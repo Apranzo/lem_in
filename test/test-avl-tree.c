@@ -26,7 +26,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "framework.h"
 
 #include "avl-tree.h"
-#include "compare-int.h"
+#include "collections/includes/compare-int.h"
 
 #define NUM_TEST_VALUES 1000
 
@@ -198,7 +198,7 @@ void test_avl_tree_insert_lookup(void)
 {
 	AVLTree *tree;
 	AVLTreeNode *node;
-	unsigned int i;
+	size_t i;
 	int *value;
 
 	/* Create a tree containing some values. Validate the
@@ -351,7 +351,7 @@ void test_avl_tree_remove(void)
 	int i;
 	int x, y, z;
 	int value;
-	unsigned int expected_entries;
+	size_t expected_entries;
 
 	tree = create_tree();
 
@@ -394,8 +394,8 @@ void test_avl_tree_to_array(void)
 	AVLTree *tree;
 	int entries[] = { 89, 23, 42, 4, 16, 15, 8, 99, 50, 30 };
 	int sorted[]  = { 4, 8, 15, 16, 23, 30, 42, 50, 89, 99 };
-	unsigned int num_entries = sizeof(entries) / sizeof(int);
-	unsigned int i;
+	size_t num_entries = sizeof(entries) / sizeof(int);
+	size_t i;
 	int **array;
 
 	/* Add all entries to the tree */

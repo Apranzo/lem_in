@@ -27,12 +27,10 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "framework.h"
 
 #include "set.h"
-#include "compare-int.h"
-#include "hash-int.h"
-#include "compare-pointer.h"
-#include "hash-pointer.h"
-#include "compare-string.h"
-#include "hash-string.h"
+#include "collections/includes/compare-int.h"
+#include "collections/includes/compare-pointer.h"
+#include "collections/includes/compare-string.h"
+#include "collections/includes/ft_hash.h"
 
 int allocated_values;
 
@@ -40,7 +38,7 @@ Set *generate_set(void)
 {
 	Set *set;
 	char buf[10];
-	unsigned int i;
+	size_t i;
 	char *value;
 
 	set = set_new(string_hash, string_equal);
@@ -152,7 +150,7 @@ void test_set_remove(void)
 	Set *set;
 	char buf[10];
 	int i;
-	unsigned int num_entries;
+	size_t num_entries;
 
 	set = generate_set();
 
@@ -405,7 +403,7 @@ void test_set_iterating_remove(void)
 	Set *set;
 	SetIterator iterator;
 	int count;
-	unsigned int removed;
+	size_t removed;
 	char *value;
 
 	set = generate_set();
@@ -503,7 +501,7 @@ void test_set_out_of_memory(void)
 {
 	Set *set;
 	int values[66];
-	unsigned int i;
+	size_t i;
 
 	set = set_new(int_hash, int_equal);
 

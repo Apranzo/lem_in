@@ -51,7 +51,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 typedef struct _BlockHeader BlockHeader;
 
 struct _BlockHeader {
-	unsigned int magic_number;
+	size_t magic_number;
 	size_t bytes;
 };
 
@@ -83,7 +83,7 @@ static BlockHeader *alloc_test_get_header(void *ptr)
 /* Overwrite a block of memory with a repeated pattern. */
 
 static void alloc_test_overwrite(void *ptr, size_t length,
-                                 unsigned int pattern)
+                                 size_t pattern)
 {
 	unsigned char *byte_ptr;
 	int pattern_seq;

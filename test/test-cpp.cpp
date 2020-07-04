@@ -27,9 +27,6 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <compare-pointer.h>
 #include <compare-string.h>
 
-#include <hash-int.h>
-#include <hash-pointer.h>
-#include <hash-string.h>
 
 #include <arraylist.h>
 #include <avl-tree.h>
@@ -147,12 +144,12 @@ static void test_bloom_filter(void)
 	bloom_filter_free(filter);
 }
 
-static void test_hash_table(void)
+static void test_hash_map(void)
 {
-	HashTable *hash_table;
+	HashTable *hash_map;
 
-	hash_table = hash_table_new(string_hash, string_equal);
-	hash_table_free(hash_table);
+	hash_map = hash_map_new(string_hash, string_equal);
+	hash_map_free(hash_map);
 }
 
 static void test_list(void)
@@ -215,7 +212,7 @@ static UnitTestFunction tests[] = {
 	test_binary_heap, 
 	test_binomial_heap,
 	test_bloom_filter,
-	test_hash_table,
+	test_hash_map,
 	test_list,
 	test_queue,
 	test_set,

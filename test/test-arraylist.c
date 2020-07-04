@@ -27,8 +27,8 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "alloc-testing.h"
 #include "framework.h"
 
-#include "arraylist.h"
-#include "compare-int.h"
+#include "collections/includes/arraylist.h"
+#include "collections/includes/compare-int.h"
 
 int variable1, variable2, variable3, variable4;
 
@@ -380,8 +380,8 @@ void test_arraylist_sort(void)
 	t_alist *arraylist;
 	int entries[] = { 89, 4, 23, 42, 4, 16, 15, 4, 8, 99, 50, 30, 4 };
 	int sorted[]  = { 4, 4, 4, 4, 8, 15, 16, 23, 30, 42, 50, 89, 99 };
-	unsigned int num_entries = sizeof(entries) / sizeof(int);
-	unsigned int i;
+	size_t num_entries = sizeof(entries) / sizeof(int);
+	size_t i;
 
 	arraylist = alist_new(10);
 

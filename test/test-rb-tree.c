@@ -26,7 +26,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "framework.h"
 
 #include "rb-tree.h"
-#include "compare-int.h"
+#include "collections/includes/compare-int.h"
 
 #define NUM_TEST_VALUES 1000
 

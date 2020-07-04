@@ -26,7 +26,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "framework.h"
 
 #include "bloom-filter.h"
-#include "hash-string.h"
+#include "collections/includes/ft_hash.h"
 
 void test_bloom_filter_new_free(void)
 {

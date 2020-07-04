@@ -25,7 +25,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "framework.h"
 
 #include "binomial-heap.h"
-#include "compare-int.h"
+#include "collections/includes/compare-int.h"
 
 #define NUM_TEST_VALUES 10000
 
@@ -162,7 +162,7 @@ static BinomialHeap *generate_heap(void)
 
 static void verify_heap(BinomialHeap *heap)
 {
-	unsigned int num_vals;
+	size_t num_vals;
 	int *val;
 	int i;
 

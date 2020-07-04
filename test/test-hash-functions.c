@@ -25,9 +25,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "alloc-testing.h"
 #include "framework.h"
 
-#include "hash-pointer.h"
-#include "hash-int.h"
-#include "hash-string.h"
+#include "collections/includes/ft_hash.h"
 
 #define NUM_TEST_VALUES 200
 

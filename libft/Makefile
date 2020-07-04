@@ -6,7 +6,7 @@
 #    By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/28 23:59:53 by cmeowth           #+#    #+#              #
-#    Updated: 2020/06/16 00:58:26 by cshinoha         ###   ########.ru        #
+#    Updated: 2020/07/05 01:10:41 by cshinoha         ###   ########.ru        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,131 +15,135 @@ NAME		= libft.a
 GCC			= /usr/bin/clang
 WOPT		= -Wall -Wextra -Werror
 OOPT		= -O2
-IOPT		= -I $(INCDIR)
+IOPT		= -I ./core/includes -I ./collections/includes -I ./printf/includes
 
 AR			= /usr/bin/ar -rc
 RM			= /bin/rm -rf
 RANLIB		= /usr/bin/ranlib
-NORMINETTE	= /usr/bin/norminette
 MKDIR		= /bin/mkdir -p
 
-INCDIR		= ./include
-SRCDIR		= ./src
+SRCDIR		= .
 OBJDIR		= ./objects
 
-SRCNAME		= printf/ft_printf.c				\
-			  printf/parsing.c					\
-			  printf/tools/buffer.c			\
-			  printf/tools/initialization.c	\
-			  printf/tools/get_si.c			\
-			  printf/tools/get_ui.c			\
-			  printf/tools/get_f.c				\
-			  printf/specs/wildcard.c			\
-			  printf/specs/set_specs.c			\
-			  printf/specs/set_flags.c			\
-			  printf/specs/set_length.c		\
-			  printf/specs/apply_specs.c		\
-			  printf/types/type_b.c			\
-			  printf/types/type_c.c			\
-			  printf/types/type_d.c			\
-			  printf/types/type_f.c			\
-			  printf/types/type_o.c			\
-			  printf/types/type_p.c			\
-			  printf/types/type_s.c			\
-			  printf/types/type_u.c			\
-			  printf/types/type_x.c			\
-			  printf/types/unknown.c			\
-			  printf/types/percent.c			\
-			  ft_memset.c				\
-			  ft_bzero.c				\
-			  ft_memcpy.c				\
-			  ft_memccpy.c				\
-			  ft_memmove.c				\
-			  ft_memchr.c				\
-			  ft_memcmp.c				\
-			  ft_strlen.c				\
-			  ft_strdup.c				\
-			  ft_strcpy.c				\
-			  ft_strncpy.c				\
-			  ft_strcat.c				\
-			  ft_strncat.c				\
-			  ft_strlcat.c				\
-			  ft_strchr.c				\
-			  ft_strrchr.c				\
-			  ft_strstr.c				\
-			  ft_strnstr.c				\
-			  ft_strcmp.c				\
-			  ft_strncmp.c				\
-			  ft_atoi.c					\
-			  ft_isalpha.c				\
-			  ft_isdigit.c				\
-			  ft_isalnum.c				\
-			  ft_isascii.c				\
-			  ft_isprint.c				\
-			  ft_toupper.c				\
-			  ft_tolower.c				\
-			  ft_memalloc.c				\
-			  ft_memdel.c				\
-			  ft_strnew.c				\
-			  ft_strdel.c				\
-			  ft_strclr.c				\
-			  ft_striter.c				\
-			  ft_striteri.c				\
-			  ft_strmap.c				\
-			  ft_strmapi.c				\
-			  ft_strequ.c				\
-			  ft_strnequ.c				\
-			  ft_strsub.c				\
-			  ft_strjoin.c				\
-			  ft_strtrim.c				\
-			  ft_strsplit.c				\
-			  ft_itoa.c					\
-			  ft_putchar.c				\
-			  ft_putstr.c				\
-			  ft_putstrss.c				\
-			  ft_putendl.c				\
-			  ft_putnbr.c				\
-			  ft_putchar_fd.c			\
-			  ft_putstr_fd.c			\
-			  ft_putendl_fd.c			\
-			  ft_putnbr_fd.c			\
-			  ft_lstnew.c				\
-			  ft_lstdelone.c			\
-			  ft_lstdel.c				\
-			  ft_lstadd.c				\
-			  ft_lstiter.c				\
-			  ft_lstmap.c				\
-			  ft_isupper.c				\
-			  ft_islower.c				\
-			  ft_isspace.c				\
-			  ft_isseparator.c			\
-			  ft_cntwords.c				\
-			  ft_nblen.c				\
-			  ft_swap.c					\
-			  ft_strnew2d.c				\
-			  ft_sitoa_base.c			\
-			  ft_silen.c				\
-			  ft_uitoa_base.c			\
-			  ft_uilen.c				\
-			  ft_litoa.c				\
-			  ft_itoa_static.c			\
-			  ft_litoa_static.c			\
-			  ft_sitoa_base_static.c	\
-			  ft_uitoa_base_static.c	\
-			  ft_ftoa_static.c			\
-			  ft_freematr.c				\
-			  ft_gnl.c					\
-			  ft_intlen.c				\
-			  ft_iswhite.c				\
-			  ft_lstfree.c				\
-			  ft_strfrjoin.c			\
-			  ft_strindexof.c			\
-			  ft_lstpush.c				\
-			  ft_error.c				\
-			  ft_min.c					\
-			  ft_max.c					\
-			  ft_abs.c					\
-			  ft_free.c
+SRCNAME		= printf/src/ft_printf.c				\
+			  printf/src/parsing.c					\
+			  printf/src/tools/buffer.c				\
+			  printf/src/tools/initialization.c		\
+			  printf/src/tools/get_si.c				\
+			  printf/src/tools/get_ui.c				\
+			  printf/src/tools/get_f.c				\
+			  printf/src/specs/wildcard.c			\
+			  printf/src/specs/set_specs.c			\
+			  printf/src/specs/set_flags.c			\
+			  printf/src/specs/set_length.c			\
+			  printf/src/specs/apply_specs.c		\
+			  printf/src/types/type_b.c				\
+			  printf/src/types/type_c.c				\
+			  printf/src/types/type_d.c				\
+			  printf/src/types/type_f.c				\
+			  printf/src/types/type_o.c				\
+			  printf/src/types/type_p.c				\
+			  printf/src/types/type_s.c				\
+			  printf/src/types/type_u.c				\
+			  printf/src/types/type_x.c				\
+			  printf/src/types/unknown.c			\
+			  printf/src/types/percent.c			\
+			  core/src/ft_memset.c				\
+			  core/src/ft_bzero.c				\
+			  core/src/ft_memcpy.c				\
+			  core/src/ft_memccpy.c				\
+			  core/src/ft_memmove.c				\
+			  core/src/ft_memchr.c				\
+			  core/src/ft_memcmp.c				\
+			  core/src/ft_strlen.c				\
+			  core/src/ft_strdup.c				\
+			  core/src/ft_strcpy.c				\
+			  core/src/ft_strncpy.c				\
+			  core/src/ft_strcat.c				\
+			  core/src/ft_strncat.c				\
+			  core/src/ft_strlcat.c				\
+			  core/src/ft_strchr.c				\
+			  core/src/ft_strrchr.c				\
+			  core/src/ft_strstr.c				\
+			  core/src/ft_strnstr.c				\
+			  core/src/ft_strcmp.c				\
+			  core/src/ft_strncmp.c				\
+			  core/src/ft_atoi.c				\
+			  core/src/ft_isalpha.c				\
+			  core/src/ft_isdigit.c				\
+			  core/src/ft_isalnum.c				\
+			  core/src/ft_isascii.c				\
+			  core/src/ft_isprint.c				\
+			  core/src/ft_toupper.c				\
+			  core/src/ft_tolower.c				\
+			  core/src/ft_memalloc.c			\
+			  core/src/ft_memdel.c				\
+			  core/src/ft_strnew.c				\
+			  core/src/ft_strdel.c				\
+			  core/src/ft_strclr.c				\
+			  core/src/ft_striter.c				\
+			  core/src/ft_striteri.c			\
+			  core/src/ft_strmap.c				\
+			  core/src/ft_strmapi.c				\
+			  core/src/ft_strequ.c				\
+			  core/src/ft_strnequ.c				\
+			  core/src/ft_strsub.c				\
+			  core/src/ft_strjoin.c				\
+			  core/src/ft_strtrim.c				\
+			  core/src/ft_strsplit.c			\
+			  core/src/ft_itoa.c				\
+			  core/src/ft_putchar.c				\
+			  core/src/ft_putstr.c				\
+			  core/src/ft_putstrss.c			\
+			  core/src/ft_putendl.c				\
+			  core/src/ft_putnbr.c				\
+			  core/src/ft_putchar_fd.c			\
+			  core/src/ft_putstr_fd.c			\
+			  core/src/ft_putendl_fd.c			\
+			  core/src/ft_putnbr_fd.c			\
+			  core/src/ft_lstnew.c				\
+			  core/src/ft_lstdelone.c			\
+			  core/src/ft_lstdel.c				\
+			  core/src/ft_lstadd.c				\
+			  core/src/ft_lstiter.c				\
+			  core/src/ft_lstmap.c				\
+			  core/src/ft_isupper.c				\
+			  core/src/ft_islower.c				\
+			  core/src/ft_isspace.c				\
+			  core/src/ft_isseparator.c			\
+			  core/src/ft_cntwords.c			\
+			  core/src/ft_nblen.c				\
+			  core/src/ft_swap.c				\
+			  core/src/ft_strnew2d.c			\
+			  core/src/ft_sitoa_base.c			\
+			  core/src/ft_silen.c				\
+			  core/src/ft_uitoa_base.c			\
+			  core/src/ft_uilen.c				\
+			  core/src/ft_litoa.c				\
+			  core/src/ft_itoa_static.c			\
+			  core/src/ft_litoa_static.c		\
+			  core/src/ft_sitoa_base_static.c	\
+			  core/src/ft_uitoa_base_static.c	\
+			  core/src/ft_ftoa_static.c			\
+			  core/src/ft_freematr.c			\
+			  core/src/ft_gnl.c					\
+			  core/src/ft_intlen.c				\
+			  core/src/ft_iswhite.c				\
+			  core/src/ft_lstfree.c				\
+			  core/src/ft_strfrjoin.c			\
+			  core/src/ft_strindexof.c			\
+			  core/src/ft_lstpush.c				\
+			  core/src/ft_error.c				\
+			  core/src/ft_min.c					\
+			  core/src/ft_max.c					\
+			  core/src/ft_abs.c					\
+			  core/src/ft_free.c				\
+			  collections/src/arraylist.c		\
+			  collections/src/compare-int.c		\
+			  collections/src/compare-pointer.c	\
+			  collections/src/compare-string.c  \
+			  collections/src/ft_hash.c			\
+			  collections/src/hash-table.c
 
 SRC			= $(addprefix $(SRCDIR)/, $(SRCNAME))
 OBJ			= $(addprefix $(OBJDIR)/, $(SRCNAME:.c=.o))
@@ -157,9 +161,12 @@ $(NAME): $(OBJ)
 	-@printf $(CR)$(GREEN)"✓ $(NAME) is created\n"$(EOC)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	-@$(MKDIR) $(OBJDIR)/printf/types
-	-@$(MKDIR) $(OBJDIR)/printf/tools
-	-@$(MKDIR) $(OBJDIR)/printf/specs
+	echo $(SRC)
+	-@$(MKDIR) $(OBJDIR)/printf/src/types
+	-@$(MKDIR) $(OBJDIR)/printf/src/tools
+	-@$(MKDIR) $(OBJDIR)/printf/src/specs
+	-@$(MKDIR) $(OBJDIR)/core/src
+	-@$(MKDIR) $(OBJDIR)/collections/src
 	$(GCC) $(WOPT) $(OOPT) $(IOPT) -c $< -o $@
 
 clean:

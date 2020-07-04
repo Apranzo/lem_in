@@ -26,7 +26,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "framework.h"
 
 #include "list.h"
-#include "compare-int.h"
+#include "collections/includes/compare-int.h"
 
 int variable1 = 50, variable2, variable3, variable4;
 
@@ -281,10 +281,10 @@ void test_list_remove_entry(void)
 void test_list_remove_data(void)
 {
 	int entries[] = { 89, 4, 23, 42, 4, 16, 15, 4, 8, 99, 50, 30, 4 };
-	unsigned int num_entries = sizeof(entries) / sizeof(int);
+	size_t num_entries = sizeof(entries) / sizeof(int);
 	int val;
 	ListEntry *list;
-	unsigned int i;
+	size_t i;
 
 	/* Generate a list containing all the entries in the array */
 
@@ -331,8 +331,8 @@ void test_list_sort(void)
 	ListEntry *list;
 	int entries[] = { 89, 4, 23, 42, 4, 16, 15, 4, 8, 99, 50, 30, 4 };
 	int sorted[]  = { 4, 4, 4, 4, 8, 15, 16, 23, 30, 42, 50, 89, 99 };
-	unsigned int num_entries = sizeof(entries) / sizeof(int);
-	unsigned int i;
+	size_t num_entries = sizeof(entries) / sizeof(int);
+	size_t i;
 
 	list = NULL;
 

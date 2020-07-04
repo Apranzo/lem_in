@@ -25,7 +25,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "framework.h"
 
 #include "binary-heap.h"
-#include "compare-int.h"
+#include "collections/includes/compare-int.h"
 
 #define NUM_TEST_VALUES 10000
 
