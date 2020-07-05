@@ -1,7 +1,7 @@
 #ifndef hash_map_H
 #define hash_map_H
 
-#include <libft.h>
+#include <coreft.h>
 
 typedef pointer				hm_key;
 typedef pointer				hm_val;

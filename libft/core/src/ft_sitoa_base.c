@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../includes/coreft.h"
 
 static void			check_sign(intmax_t *number, int base, char *str)
 {

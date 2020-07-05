@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <string.h>
-#include "../includes/libft.h"
+#include "../includes/coreft.h"
 
 char		*ft_strstr(const char *haystack, const char *needle)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../includes/coreft.h"
 
 void		ft_swap(void *a, void *b, size_t size)
 {

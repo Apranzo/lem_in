@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../includes/coreft.h"
 
 int			ft_cntwords(char const *s, char c)
 {

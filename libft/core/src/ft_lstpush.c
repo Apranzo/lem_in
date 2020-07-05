@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../includes/coreft.h"
 
 t_list	*ft_lstpush(t_list **begin_list, void *content, size_t content_size)
 {

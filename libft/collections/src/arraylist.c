@@ -24,16 +24,11 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "../includes/arraylist.h"
 
 /* malloc() / free() testing */
-
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
-
 # define DEF_SIZE 16
 
 /* Automatically resizing array */
 
-t_alist *alist_new(size_t length)
+t_alist *alist_new(size_t length, is_equal equal, compare comp)
 {
 	t_alist *new;
 
@@ -46,6 +41,8 @@ t_alist *alist_new(size_t length)
 	}
 	new->_alloced = length;
 	new->length = 0;
+	new->_equal_val = equal;
+	new->_comp_val = comp;
 
 	return new;
 }
@@ -123,18 +120,27 @@ void alist_remove(t_alist *arraylist, size_t index)
 	alist_remove_range(arraylist, index, 1);
 }
 
-int alist_index_of(t_alist *arraylist,
+int				alist_contains(t_alist *arraylist, is_equal callback,
+								pointer data)
+{
+	return (alist_index_of(arraylist, callback, data) != arraylist->length + 1)
+}
+
+size_t alist_index_of(t_alist *arraylist,
 				   is_equal callback,
 				   pointer data)
 {
 	size_t i;
 
-	for (i=0; i<arraylist->length; ++i) {
-		if (callback(arraylist->data[i], data) != 0)
-			return (int) i;
-	}
+	if (!callback)
+		callback = arraylist->_equal_val;
 
-	return -1;
+	i = 0;
+	while  (i < arraylist->length)
+		if (callback(arraylist->data[i], data))
+			return (i);
+
+	return (arraylist->length + 1);
 }
 
 void alist_clear(t_alist *arraylist)
@@ -222,6 +228,8 @@ static void arraylist_sort_internal(pointer *list_data,
 
 void arraylist_sort(t_alist *arraylist, compare compare_func)
 {
+	if (!compare_func)
+		compare_func = arraylist->_comp_val;
 	/* Perform the recursive sort */
 
 	arraylist_sort_internal(arraylist->data, arraylist->length,

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../includes/coreft.h"
 
 void		ft_putstr_fd(int fd, char const *str)
 {

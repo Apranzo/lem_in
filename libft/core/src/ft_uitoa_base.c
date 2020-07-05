@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../includes/coreft.h"
 
 char			*ft_uitoa_base(uintmax_t number, int base, int uppercase)
 {

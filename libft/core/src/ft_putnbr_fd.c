@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "../includes/libft.h"
+#include "../includes/coreft.h"
 
 void	ft_putnbr_fd(int fd, int nbr)
 {

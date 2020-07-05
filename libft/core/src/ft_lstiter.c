@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../includes/libft.h"
+#include "../includes/coreft.h"
 
 void		ft_lstiter(t_list *lst, void (*f)(t_list *elem))
 {

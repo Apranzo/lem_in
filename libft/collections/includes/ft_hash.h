@@ -29,7 +29,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define HASH_STRING_H
 
 #include <stddef.h>
-#include <libft.h>
+#include <coreft.h>
 
 size_t	ft_hash(pointer pointer);
 size_t	string_nocase_hash(void *string);

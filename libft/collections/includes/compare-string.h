@@ -34,7 +34,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef ALGORITHM_COMPARE_STRING_H
 #define ALGORITHM_COMPARE_STRING_H
 
-#include <libft.h>
+#include <coreft.h>
 
 /**
  * Compare two strings to determine if they are equal.

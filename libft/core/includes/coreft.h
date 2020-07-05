@@ -18,8 +18,7 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <fcntl.h>
-# include <z3.h>
-# include "../../printf/includes/ft_printf.h"
+//# include "../../printf/includes/ft_printf.h"
 # define BUFF_SIZE 300
 # define BASE_LOWER "0123456789abcdefghijklmnopqrstuvwxyz"
 # define BASE_UPPER "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"

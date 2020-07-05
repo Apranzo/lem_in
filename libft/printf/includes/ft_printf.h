@@ -15,7 +15,7 @@
 
 # include <stdarg.h>
 # include <limits.h>
-# include "../../core/includes/libft.h"
+# include "../../core/includes/coreft.h"
 
 # define PRINTF_BUFF_SIZE	4096
 # define LENGTH_H	0x01

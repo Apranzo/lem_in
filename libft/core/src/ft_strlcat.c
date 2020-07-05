@@ -12,7 +12,7 @@
 
 #include <string.h>
 #include <stdio.h>
-#include "../includes/libft.h"
+#include "../includes/coreft.h"
 
 size_t		ft_strlcat(char *dst, const char *src, size_t len)
 {
