@@ -24,7 +24,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 int string_equal(void *string1, void *string2)
 {
-	return strcmp((char *) string1, (char *) string2) == 0;
+	return !ft_strcmp((char *) string1, (char *) string2);
 }
 
 int string_compare(void *string1, void *string2)

@@ -17,8 +17,9 @@ typedef struct		s_room
 
 typedef struct		s_lemin
 {
+	t_alist 		raw;
 	unsigned 		ants;
-	t_hash_map 		*rooms;
+	t_hash_map 		rooms;
 	t_room			*start;
 	t_room			*end;
 }					t_lemin;

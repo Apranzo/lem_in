@@ -48,6 +48,12 @@ typedef int			(*is_equal)(pointer value1,
 typedef int			(*compare)(pointer value1,
 								  pointer value2);
 
+//typedef struct 		s_iterator
+//{
+//	pointer 		data;
+//	t_list			next;
+//}					t_iter;
+
 typedef struct 		s_alist
 {
 	pointer			*data;
@@ -59,6 +65,7 @@ typedef struct 		s_alist
 
 
 t_alist				*alist_new(size_t length, is_equal, compare);
+t_alist				*alist_init(t_alist *list, size_t length, is_equal, compare);
 void				alist_free(t_alist *arraylist);
 int					alist_append(t_alist *arraylist, pointer data);
 int					alist_prepend(t_alist *arraylist, pointer data);

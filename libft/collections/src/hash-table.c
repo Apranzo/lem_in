@@ -44,22 +44,27 @@ static void hash_map_free_entry(t_hash_map *hash_map, t_hm_entry *entry)
 	free(entry);
 }
 
+t_hash_map *hash_map_init(t_hash_map *map, hash_func hash_func, hm_is_equal equal_func)
+{
+	map->hash_func = hash_func;
+	map->equal_func = equal_func;
+	map->free_key = NULL;
+	map->free_val = NULL;
+	map->entries = 0;
+	map->prime_index = 0;
+	if (hash_map_allocate_table(map))
+		return (map);
+	free(map);
+	return (NULL);
+}
+
 t_hash_map *hash_map_new(hash_func hash_func, hm_is_equal equal_func)
 {
-	t_hash_map *hash_map;
+	t_hash_map *map;
 
-	if (!(hash_map = (t_hash_map *) malloc(sizeof(t_hash_map))))
+	if (!(map = (t_hash_map *) malloc(sizeof(t_hash_map))))
 		return (NULL);
-	hash_map->hash_func = hash_func;
-	hash_map->equal_func = equal_func;
-	hash_map->free_key = NULL;
-	hash_map->free_val = NULL;
-	hash_map->entries = 0;
-	hash_map->prime_index = 0;
-	if (hash_map_allocate_table(hash_map))
-		return (hash_map);
-	free(hash_map);
-	return (NULL);
+	return (hash_map_init(map, hash_func, equal_func));
 }
 
 void hash_map_free(t_hash_map *hash_map)
@@ -307,7 +312,7 @@ t_hm_pair hash_map_iter_next(t_hm_iterator *iterator)
 				break ;
 			}
 			/* Try the next chain */
-			++chain;
+			chain++;
 		}
 		iterator->next_chain = chain;
 	}

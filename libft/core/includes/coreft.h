@@ -25,6 +25,12 @@
 
 typedef void		*pointer;
 
+typedef	struct		s_xy
+{
+	int				x;
+	int				y;
+}					t_xy;
+
 typedef struct		s_list
 {
 	void			*content;

@@ -26,6 +26,22 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 /* malloc() / free() testing */
 # define DEF_SIZE 16
 
+t_alist *alist_init(t_alist *list, size_t length, is_equal equal, compare comp)
+{
+	length = length > 0 ? length : DEF_SIZE;
+	if ((!(list->data = ft_tmalloc(sizeof(pointer), length))))
+	{
+		ft_free(list->data);
+		return (NULL);
+	}
+	list->_alloced = length;
+	list->length = 0;
+	list->_equal_val = equal;
+	list->_comp_val = comp;
+
+	return (list);
+}
+
 /* Automatically resizing array */
 
 t_alist *alist_new(size_t length, is_equal equal, compare comp)
@@ -33,19 +49,14 @@ t_alist *alist_new(size_t length, is_equal equal, compare comp)
 	t_alist *new;
 
 	length = length ? length : DEF_SIZE;
-	if (!(new = (t_alist *) malloc(sizeof(t_alist))) ||
-		(!(new->data = ft_tmalloc(sizeof(pointer), length))))
+	if (!(new = (t_alist *) malloc(sizeof(t_alist))))
 	{
-		new && ft_free(new->data) && ft_free(new);
+		ft_free(new);
 		return (NULL);
 	}
-	new->_alloced = length;
-	new->length = 0;
-	new->_equal_val = equal;
-	new->_comp_val = comp;
-
-	return new;
+	return (alist_init(new, length, equal, comp));
 }
+
 
 void alist_free(t_alist *arraylist)
 {

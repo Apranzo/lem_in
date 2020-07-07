@@ -19,7 +19,7 @@ int			ft_cntwords(char const *s, char c)
 
 	i = 0;
 	words = 0;
-	while (s[i] != '\0')
+	while (s && s[i] != '\0')
 	{
 		if (!ft_isseparator(s[i], c))
 		{

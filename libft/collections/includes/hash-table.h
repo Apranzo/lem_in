@@ -43,6 +43,8 @@ typedef struct 				s_hm_iterator
 	size_t					next_chain;
 }							t_hm_iterator;
 
+t_hash_map					*hash_map_init(t_hash_map  *map, hash_func hash_func,
+											hm_is_equal equal_func);
 t_hash_map					*hash_map_new(hash_func hash_func,
 											hm_is_equal equal_func);
 void						hash_map_free(t_hash_map *hash_map);
