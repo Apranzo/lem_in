@@ -143,6 +143,8 @@ SRCNAME		= printf/src/ft_printf.c				\
 			  collections/src/compare-pointer.c	\
 			  collections/src/compare-string.c  \
 			  collections/src/ft_hash.c			\
+			  collections/src/queue.c			\
+			  collections/src/set.c			\
 			  collections/src/hash-table.c
 
 SRC			= $(addprefix $(SRCDIR)/, $(SRCNAME))

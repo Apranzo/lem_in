@@ -11,5 +11,7 @@
 #include "compare-string.h"
 #include "ft_hash.h"
 #include "hash-table.h"
+#include "queue.h"
+#include "set.h"
 
 #endif //LEM_IN_COLLECTIONS_H

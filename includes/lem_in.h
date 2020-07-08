@@ -24,4 +24,8 @@ typedef struct		s_lemin
 	t_room			*end;
 }					t_lemin;
 
-#endif //LEM_IN_LEM_IN_H
+void				bfs(t_lemin *lem)
+size_t 				room_equals(pointer room1, pointer room2);
+int 				room_free(pointer room);
+
+#endif

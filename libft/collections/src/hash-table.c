@@ -1,17 +1,8 @@
-//#include <stdlib.h>
-#include <string.h>
-
 #include "../includes/hash-table.h"
 
 #ifdef ALLOC_TESTING
 #include "alloc-testing.h"
 #endif
-
-
-/* This is a set of good hash table prime numbers, from:
- *   http://planetmath.org/encyclopedia/GoodHashTablePrimes.html
- * Each prime is roughly double the previous pointer, and as far as
- * possible from the nearest powers of two. */
 
 static const size_t hash_map_primes[] = {
 	193, 389, 769, 1543, 3079, 6151, 12289, 24593, 49157, 98317,
@@ -20,8 +11,7 @@ static const size_t hash_map_primes[] = {
 	402653189, 805306457, 1610612741,
 };
 
-static const size_t hash_map_num_primes
-	= sizeof(hash_map_primes) / sizeof(size_t);
+static const size_t hash_map_num_primes = sizeof(hash_map_primes) / sizeof(size_t);
 
 
 static int hash_map_allocate_table(t_hash_map *hash_map)
@@ -33,8 +23,6 @@ static int hash_map_allocate_table(t_hash_map *hash_map)
 				ft_tmemalloc(sizeof(t_hm_entry *), hash_map->table_size)));
 }
 
-/* Free an entry, calling the free functions if there are any registered */
-
 static void hash_map_free_entry(t_hash_map *hash_map, t_hm_entry *entry)
 {
 	if (hash_map->free_key)
@@ -44,7 +32,7 @@ static void hash_map_free_entry(t_hash_map *hash_map, t_hm_entry *entry)
 	free(entry);
 }
 
-t_hash_map *hash_map_init(t_hash_map *map, hash_func hash_func, hm_is_equal equal_func)
+t_hash_map *hash_map_init(t_hash_map *map, hm_hash_f hash_func, hm_equal_f equal_func)
 {
 	map->hash_func = hash_func;
 	map->equal_func = equal_func;
@@ -58,7 +46,7 @@ t_hash_map *hash_map_init(t_hash_map *map, hash_func hash_func, hm_is_equal equa
 	return (NULL);
 }
 
-t_hash_map *hash_map_new(hash_func hash_func, hm_is_equal equal_func)
+t_hash_map *hash_map_new(hm_hash_f hash_func, hm_equal_f equal_func)
 {
 	t_hash_map *map;
 
@@ -67,7 +55,7 @@ t_hash_map *hash_map_new(hash_func hash_func, hm_is_equal equal_func)
 	return (hash_map_init(map, hash_func, equal_func));
 }
 
-void hash_map_free(t_hash_map *hash_map)
+void			hash_map_free(t_hash_map *hash_map)
 {
 	t_hm_entry *rover;
 	t_hm_entry *next;
@@ -77,7 +65,8 @@ void hash_map_free(t_hash_map *hash_map)
 	while (i < hash_map->table_size)
 	{
 		rover = hash_map->table[i];
-		while (rover != NULL) {
+		while (rover != NULL)
+		{
 			next = rover->next;
 			hash_map_free_entry(hash_map, rover);
 			rover = next;
@@ -147,7 +136,7 @@ int hash_map_insert(t_hash_map *hash_map, hm_key key,
 
 	if ((hash_map->entries * 3) / hash_map->table_size > 0 &&
 		!hash_map_enlarge(hash_map))
-		return 0;
+		return (0);
 	/* Generate the hash of the key and hence the index into the table */
 	index = hash_map->hash_func(key) % hash_map->table_size;
 	/* Traverse the chain at this location and look for an existing
@@ -170,7 +159,7 @@ int hash_map_insert(t_hash_map *hash_map, hm_key key,
 			pair->key = key;
 			pair->value = value;
 			/* Finished */
-			return 1;
+			return (1);
 		}
 		rover = rover->next;
 	}

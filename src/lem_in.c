@@ -1,4 +1,4 @@
-#include "lem_in.h"
+#include "includes/lem_in.h"
 # define START "##start"
 # define END "##end"
 # define JAIL "#"
@@ -57,7 +57,6 @@ int 				read_intput(int fd, t_lemin *lemin)
 	}
 	return (!res);
 }
-
 
 void 				parse_rooms(t_lemin lemin)
 {
@@ -153,6 +152,10 @@ int					main(void)
 	parse_ants_amount(lemin);
 	parse_rooms(lemin);
 	parse_links(lemin);
+	if (!lemin.start || !lemin.end || !lemin.start->out.length)
+		ft_error("Error\n", -1);
+	bfs(&lemin)
+
 
 	
 

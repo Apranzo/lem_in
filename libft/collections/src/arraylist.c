@@ -134,7 +134,7 @@ void alist_remove(t_alist *arraylist, size_t index)
 int				alist_contains(t_alist *arraylist, is_equal callback,
 								pointer data)
 {
-	return (alist_index_of(arraylist, callback, data) != arraylist->length + 1)
+	return (alist_index_of(arraylist, callback, data) != arraylist->length + 1);
 }
 
 size_t alist_index_of(t_alist *arraylist,

@@ -1,53 +1,16 @@
-/*
-
-Copyright (c) 2005-2008, Simon Howard
-
-Permission to use, copy, modify, and/or distribute this software
-for any purpose with or without fee is hereby granted, provided
-that the above copyright notice and this permission notice appear
-in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
-WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
-AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR
-CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
-NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
-CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
- */
-
-#include <stdlib.h>
-
 #include "queue.h"
 
 /* malloc() / free() testing */
 
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
 
 /* A double-ended queue */
 
-typedef struct _QueueEntry QueueEntry;
 
-struct _QueueEntry {
-	QueueValue data;
-	QueueEntry *prev;
-	QueueEntry *next;
-};
-
-struct _Queue {
-	QueueEntry *head;
-	QueueEntry *tail;
-};
-
-Queue *queue_new(void)
+t_qu *queue_new(void)
 {
-	Queue *queue;
+	t_qu *queue;
 
-	queue = (Queue *) malloc(sizeof(Queue));
+	queue = (t_qu *) malloc(sizeof(t_qu));
 
 	if (queue == NULL) {
 		return NULL;
@@ -59,7 +22,7 @@ Queue *queue_new(void)
 	return queue;
 }
 
-void queue_free(Queue *queue)
+void queue_free(t_qu *queue)
 {
 	/* Empty the queue */
 
@@ -72,13 +35,13 @@ void queue_free(Queue *queue)
 	free(queue);
 }
 
-int queue_push_head(Queue *queue, QueueValue data)
+int queue_push_head(t_qu *queue, que_val data)
 {
-	QueueEntry *new_entry;
+	t_qu_entry *new_entry;
 
 	/* Create the new entry and fill in the fields in the structure */
 
-	new_entry = malloc(sizeof(QueueEntry));
+	new_entry = malloc(sizeof(t_qu_entry));
 
 	if (new_entry == NULL) {
 		return 0;
@@ -90,7 +53,8 @@ int queue_push_head(Queue *queue, QueueValue data)
 
 	/* Insert into the queue */
 
-	if (queue->head == NULL) {
+	if (!queue->head)
+	{
 
 		/* If the queue was previously empty, both the head and
 		 * tail must be pointed at the new entry */
@@ -110,18 +74,18 @@ int queue_push_head(Queue *queue, QueueValue data)
 		queue->head = new_entry;
 	}
 
-	return 1;
+	return (1);
 }
 
-QueueValue queue_pop_head(Queue *queue)
+que_val queue_pop_head(t_qu *queue)
 {
-	QueueEntry *entry;
-	QueueValue result;
+	t_qu_entry *entry;
+	que_val result;
 
 	/* Check the queue is not empty */
 
 	if (queue_is_empty(queue)) {
-		return QUEUE_NULL;
+		return NULL;
 	}
 
 	/* Unlink the first entry from the head of the queue */
@@ -150,22 +114,31 @@ QueueValue queue_pop_head(Queue *queue)
 	return result;
 }
 
-QueueValue queue_peek_head(Queue *queue)
+que_val queue_peek_head(t_qu *queue)
 {
-	if (queue_is_empty(queue)) {
-		return QUEUE_NULL;
-	} else {
-		return queue->head->data;
+	return (!queue_is_empty(queue) ? queue->head->data : NULL);
+}
+
+int queue_contains(t_qu *qu, que_val data)
+{
+	t_qu_entry	*ent;
+
+	ent = qu->head;
+	while (ent->next)
+	{
+		if (ent->data == data)
+			return (1);
+		ent = ent->next;
 	}
 }
 
-int queue_push_tail(Queue *queue, QueueValue data)
+int queue_push_tail(t_qu *queue, que_val data)
 {
-	QueueEntry *new_entry;
+	t_qu_entry *new_entry;
 
 	/* Create the new entry and fill in the fields in the structure */
 
-	new_entry = malloc(sizeof(QueueEntry));
+	new_entry = malloc(sizeof(t_qu_entry));
 
 	if (new_entry == NULL) {
 		return 0;
@@ -200,15 +173,15 @@ int queue_push_tail(Queue *queue, QueueValue data)
 	return 1;
 }
 
-QueueValue queue_pop_tail(Queue *queue)
+que_val queue_pop_tail(t_qu *queue)
 {
-	QueueEntry *entry;
-	QueueValue result;
+	t_qu_entry *entry;
+	que_val result;
 
 	/* Check the queue is not empty */
 
 	if (queue_is_empty(queue)) {
-		return QUEUE_NULL;
+		return NULL;
 	}
 
 	/* Unlink the first entry from the tail of the queue */
@@ -238,16 +211,16 @@ QueueValue queue_pop_tail(Queue *queue)
 	return result;
 }
 
-QueueValue queue_peek_tail(Queue *queue)
+que_val queue_peek_tail(t_qu *queue)
 {
 	if (queue_is_empty(queue)) {
-		return QUEUE_NULL;
+		return NULL;
 	} else {
 		return queue->tail->data;
 	}
 }
 
-int queue_is_empty(Queue *queue)
+int queue_is_empty(t_qu *queue)
 {
 	return queue->head == NULL;
 }
