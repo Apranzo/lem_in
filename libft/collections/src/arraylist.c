@@ -26,7 +26,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 /* malloc() / free() testing */
 # define DEF_SIZE 16
 
-t_alist *alist_init(t_alist *list, size_t length, is_equal equal, compare comp)
+t_alst *alist_init(t_alst *list, size_t length, is_equal equal, compare comp)
 {
 	length = length > 0 ? length : DEF_SIZE;
 	if ((!(list->data = ft_tmalloc(sizeof(pointer), length))))
@@ -44,12 +44,12 @@ t_alist *alist_init(t_alist *list, size_t length, is_equal equal, compare comp)
 
 /* Automatically resizing array */
 
-t_alist *alist_new(size_t length, is_equal equal, compare comp)
+t_alst *alist_new(size_t length, is_equal equal, compare comp)
 {
-	t_alist *new;
+	t_alst *new;
 
 	length = length ? length : DEF_SIZE;
-	if (!(new = (t_alist *) malloc(sizeof(t_alist))))
+	if (!(new = (t_alst *) malloc(sizeof(t_alst))))
 	{
 		ft_free(new);
 		return (NULL);
@@ -58,14 +58,14 @@ t_alist *alist_new(size_t length, is_equal equal, compare comp)
 }
 
 
-void alist_free(t_alist *arraylist)
+void alist_free(t_alst *arraylist)
 {
 	if (arraylist)
 		free(arraylist->data);
 	free(arraylist);
 }
 
-static int arraylist_enlarge(t_alist *arraylist)
+static int arraylist_enlarge(t_alst *arraylist)
 {
 	pointer *data;
 	size_t newsize;
@@ -79,7 +79,7 @@ static int arraylist_enlarge(t_alist *arraylist)
 	return (1);
 }
 
-int alist_insert(t_alist *arraylist, size_t index, pointer data)
+int alist_insert(t_alst *arraylist, size_t index, pointer data)
 {
 	if (index > arraylist->length ||
 			(arraylist->length + 1 > arraylist->_alloced &&
@@ -95,17 +95,17 @@ int alist_insert(t_alist *arraylist, size_t index, pointer data)
 	return 1;
 }
 
-int alist_append(t_alist *arraylist, pointer data)
+int alist_append(t_alst *arraylist, pointer data)
 {
 	return alist_insert(arraylist, arraylist->length, data);
 }
 
-int alist_prepend(t_alist *arraylist, pointer data)
+int alist_prepend(t_alst *arraylist, pointer data)
 {
 	return alist_insert(arraylist, 0, data);
 }
 
-void alist_remove_range(t_alist *arraylist, size_t index,
+void alist_remove_range(t_alst *arraylist, size_t index,
 						size_t length)
 {
 	/* Check this is a valid range */
@@ -126,20 +126,20 @@ void alist_remove_range(t_alist *arraylist, size_t index,
 	arraylist->length -= length;
 }
 
-void alist_remove(t_alist *arraylist, size_t index)
+void alist_remove(t_alst *arraylist, size_t index)
 {
 	alist_remove_range(arraylist, index, 1);
 }
 
-int				alist_contains(t_alist *arraylist, is_equal callback,
-								pointer data)
+int				alist_contains(t_alst *arraylist, is_equal callback,
+								  pointer data)
 {
 	return (alist_index_of(arraylist, callback, data) != arraylist->length + 1);
 }
 
-size_t alist_index_of(t_alist *arraylist,
-				   is_equal callback,
-				   pointer data)
+size_t alist_index_of(t_alst *arraylist,
+					  is_equal callback,
+					  pointer data)
 {
 	size_t i;
 
@@ -154,7 +154,7 @@ size_t alist_index_of(t_alist *arraylist,
 	return (arraylist->length + 1);
 }
 
-void alist_clear(t_alist *arraylist)
+void alist_clear(t_alst *arraylist)
 {
 	/* To clear the list, simply set the length to zero */
 
@@ -237,7 +237,7 @@ static void arraylist_sort_internal(pointer *list_data,
 	                        compare_func);
 }
 
-void arraylist_sort(t_alist *arraylist, compare compare_func)
+void arraylist_sort(t_alst *arraylist, compare compare_func)
 {
 	if (!compare_func)
 		compare_func = arraylist->_comp_val;

@@ -60,8 +60,8 @@ int 				read_intput(int fd, t_lemin *lemin)
 
 void 				parse_rooms(t_lemin lemin)
 {
-	t_alist			*x_cord;
-	t_alist			*y_cord;
+	t_alst			*x_cord;
+	t_alst			*y_cord;
 	t_xy			cord;
 	size_t 			i;
 	char 			**room;
@@ -115,24 +115,24 @@ void			parse_links(t_lemin lemin)
 {
 	size_t 			i;
 	char 			**linked;
-	t_room			*out;
-	t_room			*in;
+	t_room			*left;
+	t_room			*right;
 
 	i = 0;
 	while (ft_cntwords(lemin.raw.data[i], '-'))
 	{
 		if(!(linked = ft_strsplit(lemin.raw.data[i], '-')) || !*linked || !*(linked + 1))
 			ft_error("Error\n", -1);
-		if (!(out = hash_map_lookup(&lemin.rooms, linked[0])) ||
-				!(in = hash_map_lookup(&lemin.rooms, linked[1])) ||
-				alist_contains(&out->out, NULL, in) || alist_contains(&in->in, NULL, out))
+		if (!(left = hash_map_lookup(&lemin.rooms, linked[0])) ||
+			!(right = hash_map_lookup(&lemin.rooms, linked[1])) ||
+			alist_contains(&left->links, NULL, right) ||
+			alist_contains(&right->links, NULL, left))
 			ft_error("Error\n", -1);
-		alist_append(&out->out, in);
-		alist_append(&in->in, out);
+		alist_append(&left->links, right);
 	}
 }
 
-unsigned			parse_ants_amount(t_lemin lemin)
+int			parse_ants_amount(t_lemin lemin)
 {
 	int				num;
 
@@ -140,6 +140,20 @@ unsigned			parse_ants_amount(t_lemin lemin)
 	if (num <= 0 || !is_num_valid(num, lemin.raw.data[0]))
 		ft_error("Error\n", -1);
 	return (num);
+}
+static void		ft_alstiter(t_itr *iter, void (*f)(pointer data))
+{
+	while (hash_map_iter_has_more(iter))
+		f(iter->_cur_node->pair.value);
+}
+static				check_unuses(t_room *room)
+{
+	room
+}
+
+int 				delete_unuses(t_lemin *lemin)
+{
+	lemin.
 }
 
 int					main(void)
@@ -152,9 +166,10 @@ int					main(void)
 	parse_ants_amount(lemin);
 	parse_rooms(lemin);
 	parse_links(lemin);
-	if (!lemin.start || !lemin.end || !lemin.start->out.length)
+	if (!lemin.start || !lemin.end || !lemin.start->links.length)
 		ft_error("Error\n", -1);
 	bfs(&lemin)
+
 
 
 	

@@ -24,11 +24,11 @@ static	t_stmt				*stmnew(int fd)
 	return (statement);
 }
 
-static void					freenode(t_list *ll, t_list **l)
+static void					freenode(t_node *ll, t_node **l)
 {
 	t_stmt					*s;
 
-	s = ll->content;
+	s = ll->data;
 	free(s->res);
 	free(s);
 	if (ll->next)
@@ -39,7 +39,7 @@ static void					freenode(t_list *ll, t_list **l)
 		*l = ll->next;
 	else if (ll == *l)
 		*l = NULL;
-	ft_bzero(ll, sizeof(t_list));
+	ft_bzero(ll, sizeof(t_node));
 	free(ll);
 }
 
@@ -72,15 +72,15 @@ static int					get_line(char **line, t_stmt *s, int ret)
 	return (1);
 }
 
-static t_list				*init_static_list(t_list **l, int fd)
+static t_node				*init_static_list(t_node **l, int fd)
 {
-	t_list					*tmp;
+	t_node					*tmp;
 	t_stmt					*s;
 
 	tmp = *l;
 	while (tmp)
 	{
-		s = (t_stmt *)tmp->content;
+		s = (t_stmt *)tmp->data;
 		if (s->fd == fd)
 			return (tmp);
 		tmp = tmp->next;
@@ -94,8 +94,8 @@ static t_list				*init_static_list(t_list **l, int fd)
 
 int							ft_gnl(const int fd, char **line)
 {
-	static t_list			*l;
-	t_list					*ll;
+	static t_node			*l;
+	t_node					*ll;
 	int						ret;
 	char					buff[BUFF_SIZE + 1];
 	char					*tmp;
@@ -103,16 +103,16 @@ int							ft_gnl(const int fd, char **line)
 	ll = NULL;
 	if (fd < 0 || line == NULL || !(ll = init_static_list(&l, fd)))
 		return (-1);
-	while (!ft_strchr(((t_stmt *)ll->content)->res, '\n') &&
+	while (!ft_strchr(((t_stmt *)ll->data)->res, '\n') &&
 						(ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
-		tmp = ((t_stmt *)ll->content)->res;
-		((t_stmt *)ll->content)->res =
-				ft_strjoin(((t_stmt *)ll->content)->res, buff);
+		tmp = ((t_stmt *)ll->data)->res;
+		((t_stmt *)ll->data)->res =
+				ft_strjoin(((t_stmt *)ll->data)->res, buff);
 		free(tmp);
 	}
-	if ((ret = get_line(line, ((t_stmt *)ll->content), ret)) <= 0)
+	if ((ret = get_line(line, ((t_stmt *)ll->data), ret)) <= 0)
 		freenode(ll, &l);
 	return (ret);
 }

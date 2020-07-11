@@ -12,16 +12,16 @@
 
 #include "../includes/coreft.h"
 
-void		ft_lstfree(t_list *node, size_t len)
+void		ft_lstfree(t_node *node, size_t len)
 {
-	t_list	*tmp;
+	t_node	*tmp;
 
 	if (!len)
 		len--;
 	while (node && len--)
 	{
 		tmp = node->next;
-		free(node->content);
+		free(node->data);
 		free(node);
 		node = tmp;
 	}

@@ -12,7 +12,7 @@
 
 #include "../includes/coreft.h"
 
-void			ft_lstadd(t_list **alst, t_list *new)
+void			ft_lstadd(t_node **alst, t_node *new)
 {
 	new->next = *alst;
 	*alst = new;

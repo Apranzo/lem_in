@@ -38,9 +38,9 @@ typedef struct				s_hash_map
 typedef struct 				s_hm_iterator
 {
 	t_hash_map				*hash_map;
-	t_hm_entry				*next_entry;
+	t_node 					*_cur_node;
 	size_t					next_chain;
-}							t_hm_iterator;
+}							t_itr;
 
 t_hash_map					*hash_map_init(t_hash_map  *map, hm_hash_f hash_func,
 											 hm_equal_f equal_func);
@@ -58,8 +58,8 @@ hm_val						hash_map_lookup(t_hash_map *hash_map,
 int							hash_map_remove(t_hash_map *hash_map, hm_key key);
 size_t						hash_map_num_entries(t_hash_map *hash_map);
 void						hash_map_iterate(t_hash_map *hash_map,
-												t_hm_iterator *iter);
-int							hash_map_iter_has_more(t_hm_iterator *iterator);
-t_hm_pair					hash_map_iter_next(t_hm_iterator *iterator);
+											 t_itr *itr);
+int							hash_map_iter_has_more(t_itr *iterator);
+t_hm_pair					hash_map_iter_next(t_itr *iterator);
 
 #endif

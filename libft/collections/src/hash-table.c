@@ -243,68 +243,84 @@ size_t hash_map_num_entries(t_hash_map *hash_map)
 	return (hash_map->entries);
 }
 
-void hash_map_iterate(t_hash_map *hash_map, t_hm_iterator *iterator)
+t_itr 					*hash_map_iterate(t_hash_map *hash_map, t_itr *itr)
 {
-	size_t chain;
+	size_t				chain;
+	t_hm_entry 			*entry;
+	t_node 				*node;
 
-	iterator->hash_map = hash_map;
+	itr->hash_map = hash_map;
 	/* Default pointer of next if no entries are found. */
-	iterator->next_entry = NULL;
+	itr->_cur_node = NULL;
 	/* Find the first entry */
 	chain = 0;
 	while (chain < hash_map->table_size)
 	{
 		if (hash_map->table[chain])
 		{
-			iterator->next_entry = hash_map->table[chain];
-			iterator->next_chain = chain;
+			entry = hash_map->table[chain];
+			while (entry->next)
+			{
+				if (!(node = ft_memalloc(sizeof(t_node))))
+					return (NULL);
+				node->data = &entry->pair;
+				if (itr->_cur_node)
+				{
+					node->prev = itr->_cur_node;
+					itr->_cur_node->next = node;
+				}
+				else
+					itr->_cur_node = node;
+				entry = entry->next;
+			}
+			itr->next_chain = chain;
 			break ;
 		}
 		chain++;
 	}
 }
 
-int hash_map_iter_has_more(t_hm_iterator *iterator)
+int hash_map_iter_has_more(t_itr *iterator)
 {
-	return (iterator->next_entry != NULL);
+	return ((int)iterator->_cur_node);
 }
 
-t_hm_pair hash_map_iter_next(t_hm_iterator *iterator)
+t_hm_pair hash_map_iter_next(t_itr *iterator)
 {
-	t_hm_entry *current_entry;
-	t_hash_map *hash_map;
+	t_node *current_entry;
+//	t_hash_map *hash_map;
 	t_hm_pair pair = {NULL, NULL};
-	size_t chain;
+//	size_t chain;
 
-	hash_map = iterator->hash_map;
+//	hash_map = iterator->hash_map;
 
-	if (!iterator->next_entry)
+	if (!iterator->_cur_node)
 		return (pair);
 	/* Result is immediately available */
-	current_entry = iterator->next_entry;
-	pair = current_entry->pair;
+	current_entry = iterator->_cur_node;
+	pair = *(t_hm_pair*)current_entry->data;
 	/* Find the next entry */
-	if (current_entry->next)
-		/* Next entry in current chain */
-		iterator->next_entry = current_entry->next;
-	else
-	{
-		/* None left in this chain, so advance to the next chain */
-		chain = iterator->next_chain + 1;
-		/* Default pointer if no next chain found */
-		iterator->next_entry = NULL;
-		while (chain < hash_map->table_size) {
-			/* Is there anything in this chain? */
-			if (hash_map->table[chain])
-			{
-				iterator->next_entry = hash_map->table[chain];
-				break ;
-			}
-			/* Try the next chain */
-			chain++;
-		}
-		iterator->next_chain = chain;
-	}
+//	if (current_entry->next)
+//		/* Next entry in current chain */
+		iterator->_cur_node = current_entry->next;
+//	else
+//	{
+//		/* None left in this chain, so advance to the next chain */
+//		chain = iterator->next_chain + 1;
+//		/* Default pointer if no next chain found */
+//		iterator->_cur_node = NULL;
+//		while (chain < hash_map->table_size) {
+//			/* Is there anything in this chain? */
+//			if (hash_map->table[chain])
+//			{
+//				iterator->_cur_node = hash_map->table[chain];
+//				break ;
+//			}
+//			/* Try the next chain */
+//			chain++;
+//		}
+//		iterator->next_chain = chain;
+//	}
 	return (pair);
 }
 

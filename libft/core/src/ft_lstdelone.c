@@ -13,8 +13,8 @@
 #include <stdlib.h>
 #include "../includes/coreft.h"
 
-void	ft_lstdelone(t_list **alst, void (*del)(void*, size_t))
+void	ft_lstdelone(t_node **alst, void (*del)(void*, size_t))
 {
-	del((*alst)->content, (*alst)->content_size);
+	del((*alst)->data, (*alst)->content_size);
 	ft_memdel((void **)alst);
 }

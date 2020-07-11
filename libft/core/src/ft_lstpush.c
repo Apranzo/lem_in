@@ -12,9 +12,9 @@
 
 #include "../includes/coreft.h"
 
-t_list	*ft_lstpush(t_list **begin_list, void *content, size_t content_size)
+t_node	*ft_lstpush(t_node **begin_list, void *content, size_t content_size)
 {
-	t_list *first;
+	t_node *first;
 
 	first = ft_lstnew(content, content_size);
 	first->next = *begin_list;

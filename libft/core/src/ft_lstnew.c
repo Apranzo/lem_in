@@ -13,15 +13,15 @@
 #include "../includes/coreft.h"
 #include <stdlib.h>
 
-t_list		*ft_lstnew(void const *content, size_t content_size)
+t_node		*ft_lstnew(void const *content, size_t content_size)
 {
-	t_list	*new;
+	t_node	*new;
 	void	*copy;
 
 	copy = content && content_size ? malloc(content_size) : NULL;
-	if (!(new = (t_list *)malloc(sizeof(t_list))))
+	if (!(new = (t_node *)malloc(sizeof(t_node))))
 		return (NULL);
-	new->content = content ? ft_memcpy(copy, content, content_size) : NULL;
+	new->data = content ? ft_memcpy(copy, content, content_size) : NULL;
 	new->content_size = content ? content_size : 0;
 	new->next = NULL;
 	return (new);

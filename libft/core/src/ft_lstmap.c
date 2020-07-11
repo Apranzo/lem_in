@@ -12,10 +12,10 @@
 
 #include "../includes/coreft.h"
 
-t_list		*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
+t_node		*ft_lstmap(t_node *lst, t_node *(*f)(t_node *elem))
 {
-	t_list	*first;
-	t_list	*new;
+	t_node	*first;
+	t_node	*new;
 
 	new = f(lst);
 	first = new;

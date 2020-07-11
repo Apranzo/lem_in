@@ -1,5 +1,3 @@
-#include <ctype.h>
-
 #include "../includes/ft_hash.h"
 
 /* String hash function */

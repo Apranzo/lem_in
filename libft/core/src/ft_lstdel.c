@@ -13,14 +13,14 @@
 #include <stdlib.h>
 #include "../includes/coreft.h"
 
-void		ft_lstdel(t_list **alst, void (*del)(void *, size_t))
+void		ft_lstdel(t_node **alst, void (*del)(void *, size_t))
 {
-	t_list	*tmp;
+	t_node	*tmp;
 
 	while (*alst)
 	{
 		tmp = (*alst)->next;
-		del((*alst)->content, (*alst)->content_size);
+		del((*alst)->data, (*alst)->content_size);
 		*alst = tmp;
 		ft_memdel((void **)&tmp);
 	}

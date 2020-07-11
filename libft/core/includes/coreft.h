@@ -31,13 +31,13 @@ typedef	struct		s_xy
 	int				y;
 }					t_xy;
 
-typedef struct		s_list
+typedef struct		s_node
 {
-	void			*content;
+	void			*data;
 	size_t			content_size;
-	struct s_list	*next;
-	struct s_list	*prev;
-}					t_list;
+	struct s_node	*next;
+	struct s_node	*prev;
+}					t_node;
 
 typedef struct		s_statement
 {
@@ -51,12 +51,12 @@ int					ft_error_fd(int fd, char *mes, int code);
 void				*ft_tmemalloc(size_t type_size, size_t amount);
 void				*ft_tmalloc(size_t type_size, size_t amount);
 intmax_t			ft_abs(intmax_t n);
-void				ft_lstfree(t_list *node, size_t len);
-t_list				*ft_lstpush(t_list **begin_list,
-									void *content,
-									size_t content_size);
+void				ft_lstfree(t_node *node, size_t len);
+t_node				*ft_lstpush(t_node **begin_list,
+								  void *content,
+								  size_t content_size);
 int					ft_gnl(int fd, char **line);
-t_list				*ft_lstnew(void const *content, size_t content_size);
+t_node				*ft_lstnew(void const *content, size_t content_size);
 char				**ft_freematr(char **matr);
 char				*ft_memcpy(void *dst, const void *src, size_t len);
 void				ft_bzero(void *dst, size_t len);
@@ -121,11 +121,11 @@ void				ft_putendl(char const *s);
 void				ft_putendl_fd(int fd, char const *s);
 void				ft_putnbr(int n);
 void				ft_putnbr_fd(int fd, int n);
-void				ft_lstdelone(t_list **alst, void (*del)(void*, size_t));
-void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
-void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
-void				ft_lstadd(t_list **alst, t_list *new);
-t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
+void				ft_lstdelone(t_node **alst, void (*del)(void*, size_t));
+void				ft_lstiter(t_node *lst, void (*f)(t_node *elem));
+void				ft_lstdel(t_node **alst, void (*del)(void *, size_t));
+void				ft_lstadd(t_node **alst, t_node *new);
+t_node				*ft_lstmap(t_node *lst, t_node *(*f)(t_node *elem));
 int					ft_intlen(int n);
 int					ft_isupper(int c);
 int					ft_islower(int c);

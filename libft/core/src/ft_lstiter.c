@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include "../includes/coreft.h"
 
-void		ft_lstiter(t_list *lst, void (*f)(t_list *elem))
+void		ft_lstiter(t_node *lst, void (*f)(t_node *elem))
 {
 	while (lst)
 	{

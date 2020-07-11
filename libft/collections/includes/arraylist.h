@@ -61,25 +61,25 @@ typedef struct 		s_alist
 	size_t			_alloced;
 	is_equal 		_equal_val;
 	compare 		_comp_val;
-}					t_alist;
+}					t_alst;
 
 
-t_alist				*alist_new(size_t length, is_equal, compare);
-t_alist				*alist_init(t_alist *list, size_t length, is_equal, compare);
-void				alist_free(t_alist *arraylist);
-int					alist_append(t_alist *arraylist, pointer data);
-int					alist_prepend(t_alist *arraylist, pointer data);
-void				alist_remove(t_alist *arraylist, size_t index);
-void				alist_remove_range(t_alist *arraylist, size_t index,
-						size_t length);
-int					alist_insert(t_alist *arraylist, size_t index,
+t_alst				*alist_new(size_t length, is_equal, compare);
+t_alst				*alist_init(t_alst *list, size_t length, is_equal, compare);
+void				alist_free(t_alst *arraylist);
+int					alist_append(t_alst *arraylist, pointer data);
+int					alist_prepend(t_alst *arraylist, pointer data);
+void				alist_remove(t_alst *arraylist, size_t index);
+void				alist_remove_range(t_alst *arraylist, size_t index,
+									   size_t length);
+int					alist_insert(t_alst *arraylist, size_t index,
 									pointer data);
-size_t				alist_index_of(t_alist *arraylist, is_equal callback,
+size_t				alist_index_of(t_alst *arraylist, is_equal callback,
+									 pointer data);
+int					alist_contains(t_alst *arraylist, is_equal callback,
 									  pointer data);
-int					alist_contains(t_alist *arraylist, is_equal callback,
-									  pointer data);
-void				alist_clear(t_alist *arraylist);
-void				arraylist_sort(t_alist *arraylist, compare compare_func);
+void				alist_clear(t_alst *arraylist);
+void				arraylist_sort(t_alst *arraylist, compare compare_func);
 
 #endif
 
