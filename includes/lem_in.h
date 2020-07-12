@@ -6,8 +6,10 @@
 typedef struct		s_room
 {
 	char			*name;
-	t_alst 		links;
+	t_alst 			links;
 	int				level;
+	int				in;
+	int				required;
 }					t_room;
 
 typedef struct		s_lemin
@@ -20,7 +22,7 @@ typedef struct		s_lemin
 }					t_lemin;
 
 void				bfs(t_lemin *lem);
-size_t 				room_equals(pointer room1, pointer room2);
+int					room_equals(pointer room1, pointer room2);
 int 				room_free(pointer room);
 
 #endif

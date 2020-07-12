@@ -141,19 +141,69 @@ int			parse_ants_amount(t_lemin lemin)
 		ft_error("Error\n", -1);
 	return (num);
 }
-static void		ft_alstiter(t_itr *iter, void (*f)(pointer data))
+
+static	void 		check_unuses(t_pair *pair)
 {
-	while (hash_map_iter_has_more(iter))
-		f(iter->_cur_node->pair.value);
-}
-static				check_unuses(t_room *room)
-{
-	room
+	size_t			i;
+	t_room			*room;
+
+	room = pair->value;
+	i = 0;
+	while (room->links.length > i)
+	{
+		if (((t_room*)room->links.data[i])->level <= room->level)
+		{
+			((t_room*)room->links.data[i])->in--;
+			alist_remove(&room->links, i);
+		}
+		else
+			i++;
+	}
+	i = 0;
+	while (room->links.length > i)
+		((t_room*)room->links.data[i++])->in++;
 }
 
-int 				delete_unuses(t_lemin *lemin)
+static	void 		delete_dead_end(t_pair *pair)
 {
-	lemin.
+	t_room *room;
+
+	room = pair->value;
+	if (!room->required && room->in == 0)
+		alist_clear(&room->links);
+	if (room->in < 0)
+		ft_error("room->in < 0", -2);
+}
+
+static	void 		delete_forks(t_pair *pair)
+{
+	size_t			i;
+	t_room			*room;
+
+	room = pair->value;
+	i = 0;
+	while (room->links.length > 1 && room->links.length > i)
+	{
+		if (((t_room*)room->links.data[i])->in < 1)
+		{
+			((t_room*)room->links.data[i])->in--;
+			alist_remove(&room->links, i);
+		}
+		else
+			i++;
+	}
+}
+
+int 				delete_unnecerarry(t_lemin *lemin)
+{
+	t_itr			*itr;
+
+	if (!(itr = ft_memalloc(sizeof(t_itr))))
+		ft_error("Error\n", -1);
+	itr = hm_itr_load(lemin->rooms, itr);
+	itr_foreach(itr, (void (*)(pointer)) &check_unuses);
+	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
+	itr_free(itr);
 }
 
 int					main(void)
@@ -161,17 +211,14 @@ int					main(void)
 	t_lemin			lemin;
 
 	ft_bzero(&lemin, sizeof(lemin));
-	alist_init(&lemin.raw, 8000, &string_equal, &string_compare);
-	hash_map_init(&lemin.rooms, &ft_hash, &ft_hash);
+	alist_init(&lemin.raw, 8192, &string_equal, &string_compare);
+	hash_map_init(&lemin.rooms, &ft_hash, &room_equals);
 	parse_ants_amount(lemin);
 	parse_rooms(lemin);
 	parse_links(lemin);
 	if (!lemin.start || !lemin.end || !lemin.start->links.length)
 		ft_error("Error\n", -1);
-	bfs(&lemin)
-
-
-
-	
+	bfs(&lemin);
+	delete_unnecerarry(&lemin);
 
 }

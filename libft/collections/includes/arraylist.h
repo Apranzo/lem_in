@@ -20,7 +20,7 @@
 # define ARRAYLIST_H
 
 #include <coreft.h>
-#include <collections.h>
+#include <iterator.h>
 
 
 typedef int			(*is_equal)(pointer value1,

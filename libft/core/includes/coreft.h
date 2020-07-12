@@ -44,6 +44,12 @@ typedef struct		s_statement
 	int				fd;
 }					t_stmt;
 
+typedef struct				s_pair
+{
+	pointer					key;
+	pointer					value;
+}							t_pair;
+
 int					ft_free(void *p);
 int					ft_error(char *mes, int code);
 int					ft_error_fd(int fd, char *mes, int code);

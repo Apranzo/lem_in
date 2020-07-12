@@ -2,27 +2,17 @@
 # define HASH_MAP_H
 
 #include <coreft.h>
-#include <collections.h>
+#include <iterator.h>
 
-typedef pointer				hm_key;
-typedef pointer				hm_val;
+typedef size_t				(*hm_hash_f)(pointer value);
+typedef int					(*hm_equal_f)(pointer value1, pointer value2);
+typedef void				(*hm_free_key)(pointer value);
+typedef void				(*hm_free_val)(pointer value);
 
-typedef struct s_iterator 	t_itr;
-
-typedef size_t				(*hm_hash_f)(hm_key value);
-typedef int					(*hm_equal_f)(hm_key value1, hm_key value2);
-typedef void				(*hm_free_key)(hm_key value);
-typedef void				(*hm_free_val)(hm_val value);
-
-typedef struct				s_hm_pair
-{
-	hm_key					key;
-	hm_val					value;
-}							t_hm_pair;
 
 typedef struct				s_hash_map_entry
 {
-	t_hm_pair				pair;
+	t_pair					pair;
 	struct s_hash_map_entry *next;
 }							t_hm_entry;
 
@@ -48,14 +38,13 @@ void						hash_map_register_free_functions(t_hash_map *hash_map,
 														hm_free_key key_free_func,
 														hm_free_val value_free_func);
 int							hash_map_insert(t_hash_map *hash_map,
-												hm_key key,
-					  							hm_val value);
-hm_val						hash_map_lookup(t_hash_map *hash_map,
-						 						hm_key key);
-int							hash_map_remove(t_hash_map *hash_map, hm_key key);
+											   pointer key,
+											   pointer value);
+pointer						hash_map_lookup(t_hash_map *hash_map,
+											   pointer key);
+int							hash_map_remove(t_hash_map *hash_map, pointer key);
 size_t						hash_map_num_entries(t_hash_map *hash_map);
-void						hash_map_iterate(t_hash_map *hash_map,
-											 t_itr *itr);
+t_itr						*hm_itr_load(t_hash_map *hash_map,  t_itr *itr);
 int							hash_map_iter_has_more(t_itr *iterator);
 //t_hm_pair					hash_map_iter_next(t_itr *iterator);
 

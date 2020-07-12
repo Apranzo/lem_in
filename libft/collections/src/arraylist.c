@@ -229,23 +229,33 @@ void arraylist_sort(t_alst *arraylist, compare compare_func)
 
 t_itr				*alst_itr_load(t_alst *lst, t_itr *itr)
 {
-	t_node 			*node;
+	t_node 			*new;
+	t_node 			*tail;
 	int 			i;
 
+	if (!lst || !itr)
+		return NULL;
 	itr_clear(itr);
 	i = 0;
+	tail = itr->_cur_node;
 	while (lst->length < i)
 	{
-		if (!(node = ft_memalloc(sizeof(t_node))))
+		if (!(new = ft_memalloc(sizeof(t_node))))
 			return (NULL);
-		node->data = lst->data[i];
-		if (itr->_cur_node)
+		new->data = lst->data[i];
+		if (!itr->_cur_node)
 		{
-			node->prev = itr->_cur_node;
-			itr->_cur_node->next = node;
+			itr->_cur_node = new;
+			new->prev = itr->_cur_node;
 		}
 		else
-			itr->_cur_node = node;
+		{
+			new->prev = tail;
+			tail->next = new;
+		}
+		tail = new;
+		i++;
 	}
+	return (itr);
 }
 
