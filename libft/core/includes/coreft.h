@@ -34,7 +34,6 @@ typedef	struct		s_xy
 typedef struct		s_node
 {
 	void			*data;
-	size_t			content_size;
 	struct s_node	*next;
 	struct s_node	*prev;
 }					t_node;
@@ -52,11 +51,9 @@ void				*ft_tmemalloc(size_t type_size, size_t amount);
 void				*ft_tmalloc(size_t type_size, size_t amount);
 intmax_t			ft_abs(intmax_t n);
 void				ft_lstfree(t_node *node, size_t len);
-t_node				*ft_lstpush(t_node **begin_list,
-								  void *content,
-								  size_t content_size);
+t_node				*ft_lstpush(t_node **begin_list, void *data);
 int					ft_gnl(int fd, char **line);
-t_node				*ft_lstnew(void const *content, size_t content_size);
+t_node				*ft_lstnew(void const *data);
 char				**ft_freematr(char **matr);
 char				*ft_memcpy(void *dst, const void *src, size_t len);
 void				ft_bzero(void *dst, size_t len);

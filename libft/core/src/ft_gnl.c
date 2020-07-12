@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/coreft.h"
+#include <coreft.h>
 
 static	t_stmt				*stmnew(int fd)
 {
@@ -87,8 +87,7 @@ static t_node				*init_static_list(t_node **l, int fd)
 	}
 	if (!(s = stmnew(fd)))
 		return (NULL);
-	ft_lstpush(l, s, sizeof(t_stmt));
-	free(s);
+	ft_lstpush(l, s);
 	return (*l);
 }
 

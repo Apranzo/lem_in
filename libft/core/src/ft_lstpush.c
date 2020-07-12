@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/coreft.h"
+#include <coreft.h>
 
-t_node	*ft_lstpush(t_node **begin_list, void *content, size_t content_size)
+t_node	*ft_lstpush(t_node **begin_list, void *data)
 {
 	t_node *first;
 
-	first = ft_lstnew(content, content_size);
+	first = ft_lstnew(data);
 	first->next = *begin_list;
 	if (*begin_list)
 		(*begin_list)->prev = first;

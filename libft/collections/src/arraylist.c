@@ -1,23 +1,3 @@
-/*
-
-Copyright (c) 2005-2008, Simon Howard
-
-Permission to use, copy, modify, and/or distribute this software
-for any purpose with or without fee is hereby granted, provided
-that the above copyright notice and this permission notice appear
-in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
-WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
-AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR
-CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
-NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
-CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
- */
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -245,5 +225,27 @@ void arraylist_sort(t_alst *arraylist, compare compare_func)
 
 	arraylist_sort_internal(arraylist->data, arraylist->length,
 	                        compare_func);
+}
+
+t_itr				*alst_itr_load(t_alst *lst, t_itr *itr)
+{
+	t_node 			*node;
+	int 			i;
+
+	itr_clear(itr);
+	i = 0;
+	while (lst->length < i)
+	{
+		if (!(node = ft_memalloc(sizeof(t_node))))
+			return (NULL);
+		node->data = lst->data[i];
+		if (itr->_cur_node)
+		{
+			node->prev = itr->_cur_node;
+			itr->_cur_node->next = node;
+		}
+		else
+			itr->_cur_node = node;
+	}
 }
 

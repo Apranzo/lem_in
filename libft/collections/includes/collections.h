@@ -1,9 +1,5 @@
-//
-// Created by Celeste Shinohara on 7/5/20.
-//
-
-#ifndef LEM_IN_COLLECTIONS_H
-#define LEM_IN_COLLECTIONS_H
+#ifndef COLLECTIONS_H
+#define COLLECTIONS_H
 
 #include "arraylist.h"
 #include "compare-int.h"
@@ -13,5 +9,6 @@
 #include "hash-table.h"
 #include "queue.h"
 #include "set.h"
+#include "iterator.h"
 
-#endif //LEM_IN_COLLECTIONS_H
+#endif

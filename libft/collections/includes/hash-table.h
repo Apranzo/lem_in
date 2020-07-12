@@ -2,9 +2,12 @@
 # define HASH_MAP_H
 
 #include <coreft.h>
+#include <collections.h>
 
 typedef pointer				hm_key;
 typedef pointer				hm_val;
+
+typedef struct s_iterator 	t_itr;
 
 typedef size_t				(*hm_hash_f)(hm_key value);
 typedef int					(*hm_equal_f)(hm_key value1, hm_key value2);
@@ -35,12 +38,6 @@ typedef struct				s_hash_map
 	size_t					prime_index;
 }							t_hash_map;
 
-typedef struct 				s_hm_iterator
-{
-	t_hash_map				*hash_map;
-	t_node 					*_cur_node;
-	size_t					next_chain;
-}							t_itr;
 
 t_hash_map					*hash_map_init(t_hash_map  *map, hm_hash_f hash_func,
 											 hm_equal_f equal_func);
@@ -60,6 +57,6 @@ size_t						hash_map_num_entries(t_hash_map *hash_map);
 void						hash_map_iterate(t_hash_map *hash_map,
 											 t_itr *itr);
 int							hash_map_iter_has_more(t_itr *iterator);
-t_hm_pair					hash_map_iter_next(t_itr *iterator);
+//t_hm_pair					hash_map_iter_next(t_itr *iterator);
 
 #endif
