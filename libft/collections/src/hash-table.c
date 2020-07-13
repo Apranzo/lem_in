@@ -4,26 +4,26 @@
 #include "alloc-testing.h"
 #endif
 
-static const size_t hash_map_primes[] = {
+static const size_t hm_primes[] = {
 	193, 389, 769, 1543, 3079, 6151, 12289, 24593, 49157, 98317,
 	196613, 393241, 786433, 1572869, 3145739, 6291469,
 	12582917, 25165843, 50331653, 100663319, 201326611,
 	402653189, 805306457, 1610612741,
 };
 
-static const size_t hash_map_num_primes = sizeof(hash_map_primes) / sizeof(size_t);
+static const size_t hm_num_primes = sizeof(hm_primes) / sizeof(size_t);
 
 
-static int hash_map_allocate_table(t_hash_map *hash_map)
+static int hm_allocate_table(t_hash_map *hash_map)
 {
-	hash_map->table_size = hash_map->prime_index < hash_map_num_primes ?
-					 hash_map_primes[hash_map->prime_index] :
+	hash_map->table_size = hash_map->prime_index < hm_num_primes ?
+					 hm_primes[hash_map->prime_index] :
 					 hash_map->entries * 10;
 	return (!!(hash_map->table =
 				ft_tmemalloc(sizeof(t_hm_entry *), hash_map->table_size)));
 }
 
-static void hash_map_free_entry(t_hash_map *hash_map, t_hm_entry *entry)
+static void hm_free_entry(t_hash_map *hash_map, t_hm_entry *entry)
 {
 	if (hash_map->free_key)
 		hash_map->free_key(entry->pair.key);
@@ -32,7 +32,7 @@ static void hash_map_free_entry(t_hash_map *hash_map, t_hm_entry *entry)
 	free(entry);
 }
 
-t_hash_map *hash_map_init(t_hash_map *map, hm_hash_f hash_func, hm_equal_f equal_func)
+t_hash_map *hm_init(t_hash_map *map, hm_hash_f hash_func, hm_equal_f equal_func)
 {
 	map->hash_func = hash_func;
 	map->equal_func = equal_func;
@@ -40,22 +40,22 @@ t_hash_map *hash_map_init(t_hash_map *map, hm_hash_f hash_func, hm_equal_f equal
 	map->free_val = NULL;
 	map->entries = 0;
 	map->prime_index = 0;
-	if (hash_map_allocate_table(map))
+	if (hm_allocate_table(map))
 		return (map);
 	free(map);
 	return (NULL);
 }
 
-t_hash_map *hash_map_new(hm_hash_f hash_func, hm_equal_f equal_func)
+t_hash_map *hm_new(hm_hash_f hash_func, hm_equal_f equal_func)
 {
 	t_hash_map *map;
 
 	if (!(map = (t_hash_map *) malloc(sizeof(t_hash_map))))
 		return (NULL);
-	return (hash_map_init(map, hash_func, equal_func));
+	return (hm_init(map, hash_func, equal_func));
 }
 
-void			hash_map_free(t_hash_map *hash_map)
+void			hm_clear(t_hash_map *hash_map)
 {
 	t_hm_entry *rover;
 	t_hm_entry *next;
@@ -68,7 +68,28 @@ void			hash_map_free(t_hash_map *hash_map)
 		while (rover != NULL)
 		{
 			next = rover->next;
-			hash_map_free_entry(hash_map, rover);
+			free(rover);
+			rover = next;
+		}
+		i++;
+	}
+	free(hash_map->table);
+}
+
+void			hm_free(t_hash_map *hash_map)
+{
+	t_hm_entry *rover;
+	t_hm_entry *next;
+	size_t i;
+
+	i = 0;
+	while (i < hash_map->table_size)
+	{
+		rover = hash_map->table[i];
+		while (rover)
+		{
+			next = rover->next;
+			hm_free_entry(hash_map, rover);
 			rover = next;
 		}
 		i++;
@@ -77,7 +98,7 @@ void			hash_map_free(t_hash_map *hash_map)
 	free(hash_map);
 }
 
-void hash_map_register_free_functions(t_hash_map *hash_map,
+void hm_register_free_functions(t_hash_map *hash_map,
 										hm_free_key key_free_func,
 										hm_free_val value_free_func)
 {
@@ -85,7 +106,7 @@ void hash_map_register_free_functions(t_hash_map *hash_map,
 	hash_map->free_val = value_free_func;
 }
 
-static int hash_map_enlarge(t_hash_map *hash_map)
+static int hm_enlarge(t_hash_map *hash_map)
 {
 	t_hm_entry **old_table;
 	size_t old_table_size;
@@ -98,7 +119,7 @@ static int hash_map_enlarge(t_hash_map *hash_map)
 	old_table_size = hash_map->table_size;
 	old_prime_index = hash_map->prime_index;
 	hash_map->prime_index++;
-	if (!hash_map_allocate_table(hash_map))
+	if (!hm_allocate_table(hash_map))
 	{
 		hash_map->table = old_table;
 		hash_map->table_size = old_table_size;
@@ -122,7 +143,7 @@ static int hash_map_enlarge(t_hash_map *hash_map)
 	return (1);
 }
 
-int hash_map_insert(t_hash_map *hash_map, pointer key,
+int hm_insert(t_hash_map *hash_map, pointer key,
 					pointer value)
 {
 	t_hm_entry *rover;
@@ -135,7 +156,7 @@ int hash_map_insert(t_hash_map *hash_map, pointer key,
 	 * decreases. Enlarge the table size to prevent this happening */
 
 	if ((hash_map->entries * 3) / hash_map->table_size > 0 &&
-		!hash_map_enlarge(hash_map))
+		!hm_enlarge(hash_map))
 		return (0);
 	/* Generate the hash of the key and hence the index into the table */
 	index = hash_map->hash_func(key) % hash_map->table_size;
@@ -177,7 +198,7 @@ int hash_map_insert(t_hash_map *hash_map, pointer key,
 	return (1);
 }
 
-pointer hash_map_lookup(t_hash_map *hash_map, pointer key)
+pointer hm_lookup(t_hash_map *hash_map, pointer key)
 {
 	t_hm_entry *rover;
 	t_pair *pair;
@@ -200,7 +221,7 @@ pointer hash_map_lookup(t_hash_map *hash_map, pointer key)
 	return (NULL);
 }
 
-int hash_map_remove(t_hash_map *hash_map, pointer key)
+int hm_remove(t_hash_map *hash_map, pointer key)
 {
 	t_hm_entry **rover;
 	t_hm_entry *entry;
@@ -226,7 +247,7 @@ int hash_map_remove(t_hash_map *hash_map, pointer key)
 			/* Unlink from the list */
 			*rover = entry->next;
 			/* Destroy the entry structure */
-			hash_map_free_entry(hash_map, entry);
+			hm_free_entry(hash_map, entry);
 			/* Track count of entries */
 			hash_map->entries--;
 			result = 1;
@@ -238,7 +259,7 @@ int hash_map_remove(t_hash_map *hash_map, pointer key)
 	return (result);
 }
 
-size_t hash_map_num_entries(t_hash_map *hash_map)
+size_t hm_num_entries(t_hash_map *hash_map)
 {
 	return (hash_map->entries);
 }

@@ -51,7 +51,7 @@ t_hash_map *generate_hash_map(void)
 	 * will be collisions within the hash table (using integer values
 	 * with int_hash causes no collisions) */
 
-	hash_map = hash_map_new(ft_hash, string_equal);
+	hash_map = hm_new(ft_hash, string_equal);
 
 	/* Insert lots of values */
 
@@ -60,12 +60,12 @@ t_hash_map *generate_hash_map(void)
 
 		value = strdup(buf);
 
-		hash_map_insert(hash_map, value, value);
+		hm_insert(hash_map, value, value);
 	}
 
 	/* Automatically free all the values with the hash table */
 
-	hash_map_register_free_functions(hash_map, NULL, free);
+	hm_register_free_functions(hash_map, NULL, free);
 
 	return hash_map;
 }
@@ -76,30 +76,30 @@ void test_hash_map_new_free(void)
 {
 	t_hash_map *hash_map;
 
-	hash_map = hash_map_new(int_hash, int_equal);
+	hash_map = hm_new(int_hash, int_equal);
 
 	assert(hash_map != NULL);
 
 	/* Add some values */
 
-	hash_map_insert(hash_map, &value1, &value1);
-	hash_map_insert(hash_map, &value2, &value2);
-	hash_map_insert(hash_map, &value3, &value3);
-	hash_map_insert(hash_map, &value4, &value4);
+	hm_insert(hash_map, &value1, &value1);
+	hm_insert(hash_map, &value2, &value2);
+	hm_insert(hash_map, &value3, &value3);
+	hm_insert(hash_map, &value4, &value4);
 
 	/* Free the hash table */
 
-	hash_map_free(hash_map);
+	hm_free(hash_map);
 
 	/* Test out of memory scenario */
 
 	alloc_test_set_limit(0);
-	hash_map = hash_map_new(int_hash, int_equal);
+	hash_map = hm_new(int_hash, int_equal);
 	assert(hash_map == NULL);
 	assert(alloc_test_get_allocated() == 0);
 
 	alloc_test_set_limit(1);
-	hash_map = hash_map_new(int_hash, int_equal);
+	hash_map = hm_new(int_hash, int_equal);
 	assert(hash_map == NULL);
 	assert(alloc_test_get_allocated() == 0);
 }
@@ -114,25 +114,25 @@ void test_hash_map_insert_lookup(void)
 	int i;
 	/* Generate a hash table */
 	hash_map = generate_hash_map();
-	assert(hash_map_num_entries(hash_map) == NUM_TEST_VALUES);
+	assert(hm_num_entries(hash_map) == NUM_TEST_VALUES);
 	/* Check all values */
 	for (i=0; i<NUM_TEST_VALUES; ++i) {
 		sprintf(buf, "%i", i);
-		value = hash_map_lookup(hash_map, buf);
+		value = hm_lookup(hash_map, buf);
 
 		assert(strcmp(value, buf) == 0);
 	}
 	/* Lookup on invalid values returns NULL */
 	sprintf(buf, "%i", -1);
-	assert(hash_map_lookup(hash_map, buf) == NULL);
+	assert(hm_lookup(hash_map, buf) == NULL);
 	sprintf(buf, "%i", NUM_TEST_VALUES);
-	assert(hash_map_lookup(hash_map, buf) == NULL);
+	assert(hm_lookup(hash_map, buf) == NULL);
 	/* Insert overwrites existing entries with the same key */
 	sprintf(buf, "%i", 12345);
-	hash_map_insert(hash_map, buf, strdup("hello world"));
-	value = hash_map_lookup(hash_map, buf);
+	hm_insert(hash_map, buf, strdup("hello world"));
+	value = hm_lookup(hash_map, buf);
 	assert(strcmp(value, "hello world") == 0);
-	hash_map_free(hash_map);
+	hm_free(hash_map);
 }
 
 void test_hash_map_remove(void)
@@ -140,20 +140,20 @@ void test_hash_map_remove(void)
 	t_hash_map *hash_map;
 	char buf[10];
 	hash_map = generate_hash_map();
-	assert(hash_map_num_entries(hash_map) == NUM_TEST_VALUES);
+	assert(hm_num_entries(hash_map) == NUM_TEST_VALUES);
 	sprintf(buf, "%i", 5000);
-	assert(hash_map_lookup(hash_map, buf) != NULL);
+	assert(hm_lookup(hash_map, buf) != NULL);
 	/* Remove an entry */
-	hash_map_remove(hash_map, buf);
+	hm_remove(hash_map, buf);
 	/* Check entry counter */
-	assert(hash_map_num_entries(hash_map) == 9999);
+	assert(hm_num_entries(hash_map) == 9999);
 	/* Check that NULL is returned now */
-	assert(hash_map_lookup(hash_map, buf) == NULL);
+	assert(hm_lookup(hash_map, buf) == NULL);
 	/* Try removing a non-existent entry */
 	sprintf(buf, "%i", -1);
-	hash_map_remove(hash_map, buf);
-	assert(hash_map_num_entries(hash_map) == 9999);
-	hash_map_free(hash_map);
+	hm_remove(hash_map, buf);
+	assert(hm_num_entries(hash_map) == 9999);
+	hm_free(hash_map);
 }
 
 void test_hash_map_iterating(void)
@@ -165,9 +165,9 @@ void test_hash_map_iterating(void)
 	hash_map = generate_hash_map();
 	/* Iterate over all values in the table */
 	count = 0;
-	hash_map_iterate(hash_map, &iterator);
-	while (hash_map_iter_has_more(&iterator)) {
-		hash_map_iter_next(&iterator);
+	hm_iterate(hash_map, &iterator);
+	while (hm_iter_has_more(&iterator)) {
+		hm_iter_next(&iterator);
 
 		++count;
 	}
@@ -176,20 +176,20 @@ void test_hash_map_iterating(void)
 
 	/* Test iter_next after iteration has completed. */
 
-	t_hm_pair pair = hash_map_iter_next(&iterator);
+	t_hm_pair pair = hm_iter_next(&iterator);
 	assert(pair.value == NULL);
 
-	hash_map_free(hash_map);
+	hm_free(hash_map);
 
 	/* Test iterating over an empty table */
 
-	hash_map = hash_map_new(int_hash, int_equal);
+	hash_map = hm_new(int_hash, int_equal);
 
-	hash_map_iterate(hash_map, &iterator);
+	hm_iterate(hash_map, &iterator);
 
-	assert(hash_map_iter_has_more(&iterator) == 0);
+	assert(hm_iter_has_more(&iterator) == 0);
 
-	hash_map_free(hash_map);
+	hm_free(hash_map);
 }
 
 /* Demonstrates the ability to iteratively remove objects from
@@ -214,19 +214,19 @@ void test_hash_map_iterating_remove(void)
 	count = 0;
 	removed = 0;
 
-	hash_map_iterate(hash_map, &iterator);
+	hm_iterate(hash_map, &iterator);
 
-	while (hash_map_iter_has_more(&iterator)) {
+	while (hm_iter_has_more(&iterator)) {
 
 		/* Read the next value */
 
-		pair = hash_map_iter_next(&iterator);
+		pair = hm_iter_next(&iterator);
 		val = pair.value;
 
 		/* Remove every hundredth entry */
 
 		if ((atoi(val) % 100) == 0) {
-			hash_map_remove(hash_map, val);
+			hm_remove(hash_map, val);
 			++removed;
 		}
 
@@ -238,7 +238,7 @@ void test_hash_map_iterating_remove(void)
 	assert(removed == 100);
 	assert(count == NUM_TEST_VALUES);
 
-	assert(hash_map_num_entries(hash_map)
+	assert(hm_num_entries(hash_map)
 	       == NUM_TEST_VALUES - removed);
 
 	/* Check all entries divisible by 100 were really removed */
@@ -247,13 +247,13 @@ void test_hash_map_iterating_remove(void)
 		sprintf(buf, "%i", i);
 
 		if (i % 100 == 0) {
-			assert(hash_map_lookup(hash_map, buf) == NULL);
+			assert(hm_lookup(hash_map, buf) == NULL);
 		} else {
-			assert(hash_map_lookup(hash_map, buf) != NULL);
+			assert(hm_lookup(hash_map, buf) != NULL);
 		}
 	}
 
-	hash_map_free(hash_map);
+	hm_free(hash_map);
 }
 
 /* Create a new key */
@@ -313,9 +313,9 @@ void test_hash_map_free_functions(void)
 
 	/* Create a hash table, fill it with values */
 
-	hash_map = hash_map_new(int_hash, int_equal);
+	hash_map = hm_new(int_hash, int_equal);
 
-	hash_map_register_free_functions(hash_map, free_key, free_value);
+	hm_register_free_functions(hash_map, free_key, free_value);
 
 	allocated_values = 0;
 
@@ -323,7 +323,7 @@ void test_hash_map_free_functions(void)
 		key = new_key(i);
 		value = new_value(99);
 
-		hash_map_insert(hash_map, key, value);
+		hm_insert(hash_map, key, value);
 	}
 
 	assert(allocated_keys == NUM_TEST_VALUES);
@@ -332,7 +332,7 @@ void test_hash_map_free_functions(void)
 	/* Check that removing a key works */
 
 	i = NUM_TEST_VALUES / 2;
-	hash_map_remove(hash_map, &i);
+	hm_remove(hash_map, &i);
 
 	assert(allocated_keys == NUM_TEST_VALUES - 1);
 	assert(allocated_values == NUM_TEST_VALUES - 1);
@@ -345,14 +345,14 @@ void test_hash_map_free_functions(void)
 	assert(allocated_keys == NUM_TEST_VALUES);
 	assert(allocated_values == NUM_TEST_VALUES);
 
-	hash_map_insert(hash_map, key, value);
+	hm_insert(hash_map, key, value);
 
 	assert(allocated_keys == NUM_TEST_VALUES - 1);
 	assert(allocated_values == NUM_TEST_VALUES - 1);
 
 	/* A free of the hash table should free all of the keys and values */
 
-	hash_map_free(hash_map);
+	hm_free(hash_map);
 
 	assert(allocated_keys == 0);
 	assert(allocated_values == 0);
@@ -366,14 +366,14 @@ void test_hash_map_out_of_memory(void)
 	int values[66];
 	size_t i;
 
-	hash_map = hash_map_new(int_hash, int_equal);
+	hash_map = hm_new(int_hash, int_equal);
 
 	/* Test normal failure */
 
 	alloc_test_set_limit(0);
 	values[0] = 0;
-	assert(hash_map_insert(hash_map, &values[0], &values[0]) == 0);
-	assert(hash_map_num_entries(hash_map) == 0);
+	assert(hm_insert(hash_map, &values[0], &values[0]) == 0);
+	assert(hm_num_entries(hash_map) == 0);
 
 	alloc_test_set_limit(-1);
 
@@ -386,12 +386,12 @@ void test_hash_map_out_of_memory(void)
 	for (i=0; i<65; ++i) {
 		values[i] = (int) i;
 
-		assert(hash_map_insert(hash_map,
+		assert(hm_insert(hash_map,
 		                         &values[i], &values[i]) != 0);
-		assert(hash_map_num_entries(hash_map) == i + 1);
+		assert(hm_num_entries(hash_map) == i + 1);
 	}
 
-	assert(hash_map_num_entries(hash_map) == 65);
+	assert(hm_num_entries(hash_map) == 65);
 
 	/* Test the 66th insert */
 
@@ -399,10 +399,10 @@ void test_hash_map_out_of_memory(void)
 
 	values[65] = 65;
 
-	assert(hash_map_insert(hash_map, &values[65], &values[65]) == 0);
-	assert(hash_map_num_entries(hash_map) == 65);
+	assert(hm_insert(hash_map, &values[65], &values[65]) == 0);
+	assert(hm_num_entries(hash_map) == 65);
 
-	hash_map_free(hash_map);
+	hm_free(hash_map);
 }
 
 void test_hash_iterator_key_pair()
@@ -410,20 +410,20 @@ void test_hash_iterator_key_pair()
 	t_hash_map *hash_map;
 	t_hm_iterator iterator;
 	t_hm_pair pair;
-	hash_map = hash_map_new(int_hash, int_equal);
+	hash_map = hm_new(int_hash, int_equal);
 
 	/* Add some values */
 
-	hash_map_insert(hash_map, &value1, &value1);
-	hash_map_insert(hash_map, &value2, &value2);
+	hm_insert(hash_map, &value1, &value1);
+	hm_insert(hash_map, &value2, &value2);
 
-	hash_map_iterate(hash_map, &iterator);
+	hm_iterate(hash_map, &iterator);
 
-	while (hash_map_iter_has_more(&iterator)) {
+	while (hm_iter_has_more(&iterator)) {
 
 		/* Retrieve both Key and Value */
 
-		pair = hash_map_iter_next(&iterator);
+		pair = hm_iter_next(&iterator);
 
 		int *key = (int*) pair.key;
 		int *val = (int*) pair.value;
@@ -431,7 +431,7 @@ void test_hash_iterator_key_pair()
 		assert(*key == *val);
 	}
 
-	hash_map_free(hash_map);
+	hm_free(hash_map);
 }
 
 static UnitTestFunction tests[] = {

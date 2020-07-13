@@ -148,8 +148,8 @@ static void test_hash_map(void)
 {
 	HashTable *hash_map;
 
-	hash_map = hash_map_new(string_hash, string_equal);
-	hash_map_free(hash_map);
+	hash_map = hm_new(string_hash, string_equal);
+	hm_free(hash_map);
 }
 
 static void test_list(void)

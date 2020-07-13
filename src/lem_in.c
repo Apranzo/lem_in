@@ -77,6 +77,7 @@ void 				parse_rooms(t_lemin lemin)
 				!(room = ft_strsplit(lemin.raw.data[i], ' ')) ||
 				room[0] || room[1] || room[2])
 			ft_error("Error\n", -1);
+		new->asc_level = -1;
 		cord.x = ft_atoi(room[1]);
 		cord.y = ft_atoi(room[2]);
 		if (!is_num_valid(cord.x, room[1]) || !is_num_valid(cord.y, room[2]) ||
@@ -99,7 +100,7 @@ void 				parse_rooms(t_lemin lemin)
 				ft_error("Error\n", -1);
 			lemin.end = new;
 		}
-	 	if (!hash_map_insert(&lemin.rooms, new->name, new))
+	 	if (!hm_insert(&lemin.rooms, new->name, new))
 	 		ft_error("Error\n", -1);
 	 	ft_freematr(room);
 	 	i++;
@@ -123,8 +124,8 @@ void			parse_links(t_lemin lemin)
 	{
 		if(!(linked = ft_strsplit(lemin.raw.data[i], '-')) || !*linked || !*(linked + 1))
 			ft_error("Error\n", -1);
-		if (!(left = hash_map_lookup(&lemin.rooms, linked[0])) ||
-			!(right = hash_map_lookup(&lemin.rooms, linked[1])) ||
+		if (!(left = hm_lookup(&lemin.rooms, linked[0])) ||
+			!(right = hm_lookup(&lemin.rooms, linked[1])) ||
 			alist_contains(&left->links, NULL, right) ||
 			alist_contains(&right->links, NULL, left))
 			ft_error("Error\n", -1);
@@ -151,7 +152,7 @@ static	void 		check_unuses(t_pair *pair)
 	i = 0;
 	while (room->links.length > i)
 	{
-		if (((t_room*)room->links.data[i])->level <= room->level)
+		if (((t_room*)room->links.data[i])->asc_level <= room->asc_level)
 		{
 			((t_room*)room->links.data[i])->in--;
 			alist_remove(&room->links, i);
@@ -175,7 +176,7 @@ static	void 		delete_dead_end(t_pair *pair)
 		ft_error("room->in < 0", -2);
 }
 
-static	void 		delete_forks(t_pair *pair)
+static	void 		del_input_forks(t_pair *pair)
 {
 	size_t			i;
 	t_room			*room;
@@ -184,7 +185,7 @@ static	void 		delete_forks(t_pair *pair)
 	i = 0;
 	while (room->links.length > 1 && room->links.length > i)
 	{
-		if (((t_room*)room->links.data[i])->in < 1)
+		if (((t_room*)room->links.data[i])->in > 1)
 		{
 			((t_room*)room->links.data[i])->in--;
 			alist_remove(&room->links, i);
@@ -194,16 +195,122 @@ static	void 		delete_forks(t_pair *pair)
 	}
 }
 
-int 				delete_unnecerarry(t_lemin *lemin)
+static	void 		del_output_forks(t_pair *pair)
+{
+	size_t			i;
+	t_room			*room;
+	size_t			shortest;
+
+	room = pair->value;
+	shortest = room->desc_level;
+	i = 0;
+	while (room->links.length > 1 && room->links.length > i)
+	{
+		shortest = shortest < ((t_room *) room->links.data[i])->desc_level ?
+				   ((t_room *) room->links.data[i])->desc_level :
+				   shortest;
+		i++;
+	}
+	i = 0;
+	while (room->links.length > 1 && room->links.length > i)
+	{
+		if (((t_room *) room->links.data[i])->desc_level != shortest)
+			alist_remove(&room->links, i);
+		else
+			shortest = -1;
+		i++;
+	}
+	if (room->links.length > 1)
+		ft_error("del_output_forks\troom->links.length > 1", -2);
+}
+
+void 				delete_unnecerarry(t_lemin *lemin)
 {
 	t_itr			*itr;
 
 	if (!(itr = ft_memalloc(sizeof(t_itr))))
 		ft_error("Error\n", -1);
-	itr = hm_itr_load(lemin->rooms, itr);
+	itr = hm_itr_load(&lemin->rooms, itr);
 	itr_foreach(itr, (void (*)(pointer)) &check_unuses);
 	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
+	itr_foreach(itr, (void (*)(pointer)) &del_input_forks);
+	itr_foreach(itr, (void (*)(pointer)) &del_output_forks);
 	itr_free(itr);
+}
+
+void 				find_path(t_lemin *lemin)
+{
+	size_t 			i;
+	t_alst			*br;
+	t_room 			*room;
+	i = 0;
+	lemin->paths = alist_new(lemin->start->links.length, &pointer_equal, &pointer_compare);
+	while (i < lemin->paths->length)
+	{
+		br = alist_new(0, NULL, NULL);
+		alist_append(lemin->paths, br);
+		room = lemin->start->links.data[i];
+		while (room != lemin->end)
+		{
+			if (room->links.length > 1)
+				ft_error("find_path\troom->links > 1", -2);
+			alist_append(br, room);
+			room = *room->links.data;
+		}
+		i++;
+	}
+
+}
+
+static void			move(t_alst *lstroom)
+{
+	size_t			i;
+
+	i = lstroom->length - 1;
+	((t_room*)lstroom->data[i])->ant = 0;
+	i--;
+	while (i && i < lstroom->length)
+	{
+		((t_room*)lstroom->data[i])->ant = ((t_room*)lstroom->data[i + 1])->ant;
+		i--;
+	}
+}
+
+static void			print(t_alst *lstroom)
+{
+	size_t			i;
+	t_room 			*room;
+
+	i = 0;
+	while (i < lstroom->length)
+	{
+		room = lstroom->data[i];
+		ft_printf("L%zu-%s", room->ant, room->name);
+		i++;
+	}
+}
+
+void				print_res(t_lemin *lem)
+{
+	size_t			number;
+	size_t			i;
+	size_t			r;
+
+	number = 1;
+	while (lem->ants)
+	{
+		r = 0;
+		while (lem->paths->length > r)
+			move(lem->paths->data[r++]);
+		r = 0;
+		while (lem->paths->length > r)
+		{
+			if (r)
+				ft_putchar(' ');
+			print(lem->paths->data[r++]);
+		}
+		ft_putchar('\n');
+	}
 }
 
 int					main(void)
@@ -211,8 +318,8 @@ int					main(void)
 	t_lemin			lemin;
 
 	ft_bzero(&lemin, sizeof(lemin));
-	alist_init(&lemin.raw, 8192, &string_equal, &string_compare);
-	hash_map_init(&lemin.rooms, &ft_hash, &room_equals);
+	lemin.raw = alist_new(8192, &string_equal, &string_compare);
+	hm_init(&lemin.rooms, &ft_hash, &room_equals);
 	parse_ants_amount(lemin);
 	parse_rooms(lemin);
 	parse_links(lemin);
@@ -220,5 +327,6 @@ int					main(void)
 		ft_error("Error\n", -1);
 	bfs(&lemin);
 	delete_unnecerarry(&lemin);
+	find_path(&lemin);
 
 }

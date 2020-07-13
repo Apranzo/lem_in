@@ -130,6 +130,7 @@ int queue_contains(t_qu *qu, que_val data)
 			return (1);
 		ent = ent->next;
 	}
+	return (0)
 }
 
 int queue_push_tail(t_qu *queue, que_val data)

@@ -7,14 +7,17 @@ typedef struct		s_room
 {
 	char			*name;
 	t_alst 			links;
-	int				level;
+	size_t 			ant;
+	int				asc_level;
+	int				desc_level;
 	int				in;
 	int				required;
 }					t_room;
 
 typedef struct		s_lemin
 {
-	t_alst 			raw;
+	t_alst 			*raw;
+	t_alst 			*paths;
 	size_t			ants;
 	t_hash_map 		rooms;
 	t_room			*start;

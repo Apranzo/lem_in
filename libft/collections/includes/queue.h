@@ -25,8 +25,8 @@ typedef struct 				s_queue
  *                   the memory.
  */
 
+int							queue_contains(t_qu *qu, que_val data);
 t_qu						*queue_new(void);
-t_qu						*queue_init(t_qu *que);
 void						queue_free(t_qu *queue);
 
 /**
