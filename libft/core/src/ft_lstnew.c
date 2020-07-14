@@ -10,19 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/coreft.h"
-#include <stdlib.h>
+#include <coreft.h>
 
-t_node		*ft_lstnew(void const *data, size_t content_size)
+t_node		*ft_lstnew(void *data)
 {
 	t_node	*new;
-	void	*copy;
 
-	copy = data && content_size ? malloc(content_size) : NULL;
 	if (!(new = (t_node *)malloc(sizeof(t_node))))
 		return (NULL);
-	new->data = data ? ft_memcpy(copy, data, content_size) : NULL;
-	new->content_size = data ? content_size : 0;
+	new->data = data;
 	new->next = NULL;
+	new->prev = NULL;
 	return (new);
 }

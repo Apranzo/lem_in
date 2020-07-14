@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#ifndef COREFT_H
+# define COREFT_H
 
 # include <unistd.h>
 # include <string.h>
@@ -51,15 +51,15 @@ typedef struct				s_pair
 }							t_pair;
 
 int					ft_free(void *p);
-int					ft_error(char *mes, int code);
-int					ft_error_fd(int fd, char *mes, int code);
+void				ft_error(char *mes, int code);
+void				ft_error_fd(int fd, char *mes, int code);
 void				*ft_tmemalloc(size_t type_size, size_t amount);
 void				*ft_tmalloc(size_t type_size, size_t amount);
 intmax_t			ft_abs(intmax_t n);
 void				ft_lstfree(t_node *node, size_t len);
 t_node				*ft_lstpush(t_node **begin_list, void *data);
 int					ft_gnl(int fd, char **line);
-t_node				*ft_lstnew(void const *data);
+t_node				*ft_lstnew(void *data);
 char				**ft_freematr(char **matr);
 char				*ft_memcpy(void *dst, const void *src, size_t len);
 void				ft_bzero(void *dst, size_t len);
@@ -124,9 +124,9 @@ void				ft_putendl(char const *s);
 void				ft_putendl_fd(int fd, char const *s);
 void				ft_putnbr(int n);
 void				ft_putnbr_fd(int fd, int n);
-void				ft_lstdelone(t_node **alst, void (*del)(void*, size_t));
+void				ft_lstdelone(t_node **alst, void (*del)(void*));
 void				ft_lstiter(t_node *lst, void (*f)(t_node *elem));
-void				ft_lstdel(t_node **alst, void (*del)(void *, size_t));
+void				ft_lstdel(t_node **alst, void (*del)(void *));
 void				ft_lstadd(t_node **alst, t_node *new);
 t_node				*ft_lstmap(t_node *lst, t_node *(*f)(t_node *elem));
 int					ft_intlen(int n);

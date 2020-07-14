@@ -127,7 +127,7 @@ static int hm_enlarge(t_hash_map *hash_map)
 		return (0);
 	}
 	i = 0;
-	while (i < old_table_size)
+	while (i < old_table_size)  //TODO CHECK iT
 	{
 		while (old_table[i])
 		{

@@ -1,5 +1,5 @@
 #ifndef COMPARE_STRING_H
-#define OMPARE_STRING_H
+#define COMPARE_STRING_H
 
 #include <coreft.h>
 

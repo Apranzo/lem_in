@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/coreft.h"
+#include <coreft.h>
 
-int		ft_error_fd(int fd, char *mes, int code)
+void 		ft_error_fd(int fd, char *mes, int code)
 {
 	write(fd, mes, ft_strlen(mes));
-	return (1 + code - code);
+	exit(code);
 }
 
-int		ft_error(char *mes, int code)
+void 	ft_error(char *mes, int code)
 {
-	return (ft_error_fd(2, mes, code));
+	ft_error_fd(2, mes, code);
 }
