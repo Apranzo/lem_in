@@ -9,15 +9,15 @@
 t_alst *alist_init(t_alst *list, size_t length, is_equal equal, compare comp)
 {
 	length = length > 0 ? length : DEF_SIZE;
-	if ((!(list->data = ft_tmalloc(sizeof(pointer), length))))
+	if (!(list->data = ft_tmalloc(sizeof(pointer), length)))
 	{
 		ft_free(list->data);
 		return (NULL);
 	}
 	list->_alloced = length;
 	list->length = 0;
-	list->_equal_val = equal;
-	list->_comp_val = comp;
+//	list->_equal_val = equal;
+//	list->_comp_val = comp;
 
 	return (list);
 }
@@ -28,8 +28,7 @@ t_alst *alist_new(size_t length, is_equal equal, compare comp)
 {
 	t_alst *new;
 
-	length = length ? length : DEF_SIZE;
-	if (!(new = (t_alst *) malloc(sizeof(t_alst))))
+	if (!(new = (t_alst *) ft_memalloc(sizeof(t_alst))))
 	{
 		ft_free(new);
 		return (NULL);
@@ -54,6 +53,7 @@ static int arraylist_enlarge(t_alst *arraylist)
 	if (!(data = ft_tmemalloc(sizeof(pointer), newsize)))
 		return (0);
 	memcpy(data, arraylist->data, arraylist->length * sizeof(pointer));
+	free(arraylist->data);
 	arraylist->data = data;
 	arraylist->_alloced = newsize;
 	return (1);
@@ -123,13 +123,15 @@ size_t alist_index_of(t_alst *arraylist,
 {
 	size_t i;
 
-	if (!callback)
-		callback = arraylist->_equal_val;
+//	if (!callback)
+//		callback = arraylist->_equal_val;
 
 	i = 0;
-	while  (i < arraylist->length)
+	while  (i < arraylist->length) {
 		if (callback(arraylist->data[i], data))
 			return (i);
+		i++;
+	}
 
 	return (arraylist->length + 1);
 }
@@ -219,8 +221,8 @@ static void arraylist_sort_internal(pointer *list_data,
 
 void arraylist_sort(t_alst *arraylist, compare compare_func)
 {
-	if (!compare_func)
-		compare_func = arraylist->_comp_val;
+//	if (!compare_func)
+//		compare_func = arraylist->_comp_val;
 	/* Perform the recursive sort */
 
 	arraylist_sort_internal(arraylist->data, arraylist->length,

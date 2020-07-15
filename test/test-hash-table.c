@@ -26,12 +26,12 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "alloc-testing.h"
 #include "framework.h"
 
-#include "collections/includes/hash-table.h"
-#include "collections/includes/compare-int.h"
-#include "collections/includes/ft_hash.h"
-#include "collections/includes/compare-string.h"
+#include "../libft/collections/includes/hash-table.h"
+#include "../libft/collections/includes/compare-int.h"
+#include "../libft/collections/includes/ft_hash.h"
+#include "../libft/collections/includes/compare-string.h"
 
-#define NUM_TEST_VALUES 10000
+#define NUM_TEST_VALUES 100000
 
 int value1 = 1, value2 = 2, value3 = 3, value4 = 4;
 int allocated_keys = 0;
@@ -159,15 +159,15 @@ void test_hash_map_remove(void)
 void test_hash_map_iterating(void)
 {
 	t_hash_map		*hash_map;
-	t_hm_iterator	iterator;
+	t_itr 			*iterator = ft_memalloc(sizeof(t_itr));
 	int				count;
 
 	hash_map = generate_hash_map();
 	/* Iterate over all values in the table */
 	count = 0;
-	hm_iterate(hash_map, &iterator);
-	while (hm_iter_has_more(&iterator)) {
-		hm_iter_next(&iterator);
+	hm_itr_load(hash_map, iterator);
+	while (itr_has_more(iterator)) {
+		itr_next(iterator);
 
 		++count;
 	}
@@ -176,8 +176,8 @@ void test_hash_map_iterating(void)
 
 	/* Test iter_next after iteration has completed. */
 
-	t_hm_pair pair = hm_iter_next(&iterator);
-	assert(pair.value == NULL);
+//	t_pair pair = *((t_pair*)itr_next(iterator));
+	assert(itr_next(iterator) == NULL);
 
 	hm_free(hash_map);
 
@@ -185,9 +185,9 @@ void test_hash_map_iterating(void)
 
 	hash_map = hm_new(int_hash, int_equal);
 
-	hm_iterate(hash_map, &iterator);
+	hm_itr_load(hash_map, iterator);
 
-	assert(hm_iter_has_more(&iterator) == 0);
+	assert(itr_has_more(iterator) == 0);
 
 	hm_free(hash_map);
 }
@@ -199,10 +199,10 @@ void test_hash_map_iterating(void)
 void test_hash_map_iterating_remove(void)
 {
 	t_hash_map *hash_map;
-	t_hm_iterator iterator;
+	t_itr *iterator = ft_memalloc(sizeof(t_itr));
 	char buf[10];
 	char *val;
-	t_hm_pair pair;
+	t_pair pair;
 	int count;
 	size_t removed;
 	int i;
@@ -214,13 +214,13 @@ void test_hash_map_iterating_remove(void)
 	count = 0;
 	removed = 0;
 
-	hm_iterate(hash_map, &iterator);
+	hm_itr_load(hash_map, iterator);
 
-	while (hm_iter_has_more(&iterator)) {
+	while (itr_has_more(iterator)) {
 
 		/* Read the next value */
 
-		pair = hm_iter_next(&iterator);
+		pair = *((t_pair*)itr_next(iterator));
 		val = pair.value;
 
 		/* Remove every hundredth entry */
@@ -408,8 +408,8 @@ void test_hash_map_out_of_memory(void)
 void test_hash_iterator_key_pair()
 {
 	t_hash_map *hash_map;
-	t_hm_iterator iterator;
-	t_hm_pair pair;
+	t_itr *iterator = ft_memalloc(sizeof(t_itr));
+	t_pair pair;
 	hash_map = hm_new(int_hash, int_equal);
 
 	/* Add some values */
@@ -417,13 +417,13 @@ void test_hash_iterator_key_pair()
 	hm_insert(hash_map, &value1, &value1);
 	hm_insert(hash_map, &value2, &value2);
 
-	hm_iterate(hash_map, &iterator);
+	hm_itr_load(hash_map, iterator);
 
-	while (hm_iter_has_more(&iterator)) {
+	while (itr_has_more(iterator)) {
 
 		/* Retrieve both Key and Value */
 
-		pair = hm_iter_next(&iterator);
+		pair = *((t_pair*)itr_next(iterator));
 
 		int *key = (int*) pair.key;
 		int *val = (int*) pair.value;

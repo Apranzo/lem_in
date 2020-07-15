@@ -55,6 +55,7 @@ int 				read_intput(int fd, t_lemin *lemin)
 	line = NULL;
 	while ((res = lgnl(fd, &line)) > 0)
 	{
+		ft_printf("line:\t%s\n", line);
 		if (!alist_append(lemin->raw, line))
 			ft_error("Error\n", -1);
 	}
@@ -92,7 +93,7 @@ void 				parse_rooms(t_lemin lemin)
 			ft_error("Error\n", -1);
 		alist_insert(x_cord, cord.x, (pointer) 1);
 		alist_insert(y_cord, cord.y, (pointer) 1);
-		new->name = ft_strdup(room[0]);
+		new->name = ft_strdup(room[0]); //TODO FIX IT
 		if (!ft_strcmp(lemin.raw->data[i - 1], START))
 		{
 			if (lemin.start)
@@ -106,7 +107,7 @@ void 				parse_rooms(t_lemin lemin)
 				ft_error("Error\n", -1);
 			lemin.end = new;
 		}
-	 	if (!hm_insert(&lemin.rooms, new->name, new))
+	 	if (!hm_insert(lemin.rooms, new->name, new))
 	 		ft_error("Error\n", -1);
 	 	ft_freematr(room);
 	 	i++;
@@ -130,12 +131,14 @@ void			parse_links(t_lemin lemin)
 	{
 		if(!(linked = ft_strsplit(lemin.raw->data[i], '-')) || !*linked || !*(linked + 1))
 			ft_error("Error\n", -1);
-		if (!(left = hm_lookup(&lemin.rooms, linked[0])) ||
-				!(right = hm_lookup(&lemin.rooms, linked[1])) ||
-				alist_contains(&left->links, NULL, right) ||
-				alist_contains(&right->links, NULL, left))
+		if (!(left = hm_lookup(lemin.rooms, linked[0])) ||
+				!(right = hm_lookup(lemin.rooms, linked[1]))
+//				||
+//				alist_contains(&left->links, NULL, right) ||
+//				alist_contains(&right->links, NULL, left)
+				)
 			ft_error("Error\n", -1);
-		alist_append(&left->links, right);
+		alist_append(&left->links, right); //TODO check direction
 	}
 }
 
@@ -236,7 +239,7 @@ void 				delete_unnecerarry(t_lemin *lemin)
 
 	if (!(itr = ft_memalloc(sizeof(t_itr))))
 		ft_error("Error\n", -1);
-	itr = hm_itr_load(&lemin->rooms, itr);
+	itr = hm_itr_load(lemin->rooms, itr);
 	itr_foreach(itr, (void (*)(pointer)) &check_unuses);
 	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
 	itr_foreach(itr, (void (*)(pointer)) &del_input_forks);
@@ -343,13 +346,13 @@ int					main(void)
 {
 	t_lemin			lemin;
 
-	freopen("map", "r", stdin);
+	freopen("mmm", "r", stdin);
 
 	ft_bzero(&lemin, sizeof(lemin));
-	lemin.raw = alist_new(8192, &string_equal, &string_compare);
+	lemin.raw = alist_new(2048, &string_equal, &string_compare);
 	read_intput(STDIN_FILENO, &lemin);
-	hm_init(&lemin.rooms, &ft_hash, &room_equals);
 	parse_ants_amount(lemin);
+	lemin.rooms = hm_new(&ft_hash, &string_equal);
 	parse_rooms(lemin);
 	parse_links(lemin);
 	if (!lemin.start || !lemin.end || !lemin.start->links.length)

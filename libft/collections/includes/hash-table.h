@@ -46,7 +46,6 @@ pointer						hm_lookup(t_hash_map *hash_map,
 int							hm_remove(t_hash_map *hash_map, pointer key);
 size_t						hm_num_entries(t_hash_map *hash_map);
 t_itr						*hm_itr_load(t_hash_map *hash_map,  t_itr *itr);
-int							hm_iter_has_more(t_itr *iterator);
-//t_hm_pair					hm_iter_next(t_itr *iterator);
+//t_pair					itr_next(t_itr *iterator);
 
 #endif

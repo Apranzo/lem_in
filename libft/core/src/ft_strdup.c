@@ -19,8 +19,7 @@ char		*ft_strdup(const char *src)
 	char	*copied;
 
 	len = ft_strlen(src);
-	copied = ft_strnew(len);
-	if (!copied)
+	if (!(copied = ft_strnew(len)))
 		return (NULL);
 	return (ft_strncpy(copied, src, len));
 }

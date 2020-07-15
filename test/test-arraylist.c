@@ -18,7 +18,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
  */
 
-/* t_alist test cases */
+/* t_alst test cases */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,17 +27,17 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "alloc-testing.h"
 #include "framework.h"
 
-#include "collections/includes/arraylist.h"
-#include "collections/includes/compare-int.h"
+#include "../libft/collections/includes/arraylist.h"
+#include "../libft/collections/includes/compare-int.h"
 
 int variable1, variable2, variable3, variable4;
 
-t_alist *generate_arraylist(void)
+t_alst *generate_arraylist(void)
 {
-	t_alist *arraylist;
+	t_alst *arraylist;
 	int i;
 
-	arraylist = alist_new(0);
+	arraylist = alist_new(0, NULL, NULL);
 
 	for (i=0; i<4; ++i) {
 		alist_append(arraylist, &variable1);
@@ -51,17 +51,17 @@ t_alist *generate_arraylist(void)
 
 void test_arraylist_new_free(void)
 {
-	t_alist *arraylist;
+	t_alst *arraylist;
 
 	/* Use a default size when given zero */
 
-	arraylist = alist_new(0);
+	arraylist = alist_new(0, NULL, NULL);
 	assert(arraylist == NULL);
 	alist_free(arraylist);
 
 	/* Normal allocated */
 
-	arraylist = alist_new(10);
+	arraylist = alist_new(10, NULL, NULL);
 	assert(arraylist != NULL);
 	alist_free(arraylist);
 
@@ -72,20 +72,20 @@ void test_arraylist_new_free(void)
 	/* Test low memory scenarios (failed malloc) */
 
 	alloc_test_set_limit(0);
-	arraylist = alist_new(0);
+	arraylist = alist_new(0, NULL, NULL);
 	assert(arraylist == NULL);
 
 	alloc_test_set_limit(1);
-	arraylist = alist_new(100);
+	arraylist = alist_new(100, NULL, NULL);
 	assert(arraylist == NULL);
 }
 
 void test_arraylist_append(void)
 {
-	t_alist *arraylist;
+	t_alst *arraylist;
 	int i;
 
-	arraylist = alist_new(0);
+	arraylist = alist_new(0, NULL, NULL);
 
 	assert(arraylist->length == 0);
 
@@ -118,7 +118,7 @@ void test_arraylist_append(void)
 
 	/* Test low memory scenario */
 
-	arraylist = alist_new(100);
+	arraylist = alist_new(100, NULL, NULL);
 
 	alloc_test_set_limit(0);
 
@@ -136,10 +136,10 @@ void test_arraylist_append(void)
 
 void test_arraylist_prepend(void)
 {
-	t_alist *arraylist;
+	t_alst *arraylist;
 	int i;
 
-	arraylist = alist_new(0);
+	arraylist = alist_new(0, NULL, NULL);
 
 	assert(arraylist->length == 0);
 
@@ -172,7 +172,7 @@ void test_arraylist_prepend(void)
 
 	/* Test low memory scenario */
 
-	arraylist = alist_new(100);
+	arraylist = alist_new(100, NULL, NULL);
 
 	alloc_test_set_limit(0);
 
@@ -189,7 +189,7 @@ void test_arraylist_prepend(void)
 
 void test_arraylist_insert(void)
 {
-	t_alist *arraylist;
+	t_alst *arraylist;
 	int i;
 
 	arraylist = generate_arraylist();
@@ -254,7 +254,7 @@ void test_arraylist_insert(void)
 
 void test_arraylist_remove_range(void)
 {
-	t_alist *arraylist;
+	t_alst *arraylist;
 
 	arraylist = generate_arraylist();
 
@@ -284,7 +284,7 @@ void test_arraylist_remove_range(void)
 
 void test_arraylist_remove(void)
 {
-	t_alist *arraylist;
+	t_alst *arraylist;
 
 	arraylist = generate_arraylist();
 
@@ -315,7 +315,7 @@ void test_arraylist_index_of(void)
 {
 	int entries[] = { 89, 4, 23, 42, 16, 15, 8, 99, 50, 30 };
 	int num_entries;
-	t_alist *arraylist;
+	t_alst *arraylist;
 	int i;
 	int index;
 	int val;
@@ -323,7 +323,7 @@ void test_arraylist_index_of(void)
 	/* Generate an arraylist containing the entries in the array */
 
 	num_entries = sizeof(entries) / sizeof(int);
-	arraylist = alist_new(0);
+	arraylist = alist_new(0, NULL, NULL);
 
 	for (i=0; i<num_entries; ++i) {
 		alist_append(arraylist, &entries[i]);
@@ -343,18 +343,18 @@ void test_arraylist_index_of(void)
 	/* Check invalid values */
 
 	val = 0;
-	assert(alist_index_of(arraylist, int_equal, &val) < 0);
+	assert(alist_index_of(arraylist, int_equal, &val) == arraylist->length + 1);
 	val = 57;
-	assert(alist_index_of(arraylist, int_equal, &val) < 0);
+	assert(alist_index_of(arraylist, int_equal, &val) == arraylist->length + 1);
 
 	alist_free(arraylist);
 }
 
 void test_arraylist_clear(void)
 {
-	t_alist *arraylist;
+	t_alst *arraylist;
 
-	arraylist = alist_new(0);
+	arraylist = alist_new(0, NULL, NULL);
 
 	/* Emptying an already-empty arraylist */
 
@@ -377,13 +377,13 @@ void test_arraylist_clear(void)
 
 void test_arraylist_sort(void)
 {
-	t_alist *arraylist;
+	t_alst *arraylist;
 	int entries[] = { 89, 4, 23, 42, 4, 16, 15, 4, 8, 99, 50, 30, 4 };
 	int sorted[]  = { 4, 4, 4, 4, 8, 15, 16, 23, 30, 42, 50, 89, 99 };
 	size_t num_entries = sizeof(entries) / sizeof(int);
 	size_t i;
 
-	arraylist = alist_new(10);
+	arraylist = alist_new(10, NULL, NULL);
 
 	for (i=0; i<num_entries; ++i) {
 		alist_prepend(arraylist, &entries[i]);
@@ -408,7 +408,7 @@ void test_arraylist_sort(void)
 
 	/* Check sorting an empty list */
 
-	arraylist = alist_new(5);
+	arraylist = alist_new(5, NULL, NULL);
 
 	arraylist_sort(arraylist, int_compare);
 
@@ -418,7 +418,7 @@ void test_arraylist_sort(void)
 
 	/* Check sorting a list with 1 entry */
 
-	arraylist = alist_new(5);
+	arraylist = alist_new(5, NULL, NULL);
 
 	alist_prepend(arraylist, &entries[0]);
 	arraylist_sort(arraylist, int_compare);

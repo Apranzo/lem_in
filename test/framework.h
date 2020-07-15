@@ -25,6 +25,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 extern "C" {
 #endif
 
+#include "../libft/collections/includes/collections.h"
 /**
  * @file framework.h
  *

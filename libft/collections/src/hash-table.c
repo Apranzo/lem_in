@@ -19,8 +19,7 @@ static int hm_allocate_table(t_hash_map *hash_map)
 	hash_map->table_size = hash_map->prime_index < hm_num_primes ?
 					 hm_primes[hash_map->prime_index] :
 					 hash_map->entries * 10;
-	return (!!(hash_map->table =
-				ft_tmemalloc(sizeof(t_hm_entry *), hash_map->table_size)));
+	return ((int)(hash_map->table =	ft_tmemalloc(sizeof(t_hm_entry *), hash_map->table_size)));
 }
 
 static void hm_free_entry(t_hash_map *hash_map, t_hm_entry *entry)
@@ -276,7 +275,6 @@ t_itr 					*hm_itr_load(t_hash_map *hash_map, t_itr *itr)
 	itr->collection = hash_map;
 	/* Find the first entry */
 	chain = 0;
-	tail = itr->_cur_node;
 	while (chain < hash_map->table_size)
 	{
 		if (hash_map->table[chain])
@@ -288,10 +286,7 @@ t_itr 					*hm_itr_load(t_hash_map *hash_map, t_itr *itr)
 					return (NULL);
 				new->data = &entry->pair;
 				if (!itr->_cur_node) //TODO fix
-				{
 					itr->_cur_node = new;
-					new->prev = itr->_cur_node;
-				}
 				else
 				{
 					new->prev = tail;
@@ -301,7 +296,7 @@ t_itr 					*hm_itr_load(t_hash_map *hash_map, t_itr *itr)
 				entry = entry->next;
 			}
 //			itr->next_chain = chain;
-			break ;
+//			break ;
 		}
 		chain++;
 	}

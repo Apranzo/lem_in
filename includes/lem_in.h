@@ -19,7 +19,7 @@ typedef struct		s_lemin
 	t_alst 			*raw;
 	t_alst 			*paths;
 	size_t			ants;
-	t_hash_map 		rooms;
+	t_hash_map 		*rooms;
 	t_room			*start;
 	t_room			*end;
 }					t_lemin;

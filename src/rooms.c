@@ -10,4 +10,5 @@ int 			room_free(pointer room)
 {
 	free(((t_room*)room)->name);
 	free(room);
+	return (1);
 }

@@ -106,7 +106,7 @@ static void test_hash_string(void)
 
 static void test_arraylist(void)
 {
-	t_alist *arraylist;
+	t_alst *arraylist;
 
 	arraylist = arraylist_new(0);
 	arraylist_free(arraylist);
