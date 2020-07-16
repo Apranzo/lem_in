@@ -9,7 +9,7 @@
 t_alst *alist_init(t_alst *list, size_t length, is_equal equal, compare comp)
 {
 	length = length > 0 ? length : DEF_SIZE;
-	if (!(list->data = ft_tmalloc(sizeof(pointer), length)))
+	if (!(list->data = ft_memalloc(sizeof(pointer) * length)))
 	{
 		ft_free(list->data);
 		return (NULL);
@@ -50,7 +50,7 @@ static int arraylist_enlarge(t_alst *arraylist)
 	size_t newsize;
 
 	newsize = arraylist->_alloced * 2;
-	if (!(data = ft_tmemalloc(sizeof(pointer), newsize)))
+	if (!(data = ft_memalloc(sizeof(pointer) * newsize)))
 		return (0);
 	memcpy(data, arraylist->data, arraylist->length * sizeof(pointer));
 	free(arraylist->data);
@@ -90,10 +90,8 @@ void alist_remove_range(t_alst *arraylist, size_t index,
 {
 	/* Check this is a valid range */
 
-	if (index > arraylist->length || index + length > arraylist->length) {
+	if (index + length > arraylist->length)
 		return;
-	}
-
 	/* Move back the entries following the range to be removed */
 
 	memmove(&arraylist->data[index],

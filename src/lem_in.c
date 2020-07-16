@@ -4,20 +4,6 @@
 # define END "##end"
 # define JAIL "#"
 
-static int			lgnl(int fd, char **line)
-{
-	int 			res;
-
-	while ((res = ft_gnl(fd, line)) > 0)
-		if (!ft_strncmp(*line, JAIL, 1) &&
-				ft_strcmp(*line, START) &&
-				ft_strcmp(*line, END))
-			free(*line); //TODO Fix link
-		else
-			break ;
-	return (res);
-}
-
 int			is_num_valid(int value, char *str)
 {
 	char	*value_str;
@@ -25,7 +11,7 @@ int			is_num_valid(int value, char *str)
 
 	res = 0;
 	value_str = ft_itoa(value);
-	if (ft_strcmp(value_str, str + (str[0] == '+')) == 0)
+	if (strcmp(value_str, str + (str[0] == '+')) == 0)
 		res = 1;
 	if (value_str)
 		free(value_str);
@@ -53,11 +39,15 @@ int 				read_intput(int fd, t_lemin *lemin)
 	int 			res;
 
 	line = NULL;
-	while ((res = lgnl(fd, &line)) > 0)
+	while ((res = ft_gnl(fd, &line)) > 0)
 	{
-		ft_printf("line:\t%s\n", line);
+//		ft_printf("line:\t%s\n", line);
 		if (!alist_append(lemin->raw, line))
-			ft_error("Error\n", -1);
+			ft_error("read_input Error allocation\n", -1);
+//		res = ft_atoi(lemin->raw->data[0]);
+//		if (res)
+//			ft_putnbr(res);
+//		free(line);
 	}
 	return (!res);
 }
@@ -77,7 +67,7 @@ void 				parse_rooms(t_lemin lemin)
 	y_cord = alist_new(2048, &int_equal, &int_compare);
 	while (!ft_strchr(lemin.raw->data[i], '-'))
 	{
-		if (!ft_strcmp(lemin.raw->data[i], END) || !ft_strcmp(lemin.raw->data[i], START))
+		if (!strcmp(lemin.raw->data[i], END) || !ft_strcmp(lemin.raw->data[i], START))
 			i++;
 		if (!(new = ft_memalloc(sizeof(t_room))) ||
 				!(room = ft_strsplit(lemin.raw->data[i], ' ')) ||
@@ -93,15 +83,15 @@ void 				parse_rooms(t_lemin lemin)
 			ft_error("Error\n", -1);
 		alist_insert(x_cord, cord.x, (pointer) 1);
 		alist_insert(y_cord, cord.y, (pointer) 1);
-		new->name = ft_strdup(room[0]); //TODO FIX IT
-		if (!ft_strcmp(lemin.raw->data[i - 1], START))
+		new->name = strdup(room[0]); //TODO FIX IT
+		if (!strcmp(lemin.raw->data[i - 1], START))
 		{
 			if (lemin.start)
 				ft_error("Error\n", -1);
 			lemin.start = new;
 
 		}
-		if (!ft_strcmp(lemin.raw->data[i - 1], END))
+		if (!strcmp(lemin.raw->data[i - 1], END))
 		{
 			if (lemin.end)
 				ft_error("Error\n", -1);
@@ -142,12 +132,12 @@ void			parse_links(t_lemin lemin)
 	}
 }
 
-int			parse_ants_amount(t_lemin lemin)
+int			parse_ants_amount(t_lemin *lemin)
 {
 	int				num;
 
-	num = ft_atoi(lemin.raw->data[0]);
-	if (num <= 0 || !is_num_valid(num, lemin.raw->data[0]))
+	num = ft_atoi(lemin->raw->data[0]);
+	if (num <= 0 || !is_num_valid(num, lemin->raw->data[0]))
 		ft_error("Error\n", -1);
 	return (num);
 }
@@ -344,21 +334,23 @@ void				print_res(t_lemin *lem)
 
 int					main(void)
 {
-	t_lemin			lemin;
+	t_lemin			*lemin;
 
-	freopen("mmm", "r", stdin);
+	freopen("map", "r", stdin);
 
-	ft_bzero(&lemin, sizeof(lemin));
-	lemin.raw = alist_new(2048, &string_equal, &string_compare);
-	read_intput(STDIN_FILENO, &lemin);
+
+	if (!(lemin = ft_memalloc(sizeof(t_lemin))) ||
+			!(lemin->raw = alist_new(1000, &string_equal, &string_compare)))
+		ft_error("main alloc error", -1);
+	read_intput(STDIN_FILENO, lemin);
 	parse_ants_amount(lemin);
-	lemin.rooms = hm_new(&ft_hash, &string_equal);
-	parse_rooms(lemin);
-	parse_links(lemin);
-	if (!lemin.start || !lemin.end || !lemin.start->links.length)
+	lemin->rooms = hm_new(&ft_hash, &string_equal);
+	parse_rooms(*lemin);
+	parse_links(*lemin);
+	if (!lemin->start || !lemin->end || !lemin->start->links.length)
 		ft_error("Error\n", -1);
-	bfs(&lemin);
-	delete_unnecerarry(&lemin);
-	find_path(&lemin);
+	bfs(lemin);
+	delete_unnecerarry(lemin);
+	find_path(lemin);
 
 }

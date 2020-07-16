@@ -17,7 +17,7 @@
 # include <limits.h>
 # include "../../core/includes/coreft.h"
 
-# define PRINTF_BUFF_SIZE	4096
+# define PRINTF_BUFF_SIZE	1
 # define LENGTH_H	0x01
 # define LENGTH_HH	0x02
 # define LENGTH_L	0x04

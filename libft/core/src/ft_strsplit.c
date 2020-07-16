@@ -12,54 +12,81 @@
 
 #include "../includes/coreft.h"
 
-static int			ft_wordlen(char const *s, char c)
+
+static size_t	ft_count_words(char const *s, char c)
 {
-	int				i;
+	size_t words;
 
-	i = 0;
-	while (s[i] && s[i] != c)
-		i++;
-	return (i);
-}
-
-static char			*ft_storeword(char const *s, char c)
-{
-	int				i;
-	char			*tmp;
-
-	i = -1;
-	if (!(tmp = ft_strnew(ft_wordlen(s, c))))
-		return (NULL);
-	while (s[++i] && s[i] != c)
-		tmp[i] = s[i];
-	return (tmp);
-}
-
-char				**ft_strsplit(char const *s, char c)
-{
-	int				words;
-	int				nofword;
-	char			**tab;
-
-	if (!s)
-		return (NULL);
-	nofword = 0;
-	words = ft_cntwords(s, c);
-	if (!(tab = (char **)ft_tmalloc(sizeof(char *), words + 1)))
-		return (NULL);
-	while (*s != '\0')
+	words = 0;
+	while (*s)
 	{
-		if (*s != c)
+		while (*s == c)
+			s++;
+		if (*s)
 		{
-			if (!(tab[nofword] = ft_storeword(s, c)))
-				return (NULL);
-			nofword++;
-			while (*s != '\0' && *s != c)
+			words++;
+			while (*s && *s != c)
 				s++;
 		}
-		else
-			s++;
 	}
-	tab[nofword] = 0;
-	return (tab);
+	return (words);
+}
+
+static char		*ft_get_word(char *word, char c)
+{
+	char *start;
+
+	start = word;
+	while (*word && *word != c)
+		word++;
+	*word = '\0';
+	return (ft_strdup(start));
+}
+
+static void		ft_free_words(char **words, size_t i)
+{
+	while (i--)
+		ft_strdel(&(words[i]));
+	free(*words);
+}
+
+static char		**ft_get_words(char *s, char c, size_t words_count)
+{
+	char	**words;
+	char	*word;
+	size_t	i;
+
+	i = 0;
+	if ((words = (char **)ft_memalloc(sizeof(char *) * (words_count + 1))))
+	{
+		while (i < words_count)
+		{
+			while (*s == c)
+				s++;
+			if (*s)
+			{
+				if (!(word = ft_get_word(s, c)))
+				{
+					ft_free_words(words, i);
+					return (NULL);
+				}
+				words[i++] = word;
+				s += (ft_strlen(word) + 1);
+			}
+		}
+		words[i] = NULL;
+	}
+	return (words);
+}
+
+char			**ft_strsplit(char const *s, char c)
+{
+	char	**words;
+	char	*line;
+
+	if (!s || !(line = ft_strdup((char *)s)))
+		return (NULL);
+	words = ft_get_words(line, c, ft_count_words(line, c));
+	free(line);
+	return (words);
 }
