@@ -16,11 +16,14 @@ void		ft_lstdel(t_node **alst, void (*del)(void *))
 {
 	t_node	*tmp;
 
-	while (*alst)
+	while (alst && *alst)
 	{
 		tmp = (*alst)->next;
-		del((*alst)->data);
+		tmp->prev = (*alst)->prev;
+		if (tmp->prev)
+			tmp->prev->next = tmp;
+		if (del)
+			del((*alst)->data);
 		*alst = tmp;
-		ft_memdel((void **)&tmp);
 	}
 }

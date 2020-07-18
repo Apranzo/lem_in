@@ -16,25 +16,24 @@ static void		desc_level(t_room *child, t_room *parent)
 						parent->desc_level + 1;
 }
 
-static int 		bfs_rec(t_room *room, t_hash_map *black, t_qu *qu,
+static int 			bfs_rec(t_room *room, t_hash_map *black, t_qu *qu,
 							void (*f_level)(t_room *child, t_room *parent))
 {
-	size_t 			i;
-	t_room			**rooms;
-	i = 0;
-	rooms = (t_room **) room->links.data;
+	t_node 			*node;
+
+	node = room->links->data;
 	if (!hm_insert(black, room->name, room))
 		return (0);
-	while (i < room->links.length)
+	while (node)
 	{
-		if (!hm_lookup(black, rooms[i]->name) &&
-			!queue_contains(qu, rooms[i]))
+		if (!hm_lookup(black, ((t_room *)node->data)->name) &&
+			!queue_contains(qu, node->data))
 		{
-			f_level(rooms[i], room);
-			if (!queue_push_head(qu, rooms[i]))
+			f_level(node->data, room);
+			if (!queue_push_head(qu, node->data))
 				return (0);
 		}
-		i++;
+		node = node->next;
 	}
 	return (1);
 }

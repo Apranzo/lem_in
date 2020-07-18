@@ -16,7 +16,8 @@ t_node	*ft_lstpush(t_node **begin_list, void *data)
 {
 	t_node *first;
 
-	first = ft_lstnew(data);
+	if (!(first = ft_lstnew(data)))
+		return (NULL);
 	first->next = *begin_list;
 	if (*begin_list)
 		(*begin_list)->prev = first;

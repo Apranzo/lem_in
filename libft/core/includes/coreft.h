@@ -57,6 +57,7 @@ void				*ft_tmemalloc(size_t type_size, size_t amount);
 void				*ft_tmalloc(size_t type_size, size_t amount);
 intmax_t			ft_abs(intmax_t n);
 void				ft_lstfree(t_node *node, size_t len);
+t_node				*ft_lstappend(t_node **begin_list, void *data);
 t_node				*ft_lstpush(t_node **begin_list, void *data);
 int					ft_gnl(int fd, char **line);
 t_node				*ft_lstnew(void *data);
