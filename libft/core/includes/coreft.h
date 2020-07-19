@@ -24,6 +24,11 @@
 # define BASE_UPPER "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 typedef void		*pointer;
+//typedef union
+//{
+//	pointer 		blob;
+//	char 			*str;
+//}					t_pointer;
 
 typedef	struct		s_xy
 {
@@ -33,6 +38,7 @@ typedef	struct		s_xy
 
 typedef struct		s_node
 {
+//	t_pointer		*data;
 	void			*data;
 	struct s_node	*next;
 	struct s_node	*prev;

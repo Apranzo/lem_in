@@ -124,7 +124,7 @@ int queue_contains(t_qu *qu, que_val data)
 	t_qu_entry	*ent;
 
 	ent = qu->head;
-	while (ent->next)
+	while (ent)
 	{
 		if (ent->data == data)
 			return (1);

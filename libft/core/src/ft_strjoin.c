@@ -19,8 +19,10 @@ char		*ft_strjoin(char const *s1, char const *s2)
 	size_t	size2;
 	char	*new;
 
-	size1 = ft_strlen(s1);
-	size2 = ft_strlen(s2);
+	if (!s1 && !s2)
+		return (NULL);
+	size1 = s1 ? ft_strlen(s1) : 0;
+	size2 = s2 ? ft_strlen(s2) : 0;
 	new = ft_strnew(size1 + size2);
 	ft_strcpy(new, s1);
 	ft_strncat(new, s2, size2);

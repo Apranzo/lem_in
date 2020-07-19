@@ -19,8 +19,7 @@ void		ft_lstdel(t_node **alst, void (*del)(void *))
 	while (alst && *alst)
 	{
 		tmp = (*alst)->next;
-		tmp->prev = (*alst)->prev;
-		if (tmp->prev)
+		if (tmp && (tmp->prev = (*alst)->prev))
 			tmp->prev->next = tmp;
 		if (del)
 			del((*alst)->data);

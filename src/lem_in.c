@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include "includes/lem_in.h"
 # define START "##start"
 # define END "##end"
@@ -41,8 +42,8 @@ int 				read_intput(int fd, t_lemin *lemin)
 	line = NULL;
 	while ((res = ft_gnl(fd, &line)) > 0)
 	{
-//		printf("line:\t%p\n", line);
-
+		if (!lemin->raw && !line)
+			assert(0);
 		if (!ft_lstappend(&lemin->raw, line))
 			ft_error("read_input Error allocation\n", -1);
 //		res = ft_atoi(lemin->raw->data[0]);
@@ -53,7 +54,7 @@ int 				read_intput(int fd, t_lemin *lemin)
 	return (!res);
 }
 
-void 				parse_rooms(t_lemin lemin)
+void 				parse_rooms(t_lemin *lemin)
 {
 	t_alst			*x_cord;
 	t_alst			*y_cord;
@@ -63,7 +64,7 @@ void 				parse_rooms(t_lemin lemin)
 	char 			**room;
 	t_room			*new;
 
-	node = lemin.raw;
+	node = lemin->raw;
 	cord = (t_xy){-1, -1};
 	x_cord = alist_new(2048, &int_equal, &int_compare);
 	y_cord = alist_new(2048, &int_equal, &int_compare);
@@ -88,43 +89,43 @@ void 				parse_rooms(t_lemin lemin)
 		new->name = strdup(room[0]); //TODO FIX IT
 		if (!strcmp(node->prev->data, START))
 		{
-			if (lemin.start)
+			if (lemin->start)
 				ft_error("Error\n", -1);
-			lemin.start = new;
+			lemin->start = new;
 
 		}
 		if (!strcmp(node->prev->data, END))
 		{
-			if (lemin.end)
+			if (lemin->end)
 				ft_error("Error\n", -1);
-			lemin.end = new;
+			lemin->end = new;
 		}
-	 	if (!hm_insert(lemin.rooms, new->name, new))
+	 	if (!hm_insert(lemin->rooms, new->name, new))
 	 		ft_error("Error\n", -1);
 	 	ft_freematr(room);
 	 	node = node->next;
 	}
-//	if (!lemin.raw->data[i])
+//	if (!lemin->raw->data[i])
 //		ft_error("Error\n", -1);
 	alist_free(x_cord);
 	alist_free(y_cord);
-	lemin.raw = node; //TODO free before
+	lemin->raw = node; //TODO free before
 }
 
-void				parse_links(t_lemin lemin)
+void				parse_links(t_lemin *lemin)
 {
 	t_node			*node;
 	char 			**linked;
 	t_room			*left;
 	t_room			*right;
 
-	node = lemin.raw;
-	while (ft_cntwords(node->data, '-'))
+	node = lemin->raw;
+	while (node && ft_cntwords(node->data, '-'))
 	{
 		if(!(linked = ft_strsplit(node->data, '-')) || !*linked || !*(linked + 1))
 			ft_error("Error\n", -1);
-		if (!(left = hm_lookup(lemin.rooms, linked[0])) ||
-				!(right = hm_lookup(lemin.rooms, linked[1]))
+		if (!(left = hm_lookup(lemin->rooms, linked[0])) ||
+				!(right = hm_lookup(lemin->rooms, linked[1]))
 //				||
 //				alist_contains(&left->links, NULL, right) ||  // TODO check it
 //				alist_contains(&right->links, NULL, left)
@@ -132,11 +133,13 @@ void				parse_links(t_lemin lemin)
 			ft_error("Error\n", -1);
 		ft_lstappend(&left->links, right);
 		ft_lstappend(&right->links, left); //TODO check direction
+		node = node->next;
 	}
 }
 
 int			parse_ants_amount(t_lemin *lemin)
 {
+	assert(lemin->raw);
 	lemin->ants = ft_atoi(lemin->raw->data);
 	if (lemin->ants <= 0 || !is_num_valid(lemin->ants, lemin->raw->data))
 		ft_error("Error\n", -1);
@@ -240,7 +243,7 @@ void 				delete_unnecerarry(t_lemin *lemin)
 	if (!(itr = ft_memalloc(sizeof(t_itr))))
 		ft_error("Error\n", -1);
 	itr = hm_itr_load(lemin->rooms, itr);
-	itr_foreach(itr, (void (*)(pointer)) &check_unuses);
+	itr_foreach(itr, (void (*)(pointer)) &check_unuses); //TODO удаление в итераторе
 	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
 	itr_foreach(itr, (void (*)(pointer)) &del_input_forks);
 	itr_foreach(itr, (void (*)(pointer)) &del_output_forks);
@@ -346,21 +349,23 @@ int					main(void)
 	t_lemin			*lemin;
 //	int y = 1000000;
 
-	freopen("map", "r", stdin);
-
+	freopen("mmm", "r", stdin);
 
 	if (!(lemin = ft_memalloc(sizeof(t_lemin)))
 //	||
 //			!(lemin->raw = alist_new(1000, &string_equal, &string_compare))
 			)
 		ft_error("main alloc error", -1);
+
 	read_intput(STDIN_FILENO, lemin);
+	assert(lemin->raw);
 //	while (--y)
 	parse_ants_amount(lemin);
 //	ft_putnbr(parse_ants_amount(lemin));
 	lemin->rooms = hm_new(&ft_hash, &string_equal);
-	parse_rooms(*lemin);
-	parse_links(*lemin);
+	assert(lemin->rooms);
+	parse_rooms(lemin);
+	parse_links(lemin);
 	if (!lemin->start || !lemin->end || !lemin->start->links)
 		ft_error("Error\n", -1);
 	bfs(lemin);
