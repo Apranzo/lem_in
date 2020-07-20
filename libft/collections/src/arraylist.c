@@ -6,7 +6,7 @@
 /* malloc() / free() testing */
 # define DEF_SIZE 16
 
-t_alst *alist_init(t_alst *list, size_t length, is_equal equal, compare comp)
+t_alst *alist_init(t_alst *list, size_t length, f_equal equal, f_compare comp)
 {
 	length = length > 0 ? length : DEF_SIZE;
 	if (!(list->data = ft_memalloc(sizeof(pointer) * length)))
@@ -24,7 +24,7 @@ t_alst *alist_init(t_alst *list, size_t length, is_equal equal, compare comp)
 
 /* Automatically resizing array */
 
-t_alst *alist_new(size_t length, is_equal equal, compare comp)
+t_alst *alist_new(size_t length, f_equal equal, f_compare comp)
 {
 	t_alst *new;
 
@@ -109,14 +109,14 @@ void alist_remove(t_alst *arraylist, size_t index)
 	alist_remove_range(arraylist, index, 1);
 }
 
-int				alist_contains(t_alst *arraylist, is_equal callback,
+int				alist_contains(t_alst *arraylist, f_equal callback,
 								  pointer data)
 {
 	return (alist_index_of(arraylist, callback, data) != arraylist->length + 1);
 }
 
 size_t alist_index_of(t_alst *arraylist,
-					  is_equal callback,
+					  f_equal callback,
 					  pointer data)
 {
 	size_t i;
@@ -143,7 +143,7 @@ void alist_clear(t_alst *arraylist)
 
 static void arraylist_sort_internal(pointer *list_data,
 									size_t list_length,
-									compare compare_func)
+									f_compare compare_func)
 {
 	pointer pivot;
 	pointer tmp;
@@ -217,7 +217,7 @@ static void arraylist_sort_internal(pointer *list_data,
 	                        compare_func);
 }
 
-void arraylist_sort(t_alst *arraylist, compare compare_func)
+void arraylist_sort(t_alst *arraylist, f_compare compare_func)
 {
 //	if (!compare_func)
 //		compare_func = arraylist->_comp_val;

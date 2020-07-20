@@ -2,7 +2,7 @@
 
 /* String hash function */
 
-size_t ft_hash(pointer pointer)
+size_t ft_str_hash(pointer pointer)
 {
 	/* This is the djb2 string hash function */
 

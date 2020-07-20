@@ -10,5 +10,6 @@
 #include "queue.h"
 #include "set.h"
 #include "iterator.h"
+#include "list.h"
 
 #endif

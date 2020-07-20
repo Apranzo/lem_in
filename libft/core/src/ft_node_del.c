@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_list_push_params.c                              :+:      :+:    :+:   */
+/*   ft_lstdel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cshinoha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/13 23:16:49 by cshinoha          #+#    #+#             */
+/*   Created: 2019/04/18 17:27:01 by cshinoha          #+#    #+#             */
 /*   Updated: 2020/07/04 15:45:00 by cshinoha         ###   ########.ru       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <coreft.h>
 
-t_node	*ft_node_prepend(t_node **begin_list, void *data)
+pointer 		ft_node_del(t_node *node, void (*del)(void *))
 {
-	t_node *first;
+	t_node	*tmp;
 
-	if (!(first = ft_lstnew(data)))
-		return (NULL);
-	first->next = *begin_list;
-	if (*begin_list)
-		(*begin_list)->prev = first;
-	first->prev = NULL;
-	*begin_list = first;
-	return (*begin_list);
+	if (node)
+	{
+		tmp = node->next;
+		if (tmp && (tmp->prev = node->prev))
+			tmp->prev->next = tmp;
+		if (del)
+			del(node->data);
+	}
+	return (node);
 }

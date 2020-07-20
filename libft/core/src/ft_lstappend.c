@@ -1,16 +1,16 @@
 #include <coreft.h>
 
-t_node *ft_lstappend(t_node **list, pointer data)
+t_node *ft_node_append(t_node **node, pointer data)
 {
 	t_node *rover;
 	t_node *new;
 
-	if (!list || !(new = ft_lstnew(data)))
+	if (!node || !(new = ft_lstnew(data)))
 		return (NULL);
-	if (!*list)
-		*list = new;
+	if (!*node)
+		*node = new;
 	else {
-		rover = *list;
+		rover = *node;
 		while (rover->next)
 			rover = rover->next;
 		new->prev = rover;

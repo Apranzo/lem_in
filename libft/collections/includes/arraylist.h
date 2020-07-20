@@ -23,12 +23,6 @@
 #include <iterator.h>
 
 
-typedef int			(*is_equal)(pointer value1,
-								   pointer value2);
-
-typedef int			(*compare)(pointer value1,
-								  pointer value2);
-
 //typedef struct 		s_iterator
 //{
 //	pointer 		data;
@@ -45,8 +39,8 @@ typedef struct 		s_alist
 }					t_alst;
 
 
-t_alst				*alist_new(size_t length, is_equal, compare);
-t_alst				*alist_init(t_alst *list, size_t length, is_equal, compare);
+t_alst				*alist_new(size_t length, f_equal, f_compare);
+t_alst				*alist_init(t_alst *list, size_t length, f_equal, f_compare);
 void				alist_free(t_alst *arraylist);
 int					alist_append(t_alst *arraylist, pointer data);
 int					alist_prepend(t_alst *arraylist, pointer data);
@@ -55,12 +49,12 @@ void				alist_remove_range(t_alst *arraylist, size_t index,
 									   size_t length);
 int					alist_insert(t_alst *arraylist, size_t index,
 									pointer data);
-size_t				alist_index_of(t_alst *arraylist, is_equal callback,
+size_t				alist_index_of(t_alst *arraylist, f_equal callback,
 									 pointer data);
-int					alist_contains(t_alst *arraylist, is_equal callback,
+int					alist_contains(t_alst *arraylist, f_equal callback,
 									  pointer data);
 void				alist_clear(t_alst *arraylist);
-void				arraylist_sort(t_alst *arraylist, compare compare_func);
+void				arraylist_sort(t_alst *arraylist, f_compare compare_func);
 
 #endif
 

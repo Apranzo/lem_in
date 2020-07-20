@@ -31,7 +31,7 @@ static void hm_free_entry(t_hash_map *hash_map, t_hm_entry *entry)
 	free(entry);
 }
 
-t_hash_map *hm_init(t_hash_map *map, hm_hash_f hash_func, hm_equal_f equal_func)
+t_hash_map *hm_init(t_hash_map *map, f_hash hash_func, f_equal equal_func)
 {
 	map->hash_func = hash_func;
 	map->equal_func = equal_func;
@@ -45,7 +45,7 @@ t_hash_map *hm_init(t_hash_map *map, hm_hash_f hash_func, hm_equal_f equal_func)
 	return (NULL);
 }
 
-t_hash_map *hm_new(hm_hash_f hash_func, hm_equal_f equal_func)
+t_hash_map *hm_new(f_hash hash_func, f_equal equal_func)
 {
 	t_hash_map *map;
 
@@ -282,9 +282,8 @@ t_itr 					*hm_itr_load(t_hash_map *hash_map, t_itr *itr)
 			entry = hash_map->table[chain];
 			while (entry)
 			{
-				if (!(new = ft_memalloc(sizeof(t_node))))
+				if (!(new = ft_lstnew(&entry->pair)))
 					return (NULL);
-				new->data = &entry->pair;
 				if (!itr->_cur_node) //TODO fix
 					itr->_cur_node = new;
 				else

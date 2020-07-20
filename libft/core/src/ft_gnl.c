@@ -87,7 +87,7 @@
 //	}
 //	if (!(s = stmnew(fd)))
 //		return (NULL);
-//	ft_lstpush(l, s);
+//	ft_node_prepend(l, s);
 //	return (*l);
 //}
 //

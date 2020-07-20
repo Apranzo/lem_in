@@ -24,6 +24,10 @@
 # define BASE_UPPER "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 typedef void		*pointer;
+
+typedef size_t				(*f_hash)(pointer value);
+typedef int					(*f_equal)(pointer value1, pointer value2);
+typedef int					(*f_compare)(pointer value1, pointer value2);
 //typedef union
 //{
 //	pointer 		blob;
@@ -56,6 +60,7 @@ typedef struct				s_pair
 	pointer					value;
 }							t_pair;
 
+pointer 			ft_node_del(t_node *node, void (*del)(void *));
 int					ft_free(void *p);
 void				ft_error(char *mes, int code);
 void				ft_error_fd(int fd, char *mes, int code);
@@ -63,8 +68,8 @@ void				*ft_tmemalloc(size_t type_size, size_t amount);
 void				*ft_tmalloc(size_t type_size, size_t amount);
 intmax_t			ft_abs(intmax_t n);
 void				ft_lstfree(t_node *node, size_t len);
-t_node				*ft_lstappend(t_node **begin_list, void *data);
-t_node				*ft_lstpush(t_node **begin_list, void *data);
+t_node				*ft_node_append(t_node **node, void *data);
+t_node				*ft_node_prepend(t_node **begin_list, void *data);
 int					ft_gnl(int fd, char **line);
 t_node				*ft_lstnew(void *data);
 char				**ft_freematr(char **matr);
