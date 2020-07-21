@@ -19,8 +19,10 @@ pointer 		ft_node_del(t_node *node, void (*del)(void *))
 	if (node)
 	{
 		tmp = node->next;
-		if (tmp && (tmp->prev = node->prev))
-			tmp->prev->next = tmp;
+		if (tmp)
+			tmp->prev = node->prev;
+		if (node->prev)
+			node->prev->next = tmp;
 		if (del)
 			del(node->data);
 	}

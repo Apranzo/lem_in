@@ -3,13 +3,15 @@
 
 pointer				itr_next(t_itr *iterator)
 {
-	t_node *current_entry;
-
+	t_node			*current_entry;
+	pointer			data;
 	if (!iterator->_cur_node)
 		return (NULL);
 	current_entry = iterator->_cur_node;
 	iterator->_cur_node = current_entry->next;
-	return (current_entry->data);
+	data = current_entry->data;
+	free(current_entry);
+	return (data);
 }
 
 int 				itr_has_more(t_itr *itr)
