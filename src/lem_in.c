@@ -124,17 +124,31 @@ t_room *lmn_init_room(t_room *new, char **room)
 	return (new);
 }
 
-t_room				*lmn_check_status(t_itr *itr, t_room *room, char *line)
+t_room				*lmn_check_status(t_lemin *lemin, t_room *room, char **line)
 {
-	while (itr_has_more(itr))
-		if (!strcmp(line, END) || !ft_strcmp(line, START))
+
+	if (!strcmp(*line, END))
+	{
+		if (lemin->end || !itr_has_more(lemin->filtred))
+			return (NULL);
+		else
 		{
-			line = itr_next(itr);
-			if (room->required)
-				return (NULL);
-			else
-				room->required = 1;
+			*line = itr_next(lemin->filtred);
+			(room->required = 1) && (lemin->end = room);
+			lmn_check_status(lemin, room, line);
 		}
+	}
+	else if (!ft_strcmp(*line, START))
+	{
+		if (lemin->start || !itr_has_more(lemin->filtred))
+			return (NULL);
+		else
+		{
+			*line = itr_next(lemin->filtred);
+			(room->required = 1) && (lemin->start = room);
+			lmn_check_status(lemin, room, line);
+		}
+	}
 	return (room);
 }
 
@@ -147,10 +161,12 @@ void 				parse_rooms(t_lemin *lemin)
 
 	x_cord = alist_new(2048, &int_equal, &int_compare);
 	y_cord = alist_new(2048, &int_equal, &int_compare);
-	while ((line = itr_next(lemin->filtred)) && !ft_strchr(line, '-'))
+	while (itr_has_more(lemin->filtred) &&
+			!ft_strchr(lemin->filtred->_cur_node->data, '-'))
 	{
+		line = itr_next(lemin->filtred);
 		if (!(new = ft_memalloc(sizeof(t_room))) ||
-				!lmn_check_status(lemin->filtred, new, line) ||
+				!lmn_check_status(lemin, new, &line) ||
 				!(new = lmn_init_room(new ,ft_strsplit(line, ' '))))
 			ft_error("Error\n", -1);
 		if ((x_cord->length - 1 < new->cords.x || x_cord->data[new->cords.x]) ||
@@ -161,7 +177,7 @@ void 				parse_rooms(t_lemin *lemin)
 	 	if (!hm_insert(lemin->rooms, new->name, new))
 	 		ft_error("Error\n", -1);
 	}
-	if (itr_has_more(lemin->filtred))
+	if (!itr_has_more(lemin->filtred))
 		ft_error("Error\n", -1);
 	alist_free(x_cord);
 	alist_free(y_cord);
@@ -188,8 +204,6 @@ void				parse_links(t_lemin *lemin)
 		lst_append(left->links, right);
 		lst_append(right->links, left); //TODO check direction
 	}
-	if (itr_has_more(lemin->filtred))
-		ft_error("Error\n", -1);
 }
 
 int			parse_ants_amount(t_lemin *lemin)
@@ -326,6 +340,7 @@ void 				delete_unnecerarry(t_lemin *lemin)
 	if (!(itr = ft_memalloc(sizeof(t_itr))))
 		ft_error("Error\n", -1);
 	itr = hm_itr_load(lemin->rooms, itr);
+	deb(lemin);
 	itr_foreach(itr, (void (*)(pointer)) &check_unuses); //TODO удаление в итераторе
 	hm_itr_load(lemin->rooms, itr);
 	itr_foreach(itr, (void (*)(pointer)) &count_input);
@@ -363,8 +378,8 @@ void 				find_path(t_lemin *lemin)
 	size_t 			i;
 	t_lst			*br;
 	t_lst			*links;
-	t_room 			*room;
 	t_node			*node;
+
 	i = 0;
 	lemin->paths = lst_new();
 	links = lemin->start->links;
@@ -382,6 +397,8 @@ void 				find_path(t_lemin *lemin)
 		build_path(lemin, br);
 		node = node->next;
 	}
+	if (!lemin->paths->length)
+		ft_error("Error\n", -1);
 }
 
 static void			move(t_lst *lst)
@@ -456,9 +473,8 @@ void				print_res(t_lemin *lem)
 
 int 				input_filter_predict(char *line)
 {
-	return !(ft_strncmp(line, JAIL, 1) &&
-	 			!(!ft_strcmp(line, START) ||
-	 			!ft_strcmp(line, END)));
+	return (ft_strncmp(line, JAIL, 1) ||
+			(!ft_strcmp(line, START) ||	!ft_strcmp(line, END)));
 }
 
 
@@ -476,22 +492,22 @@ int					main(void)
 	if (!(lemin->filtred = lst_itr_load(lemin->raw, lemin->filtred,
 										(f_prdct) input_filter_predict)))
 		ft_error("main alloc error", -1);
-	assert(lemin->raw);
 //	while (--y)
 	parse_ants_amount(lemin);
 //	ft_putnbr(parse_ants_amount(lemin));
 	lemin->rooms = hm_new(&ft_str_hash, &string_equal);
 	assert(lemin->rooms);
 	parse_rooms(lemin);
-	lemin->start->required = 1;
-	lemin->end->required = 1;
 	parse_links(lemin);
+	deb(lemin);
 	if (!lemin->start || !lemin->end || !lemin->start->links)
 		ft_error("Error\n", -1);
 	bfs(lemin);
+	deb(lemin);
 	lemin->start->asc_level = -1;
 	lemin->end->asc_level = INT_MAX;
 	delete_unnecerarry(lemin);
+	deb(lemin);
 	find_path(lemin);
 	pdeb(lemin);
 	print_res(lemin);
