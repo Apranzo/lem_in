@@ -105,78 +105,78 @@ int 				read_intput(int fd, t_lemin *lemin)
 	return (!res);
 }
 
+t_room *lmn_init_room(t_room *new, char **room)
+{
+	if (!new || !room ||
+			!room[0] || !room[1] || !room[2] ||
+			!(new->links = lst_new()))
+		return (NULL);
+	new->name = strdup(room[0]);
+	new->cords.x = ft_atoi(room[1]);
+	new->cords.y = ft_atoi(room[2]);
+	if (!is_num_valid(new->cords.x, room[1]) || !is_num_valid(new->cords.y, room[2]))
+		return (NULL);
+	new->asc_level = -1;
+//	new->in = 0;
+//	new->ant = 0;
+	new->desc_level = INT_MAX;
+	ft_freematr(room);
+	return (new);
+}
+
+t_room				*lmn_check_status(t_itr *itr, t_room *room, char *line)
+{
+	while (itr_has_more(itr))
+		if (!strcmp(line, END) || !ft_strcmp(line, START))
+		{
+			line = itr_next(itr);
+			if (room->required)
+				return (NULL);
+			else
+				room->required = 1;
+		}
+	return (room);
+}
+
 void 				parse_rooms(t_lemin *lemin)
 {
 	t_alst			*x_cord;
 	t_alst			*y_cord;
-	t_xy			cord;
-//	size_t 			i;
-	t_node			*node;
-	char 			**room;
+	char 			*line;
 	t_room			*new;
 
-	node = lemin->raw->first;
-	cord = (t_xy){-1, -1};
 	x_cord = alist_new(2048, &int_equal, &int_compare);
 	y_cord = alist_new(2048, &int_equal, &int_compare);
-	while (node && !ft_strchr(node->data, '-'))
+	while ((line = itr_next(lemin->filtred)) && !ft_strchr(line, '-'))
 	{
-		if (!strcmp(node->data, END) || !ft_strcmp(node->data, START))
-			node = node->next;
 		if (!(new = ft_memalloc(sizeof(t_room))) ||
-				!(room = ft_strsplit(node->data, ' ')) ||
-				!(new->links = lst_new()) ||
-				!room[0] || !room[1] || !room[2])
+				!lmn_check_status(lemin->filtred, new, line) ||
+				!(new = lmn_init_room(new ,ft_strsplit(line, ' '))))
 			ft_error("Error\n", -1);
-		new->asc_level = -1;
-		new->in = 0;
-		new->ant = 0;
-		new->desc_level = INT_MAX; // TODO CNECK
-		cord.x = ft_atoi(room[1]);
-		cord.y = ft_atoi(room[2]);
-		if (!is_num_valid(cord.x, room[1]) || !is_num_valid(cord.y, room[2]) ||
-				(x_cord->length > cord.x && x_cord->data[cord.x]) ||
-				(y_cord->length > cord.y && x_cord->data[cord.y]))
+		if ((x_cord->length - 1 < new->cords.x || x_cord->data[new->cords.x]) ||
+				(y_cord->length  - 1 < new->cords.y || x_cord->data[new->cords.y]))
 			ft_error("Error\n", -1);
-		alist_insert(x_cord, cord.x, (pointer) 1);
-		alist_insert(y_cord, cord.y, (pointer) 1);
-		new->name = strdup(room[0]); //TODO FIX IT
-		if (!strcmp(node->prev->data, START))
-		{
-			if (lemin->start)
-				ft_error("Error\n", -1);
-			lemin->start = new;
-
-		}
-		if (!strcmp(node->prev->data, END))
-		{
-			if (lemin->end)
-				ft_error("Error\n", -1);
-			lemin->end = new;
-		}
+		alist_insert(x_cord, new->cords.x, (pointer) 1);
+		alist_insert(y_cord, new->cords.y, (pointer) 1);
 	 	if (!hm_insert(lemin->rooms, new->name, new))
 	 		ft_error("Error\n", -1);
-	 	ft_freematr(room);
-	 	node = node->next;
 	}
-//	if (!lemin->raw->data[i])
-//		ft_error("Error\n", -1);
+	if (itr_has_more(lemin->filtred))
+		ft_error("Error\n", -1);
 	alist_free(x_cord);
 	alist_free(y_cord);
-	lemin->raw->first = node; //TODO free before
 }
 
 void				parse_links(t_lemin *lemin)
 {
-	t_node			*node;
+	char			*line;
 	char 			**linked;
 	t_room			*left;
 	t_room			*right;
 
-	node = lemin->raw->first;
-	while (node && ft_cntwords(node->data, '-'))
+	while ((line = itr_next(lemin->filtred)) && ft_cntwords(line, '-'))
 	{
-		if(!(linked = ft_strsplit(node->data, '-')) || !*linked || !*(linked + 1))
+		if(!(linked = ft_strsplit(line, '-')) || !*linked || !*(linked + 1))
 			ft_error("Error\n", -1);
 		if (!(left = hm_lookup(lemin->rooms, linked[0])) ||
 				!(right = hm_lookup(lemin->rooms, linked[1]))
@@ -187,9 +187,9 @@ void				parse_links(t_lemin *lemin)
 			ft_error("Error\n", -1);
 		lst_append(left->links, right);
 		lst_append(right->links, left); //TODO check direction
-		node = node->next;
 	}
-	lemin->raw->first = node;
+	if (itr_has_more(lemin->filtred))
+		ft_error("Error\n", -1);
 }
 
 int			parse_ants_amount(t_lemin *lemin)
@@ -197,7 +197,7 @@ int			parse_ants_amount(t_lemin *lemin)
 	assert(lemin->raw);
 	char			*str;
 
-	str = lst_nth_data(lemin->raw, 0);
+	str = itr_next(lemin->filtred);
 	lemin->ants = ft_atoi(str);
 	if (lemin->ants <= 0 || !is_num_valid(lemin->ants, str))
 		ft_error("Error\n", -1);
@@ -454,6 +454,12 @@ void				print_res(t_lemin *lem)
 	}
 }
 
+int 				input_filter_predict(char *line)
+{
+	return !(ft_strncmp(line, JAIL, 1) &&
+	 			!(!ft_strcmp(line, START) ||
+	 			!ft_strcmp(line, END)));
+}
 
 
 int					main(void)
@@ -466,8 +472,10 @@ int					main(void)
 	if (!(lemin = ft_memalloc(sizeof(t_lemin))) ||
 			!(lemin->raw = lst_new()))
 		ft_error("main alloc error", -1);
-
 	read_intput(STDIN_FILENO, lemin);
+	if (!(lemin->filtred = lst_itr_load(lemin->raw, lemin->filtred,
+										(f_prdct) input_filter_predict)))
+		ft_error("main alloc error", -1);
 	assert(lemin->raw);
 //	while (--y)
 	parse_ants_amount(lemin);
@@ -476,7 +484,7 @@ int					main(void)
 	assert(lemin->rooms);
 	parse_rooms(lemin);
 	lemin->start->required = 1;
-	lemin->end->required = 1;;
+	lemin->end->required = 1;
 	parse_links(lemin);
 	if (!lemin->start || !lemin->end || !lemin->start->links)
 		ft_error("Error\n", -1);

@@ -18,7 +18,7 @@ static int set_allocate_table(t_set *set)
 	set->table_size = set->prime_index < set_num_primes ?
 					  set_primes[set->prime_index] :
 					  set->entries * 10;
-	return (!!(set->table =
+	return ((int)(set->table =
 					   ft_tmemalloc(sizeof(t_set_entry *), set->table_size)));
 
 }
@@ -178,7 +178,7 @@ int set_query(t_set *set, set_val data)
 	rover = set->table[index];
 	while (rover)
 	{
-		if (set->equal_func(data, rover->data) != 0)
+		if (set->equal_func(data, rover->data))
 			return (1);
 		rover = rover->next;
 	}

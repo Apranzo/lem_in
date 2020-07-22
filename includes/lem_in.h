@@ -12,11 +12,15 @@ typedef struct		s_room
 	int				desc_level;
 	int				in;
 	int				required;
+//	int				start;
+//	int				end;
+	t_xy			cords;
 }					t_room;
 
 typedef struct		s_lemin
 {
 	t_lst 			*raw;
+	t_itr 			*filtred;
 	t_lst 			*paths;
 	size_t			ants;
 	t_hash_map 		*rooms;
