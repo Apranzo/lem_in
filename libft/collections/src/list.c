@@ -23,6 +23,7 @@ void lst_free(t_lst *lst)
 		free(entry);
 		entry = next;
 	}
+	lst->length = 0;
 }
 
 t_node *lst_prepend(t_lst *lst, pointer data)
@@ -277,108 +278,105 @@ int lst_remove_entry(t_lst *lst, t_node *entry)
 /* Function used internally for sorting.  Returns the last entry in the
  * new sorted lst */
 
-//static t_node *lst_sort_internal(t_lst *lst,
-//                                     f_compare compare_func)
-//{
-//	t_node *pivot;
-//	t_node *rover;
-//	t_node *less_lst, *more_lst;
-//	t_node *less_lst_end, *more_lst_end;
-//
-//	if (lst == NULL || compare_func == NULL) {
-//		return NULL;
-//	}
-//
-//	/* If there are less than two entries in this lst, it is
-//	 * already sorted */
-//
-//	if (*lst == NULL || (*lst)->next == NULL) {
-//		return *lst;
-//	}
-//
-//	/* The first entry is the pivot */
-//
-//	pivot = *lst;
-//
-//	/* Iterate over the lst, starting from the second entry.  Sort
-//	 * all entries into the less and more lsts based on comparisons
-//	 * with the pivot */
-//
-//	less_lst = NULL;
-//	more_lst = NULL;
-//	rover = (*lst)->next;
-//
-//	while (rover != NULL) {
-//		t_node *next = rover->next;
-//
-//		if (compare_func(rover->data, pivot->data) < 0) {
-//
-//			/* Place this in the less lst */
-//
-//			rover->prev = NULL;
-//			rover->next = less_lst;
-//			if (less_lst != NULL) {
-//				less_lst->prev = rover;
-//			}
-//			less_lst = rover;
-//
-//		} else {
-//
-//			/* Place this in the more lst */
-//
-//			rover->prev = NULL;
-//			rover->next = more_lst;
-//			if (more_lst != NULL) {
-//				more_lst->prev = rover;
-//			}
-//			more_lst = rover;
-//		}
-//
-//		rover = next;
-//	}
-//
-//	/* Sort the sublsts recursively */
-//
-//	less_lst_end = lst_sort_internal(&less_lst, compare_func);
-//	more_lst_end = lst_sort_internal(&more_lst, compare_func);
-//
-//	/* Create the new lst starting from the less lst */
-//
-//	*lst = less_lst;
-//
-//	/* Append the pivot to the end of the less lst.  If the less lst
-//	 * was empty, start from the pivot */
-//
-//	if (less_lst == NULL) {
-//		pivot->prev = NULL;
-//		*lst = pivot;
-//	} else {
-//		pivot->prev = less_lst_end;
-//		less_lst_end->next = pivot;
-//	}
-//
-//	/* Append the more lst after the pivot */
-//
-//	pivot->next = more_lst;
-//	if (more_lst != NULL) {
-//		more_lst->prev = pivot;
-//	}
-//
-//	/* Work out what the last entry in the lst is.  If the more lst was
-//	 * empty, the pivot was the last entry.  Otherwise, the end of the
-//	 * more lst is the end of the total lst. */
-//
-//	if (more_lst == NULL) {
+static t_node *lst_sort_internal(t_node **node,
+                                     f_compare compare_func)
+{
+	t_node *pivot;
+	t_node *rover;
+	t_node *less_lst;
+	t_node *more_lst;
+	t_node *less_lst_end, *more_lst_end;
+
+	if (!node || !compare_func)
+		return (NULL);
+	if (!*node || !(*node)->next)
+		return (*node);
+
+	/* The first entry is the pivot */
+
+	pivot =	*node;
+
+	/* Iterate over the lst, starting from the second entry.  Sort
+	 * all entries into the less and more lsts based on comparisons
+	 * with the pivot */
+
+	less_lst = NULL;
+	more_lst = NULL;
+	rover = pivot->next;
+
+	while (rover)
+	{
+		t_node *next = rover->next;
+		if (compare_func(rover->data, pivot->data) < 0)
+		{
+
+			/* Place this in the less lst */
+
+			rover->prev = NULL;
+			rover->next = less_lst;
+			if (less_lst)
+				less_lst->prev = rover;
+			less_lst = rover;
+
+		}
+		else
+		{
+
+			/* Place this in the more lst */
+
+			rover->prev = NULL;
+			rover->next = more_lst;
+			if (more_lst)
+				more_lst->prev = rover;
+			more_lst = rover;
+		}
+		rover = next;
+	}
+
+	/* Sort the sublsts recursively */
+
+	less_lst_end = lst_sort_internal(&less_lst, compare_func);
+	more_lst_end = lst_sort_internal(&more_lst, compare_func);
+
+	/* Create the new lst starting from the less lst */
+
+	*node = less_lst;
+
+	/* Append the pivot to the end of the less lst.  If the less lst
+	 * was empty, start from the pivot */
+
+	if (!less_lst)
+	{
+		pivot->prev = NULL;
+		*node = pivot;
+	}
+	else
+	{
+		pivot->prev = less_lst_end;
+		less_lst_end->next = pivot;
+	}
+
+	/* Append the more lst after the pivot */
+
+	pivot->next = more_lst;
+	if (more_lst)
+		more_lst->prev = pivot;
+	/* Work out what the last entry in the lst is.  If the more lst was
+	 * empty, the pivot was the last entry.  Otherwise, the end of the
+	 * more lst is the end of the total lst. */
+	return (!more_lst ? pivot : more_lst_end);
+
+//	if (more_lst) {
 //		return pivot;
 //	} else {
 //		return more_lst_end;
 //	}
-//}
+}
 
-//void lst_sort(t_node **lst, f_compare compare_func)
-//{
-//	lst_sort_internal(lst, compare_func);
-//}
+void lst_sort(t_lst *lst, f_compare compare_func)
+{
+	lst->last = lst_sort_internal(&lst->first, compare_func);
+}
 
 t_node *lst_find_data(t_node *lst,
                           f_equal callback,
