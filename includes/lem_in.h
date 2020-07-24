@@ -28,6 +28,12 @@ typedef struct		s_lemin
 	t_room			*end;
 }					t_lemin;
 
+typedef struct				s_path_wrapper
+{
+	t_lst					*rooms;
+	size_t					cost;
+}							t_pth;
+
 void				bfs(t_lemin *lem);
 int					room_equals(pointer room1, pointer room2);
 int 				room_free(pointer room);

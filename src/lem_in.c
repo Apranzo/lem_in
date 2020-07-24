@@ -49,19 +49,41 @@ static void deb(t_lemin *lemin)
 	}
 }
 
+static void pthdeb(t_lemin *lemin)
+{
+	t_node	*node;
+	t_node	*path_node;
+	t_pth 	*path;
+	size_t i = 1;
+	path_node = lemin->paths->first;
+	while (path_node)
+	{
+		path = ((t_pth *)path_node->data);
+		ft_printf("\n++++++++++++++++++++++++++\nPath#%zu\n", i++);
+		node = path->rooms->first;
+		while (node)
+		{
+			ft_printf("%s(L%d)->", ((t_room*)node->data)->name, ((t_room*)node->data)->ant);
+			node = node->next;
+		}
+		path_node = path_node->next;
+	}
+	ft_printf("\n");
+}
+
 static void pdeb(t_lemin *lemin)
 {
 	t_node	*node;
 	t_node	*path_node;
-	t_lst  *path;
+	t_pth 	*path;
 	size_t i = 1;
 	path_node = lemin->paths->first;
 	ft_printf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 	while (path_node)
 	{
-		path = path_node->data;
+		path = ((t_pth *)path_node->data);
 		ft_printf("\n++++++++++++++++++++++++++\nPath#%zu\n", i++);
-		node = path->first;
+		node = path->rooms->first;
 		while (node)
 		{
 			ft_printf("%s->", ((t_room*)node->data)->name);
@@ -69,7 +91,9 @@ static void pdeb(t_lemin *lemin)
 		}
 		path_node = path_node->next;
 	}
+	ft_printf("\n");
 }
+
 
 int			is_num_valid(int value, char *str)
 {
@@ -402,6 +426,7 @@ void 				find_path(t_lemin *lemin)
 	t_lst			*br;
 	t_lst			*links;
 	t_node			*node;
+	t_pth 			*path;
 
 	i = 0;
 	lemin->paths = lst_new();
@@ -409,20 +434,27 @@ void 				find_path(t_lemin *lemin)
 	while (i < links->length)
 	{
 		br = lst_new();
-		lst_append(lemin->paths, br);
+		path = ft_memalloc(sizeof(t_pth));
+		path->rooms = br;
+		lst_append(lemin->paths, path);
 		lst_append(br, lst_nth_data(links, i));
 		i++;
 	}
 	node = lemin->paths->first;
 	while (node)
 	{
-		br = node->data;
+		br = ((t_pth *)node->data)->rooms;
 		if(!build_path(lemin, br))
 			lst_remove_entry(lemin->paths, node);
 		node = node->next;
 	}
 	if (!lemin->paths->length)
 		ft_error("Error\n", -1);
+}
+
+int 				resolv_path( t_pth *pth, int ants, int number)
+{
+	return (ants - number > pth->cost);
 }
 
 static void			move(t_lst *lst)
@@ -434,7 +466,7 @@ static void			move(t_lst *lst)
 	i--;
 	while (i && i < lst->length)
 	{
-		((t_room*)lst_nth_data(lst, i))->ant = ((t_room*)lst_nth_data(lst, i + 1))->ant;
+		((t_room*)lst_nth_data(lst, i))->ant = ((t_room*)lst_nth_data(lst, i - 1))->ant;
 		i--;
 	}
 }
@@ -442,19 +474,22 @@ static void			move(t_lst *lst)
 static int 			pass_ants(t_lemin *lem, size_t *number)
 {
 	size_t			i;
-	t_lst			*path;
-
-	i = 0;
+	t_node			*node;
+	t_pth 			*pth;
 
 	if (*number == lem->ants && lem->end->ant == lem->ants) //TODO check it
 		return (0);
-	while (lem->paths->length > i)
+	i = 0;
+	node = lem->paths->first;
+	while (lem->paths->length > i++ &&
+			resolv_path(node->data, lem->ants, *number))
 	{
-		path = lst_nth_data(lem->paths, i++);
-		move(path);
-		if (*number < lem->ants)
-			((t_room*)path->first->data)->ant = (*number)++;
+		pth = node->data;
+		move(pth->rooms);
+		((t_room *) pth->rooms->first->data)->ant = (*number)++;
+		node = node->next;
 	}
+//	pthdeb(lem);
 	return (1);
 
 }
@@ -467,35 +502,62 @@ static void			print(t_lst *lst)
 	i = 0;
 	while (i < lst->length)
 	{
-		room = lst_nth_data(lst, i++);
+		room = lst_nth_data(lst, i);
+		if (i++)
+			ft_putchar(' ');
 		if (room->ant)
 			ft_printf("L%zu-%s", room->ant, room->name);
 	}
 }
 
-static int 			cmpr_lst_ln(t_lst *lft, t_lst *rght)
+static int 			cmpr_lst_ln(t_pth *lft, t_pth *rght)
 {
-	return (lft->length - rght->length);
+	return (lft->rooms->length - rght->rooms->length);
+}
+
+static void 		sum_prev_ln(t_node *node)
+{
+	t_pth 			*pth;
+
+	pth = node->data;
+	pth->cost = 0;
+	while (node->prev)
+	{
+		pth->cost += ((t_pth *)node->data)->rooms->length
+						- ((t_pth *)node->prev->data)->rooms->length;
+		node = node->prev;
+	}
 }
 
 void				print_res(t_lemin *lem)
 {
 	size_t			number;
 	size_t			i;
+	t_node			*node;
+	t_pth			*pth;
 
 	number = 1;
 	i = 0;
 	lst_sort(lem->paths, (f_compare) &cmpr_lst_ln);
-	while (lem->paths->length > i && number < lem->ants)
-		((t_room*)(((t_lst *)lst_nth_data(lem->paths, i++))->first))->ant = number++;
+	lst_foreach(lem->paths, (f_map) &sum_prev_ln);
+//	node = lem->paths->first;
+//	while (lem->paths->length > i++ && resolv_path(pth, lem->ants, number))
+//	{
+//		pth = node->data;
+//		((t_room *) pth->rooms->first)->ant = number++;
+//		node = node->next;
+//	}
 	while (pass_ants(lem, &number))
 	{
 		i = 0;
-		while (lem->paths->length > i)
+		node = lem->paths->first;
+		while (lem->paths->length > i++)
 		{
-			if (i)
-				ft_putchar(' ');
-			print(lst_nth_data(lem->paths, i++));
+			pth = node->data;
+//			if (i++)
+//				ft_putchar(' ');
+			print(pth->rooms);
+			node = node->next;
 		}
 		ft_putchar('\n');
 	}

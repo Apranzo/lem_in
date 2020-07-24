@@ -26,6 +26,7 @@
 typedef void		*pointer;
 
 typedef int					(*f_prdct)(pointer value);
+typedef void 				(*f_map)(pointer value);
 typedef size_t				(*f_hash)(pointer value);
 typedef int					(*f_equal)(pointer value1, pointer value2);
 typedef int					(*f_compare)(pointer value1, pointer value2);

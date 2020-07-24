@@ -104,7 +104,7 @@ t_node				*lst_nth_entry(t_lst *lst, size_t index)
 	else if(lst->length > index)
 	{
 		entry = lst->last;
-		while (i++ > lst->length - index)
+		while (i++ < lst->length - index - 1)
 			entry = entry->prev;
 	}
 	return (entry);
@@ -395,6 +395,11 @@ t_node *lst_find_data(t_node *lst,
 	/* Not found */
 
 	return NULL;
+}
+
+void lst_foreach(t_lst *lst, f_map merge_func)
+{
+	ft_lstiter(lst->first, (void (*)(t_node *)) merge_func);
 }
 
 t_itr			*lst_itr_load(t_lst *lst, t_itr *itr, f_prdct prdct)
