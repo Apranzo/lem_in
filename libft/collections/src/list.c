@@ -166,7 +166,6 @@ int lst_rm_entry(t_lst *lst, t_node *entry)
 			lst->first = lst->first->next;
 		if (entry == lst->last)
 			lst->last = lst->last->prev;
-//		free(entry);
 		lst->length--;
 		return (1);
 	}
@@ -457,6 +456,7 @@ t_itr			*lst_itr_load(t_lst *lst, t_itr *itr, f_prdct prdct)
 			ft_node_prepend(&itr->_cur_node, entry->data);
 		entry = entry->prev;
 	}
+	itr->_start_node = itr->_cur_node;
 	return (itr);
 }
 

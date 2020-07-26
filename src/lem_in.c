@@ -14,7 +14,7 @@ void				pr_iter(t_itr *itr)
 	ft_printf("\n********************\n");
 	while (node)
 	{
-		ft_printf("%s\n", node->data);
+		ft_printf("%s\n", ((t_room*)node->data)->name);
 		node = node->next;
 	}
 	ft_printf(":::::::::::::::::::::::::::::::\n");
@@ -155,7 +155,7 @@ t_room *lmn_init_room(t_room *new, char **room)
 	new->asc_level = -1;
 //	new->in = 0;
 //	new->ant = 0;
-	new->desc_level = INT_MAX;
+	new->desc_level = -1;
 	ft_freematr(room);
 	return (new);
 }
@@ -257,17 +257,16 @@ int			parse_ants_amount(t_lemin *lemin)
 	return (lemin->ants);
 }
 
-static	void 		check_unuses(t_pair *pair)
+static	void 		check_unuses(t_room	*room)
 {
-	t_room			*room;
 	t_node			*node;
 //	t_node			*tmp; TODO free maybe
 
-	room = pair->value;
 	node = room->out->first;
 	while (node)
 	{
-		if (((t_room*)node->data)->asc_level == room->asc_level)
+		if (((t_room*)node->data)->asc_level <  0 ||
+			((t_room*)node->data)->asc_level == room->asc_level)
 		{
 			lst_rm_entry(room->out, node);
 			lst_rm_entry(room->in, node);
@@ -315,27 +314,27 @@ static	void 		check_unuses(t_pair *pair)
 //	}
 //}
 
-static	void 		delete_dead_end(t_pair *pair)
+static	void 		delete_dead_end(t_room	*room)
 {
-	t_room *room;
 	t_node *node;
 
-	room = pair->value;
-	if ((room->in->length && !room->out->length))
+	if (!room->required && room->in->length && !room->out->length)
 	{
 		node = room->in->first;
 		while (node)
 		{
 			lst_rm_data(((t_room*)node->data)->out, (f_equal) &room_equals, room);
+			lst_rm_data(room->in, (f_equal) &room_equals, node->data);
 			node = node->next;
 		}
 	}
-	if (!room->in->length && room->out->length)
+	if (!room->required && !room->in->length && room->out->length)
 	{
 		node = room->out->first;
 		while (node)
 		{
 			lst_rm_data(((t_room*)node->data)->in, (f_equal) &room_equals, room);
+			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
 			node = node->next;
 		}
 	}
@@ -343,31 +342,28 @@ static	void 		delete_dead_end(t_pair *pair)
 //		ft_error("room->in < 0", -2);
 }
 
-static	void 		del_input_forks(t_pair *pair) // TODO What?
+static	void 		del_input_forks(t_room	*room) // TODO What?
 {
 	t_node			*node;
-	t_room			*room;
 
-	room = pair->value;
-	node = room->out->first;
+	node = room->in->first;
 	while (node)
 	{
-		if (!((t_room*)node->data)->required && ((t_room*)node->data)->in->length > 1)
+		if (!((t_room*)node->data)->required && room->in->length != 1)
 		{
-			((t_room*)node->data)->in--;
-			lst_rm_entry(room->out, node);
+//			((t_room*)node->data)->in;
+			lst_rm_entry(room->in, node);
+			lst_rm_data(((t_room*)node->data)->out, (f_equal) &room_equals, room);
 		}
 		node = node->next;
 	}
 }
 
-static	void 		del_output_forks(t_pair *pair)
+static	void 		del_output_forks(t_room	*room)
 {
 	t_node			*node;
-	t_room			*room;
 	size_t			shortest;
 
-	room = pair->value;
 	shortest = room->desc_level;
 	node = room->out->first;
 	if (room->required)
@@ -397,21 +393,21 @@ void 				delete_unnecerarry(t_lemin *lemin)
 {
 	t_itr			*itr;
 
-	if (!(itr = ft_memalloc(sizeof(t_itr))))
+	if (!(itr = bfs_trip(lemin->start, NULL, NULL, &get_out_first)))
 		ft_error("Error\n", -1);
-	itr = hm_itr_load(lemin->rooms, itr);
 	deb(lemin);
 	itr_foreach(itr, (void (*)(pointer)) &check_unuses); //TODO удаление в итераторе
 //	hm_itr_load(lemin->rooms, itr);
 //	itr_foreach(itr, (void (*)(pointer)) &count_input);
 	deb(lemin);
-	hm_itr_load(lemin->rooms, itr);
+	itr_reset(itr);
 	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
 	deb(lemin);
-	hm_itr_load(lemin->rooms, itr);
+	if (!(itr = bfs_trip(lemin->end, lemin->start, itr, &get_in_first)))
+		ft_error("Error\n", -1);
 	itr_foreach(itr, (void (*)(pointer)) &del_input_forks);
 	deb(lemin);
-	hm_itr_load(lemin->rooms, itr);
+	itr_reset(itr);
 	itr_foreach(itr, (void (*)(pointer)) &del_output_forks);
 	deb(lemin);
 	itr_free(itr);
@@ -479,6 +475,7 @@ int 				input_filter_predict(char *line)
 int					main(void)
 {
 	t_lemin			*lemin;
+//	t_itr			*itr;
 //	int y = 1000000;
 
 	freopen("mmm", "r", stdin);
@@ -504,11 +501,13 @@ int					main(void)
 	if (!lemin->start || !lemin->end || !lemin->start->out)
 		ft_error("Error\n", -1);
 	lemin->start->asc_level = 0;
+//	itr = bfs_trip(lemin->start, lemin->end, NULL);
+//	pr_iter(itr);
 	bfs(lemin);
 	lemin->end->asc_level = INT_MAX;
 	deb(lemin);
 //	lemin->start->in = INT_MAX;
-	lemin->end->asc_level = INT_MAX;
+//	lemin->end->asc_level = INT_MAX;
 	delete_unnecerarry(lemin);
 	deb(lemin);
 	find_path(lemin);

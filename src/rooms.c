@@ -7,6 +7,16 @@ int				room_equals(t_room *room1, t_room *room2)
 }
 
 
+t_node 			*get_out_first(t_room *room)
+{
+	return (room->out->first);
+}
+
+t_node 			*get_in_first(t_room *room)
+{
+	return (room->in->first);
+}
+
 int 			room_free(pointer room)
 {
 	free(((t_room*)room)->name);

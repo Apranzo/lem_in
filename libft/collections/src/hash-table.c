@@ -299,6 +299,7 @@ t_itr 					*hm_itr_load(t_hash_map *hash_map, t_itr *itr)
 		}
 		chain++;
 	}
+	itr->_start_node = itr->_cur_node;
 	return (itr);
 }
 

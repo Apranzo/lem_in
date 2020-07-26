@@ -11,7 +11,6 @@ pointer				itr_next(t_itr *iterator)
 	current_entry = iterator->_cur_node;
 	iterator->_cur_node = current_entry->next;
 	data = current_entry->data;
-	free(current_entry);
 	return (data);
 }
 
@@ -52,4 +51,9 @@ void					itr_clear(t_itr *itr)
 		node = itr->_cur_node;
 	}
 	ft_bzero(itr, sizeof(t_itr));
+}
+
+void					itr_reset(t_itr *itr)
+{
+	itr->_cur_node = itr->_start_node;
 }

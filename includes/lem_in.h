@@ -35,6 +35,11 @@ typedef struct				s_path_wrapper
 	size_t					cost;
 }							t_pth;
 
+
+t_node 				*get_out_first(t_room *room);
+t_node 				*get_in_first(t_room *room);
+t_itr 				*bfs_trip(t_room *start, t_room *end, t_itr *itr,
+							   t_node *(*get_first)(t_room *));
 void				print_res(t_lemin *lem);
 void				bfs(t_lemin *lem);
 int					room_equals(t_room *room1, t_room *room2);
