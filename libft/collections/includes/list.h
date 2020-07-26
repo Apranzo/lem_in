@@ -62,12 +62,14 @@ t_node *lst_append(t_lst *lst, pointer data);
  * @param index     The index into the lst .
  * @return          The entry at the specified index, or NULL if out of range.
  */
+int						lst_contains(t_lst *lst, f_equal equal, pointer data);
 void					lst_foreach(t_lst *lst, f_map merge_func);
 void					lst_sort(t_lst *lst, f_compare compare_func);
 t_node 					*lst_nth_entry(t_lst *lst, size_t index);
 pointer					lst_nth_data(t_lst *lst, size_t index);
 pointer					*lst_to_array(t_lst *lst);
-int						lst_remove_entry(t_lst *lst, t_node *entry);
+int						lst_rm_entry(t_lst *lst, t_node *entry);
+int						lst_rm_data(t_lst *lst, f_equal equal, pointer data);
 t_itr					*lst_itr_load(t_lst *lst, t_itr *itr, f_prdct prdct);
 
 #endif

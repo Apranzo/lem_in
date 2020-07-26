@@ -6,7 +6,7 @@
 /* malloc() / free() testing */
 # define DEF_SIZE 16
 
-t_alst *alist_init(t_alst *list, size_t length, f_equal equal, f_compare comp)
+t_alst *alst_init(t_alst *list, size_t length, f_equal equal, f_compare comp)
 {
 	length = length > 0 ? length : DEF_SIZE;
 	if (!(list->data = ft_memalloc(sizeof(pointer) * length)))
@@ -24,7 +24,7 @@ t_alst *alist_init(t_alst *list, size_t length, f_equal equal, f_compare comp)
 
 /* Automatically resizing array */
 
-t_alst *alist_new(size_t length, f_equal equal, f_compare comp)
+t_alst *alst_new(size_t length, f_equal equal, f_compare comp)
 {
 	t_alst *new;
 
@@ -33,115 +33,115 @@ t_alst *alist_new(size_t length, f_equal equal, f_compare comp)
 		ft_free(new);
 		return (NULL);
 	}
-	return (alist_init(new, length, equal, comp));
+	return (alst_init(new, length, equal, comp));
 }
 
 
-void alist_free(t_alst *arraylist)
+void alst_free(t_alst *alst)
 {
-	if (arraylist)
-		free(arraylist->data);
-	free(arraylist);
+	if (alst)
+		free(alst->data);
+	free(alst);
 }
 
-static int arraylist_enlarge(t_alst *arraylist)
+static int alst_enlarge(t_alst *alst)
 {
 	pointer *data;
 	size_t newsize;
 
-	newsize = arraylist->_alloced * 2;
+	newsize = alst->_alloced * 2;
 	if (!(data = ft_memalloc(sizeof(pointer) * newsize)))
 		return (0);
-	memcpy(data, arraylist->data, arraylist->length * sizeof(pointer));
-	free(arraylist->data);
-	arraylist->data = data;
-	arraylist->_alloced = newsize;
+	memcpy(data, alst->data, alst->length * sizeof(pointer));
+	free(alst->data);
+	alst->data = data;
+	alst->_alloced = newsize;
 	return (1);
 }
 
-int alist_insert(t_alst *arraylist, size_t index, pointer data)
+int alst_insert(t_alst *alst, size_t index, pointer data)
 {
-	if (index > arraylist->length ||
-			(arraylist->length + 1 > arraylist->_alloced &&
-				!arraylist_enlarge(arraylist)))
+	if (index > alst->length ||
+			(alst->length + 1 > alst->_alloced &&
+				!alst_enlarge(alst)))
 			return (0);
 
-	memmove(&arraylist->data[index + 1],
-	        &arraylist->data[index],
-	        (arraylist->length - index) * sizeof(pointer));
+	memmove(&alst->data[index + 1],
+	        &alst->data[index],
+	        (alst->length - index) * sizeof(pointer));
 
-	arraylist->data[index] = data;
-	arraylist->length++;
+	alst->data[index] = data;
+	alst->length++;
 	return 1;
 }
 
-int alist_append(t_alst *arraylist, pointer data)
+int alst_append(t_alst *alst, pointer data)
 {
-	return alist_insert(arraylist, arraylist->length, data);
+	return alst_insert(alst, alst->length, data);
 }
 
-int alist_prepend(t_alst *arraylist, pointer data)
+int alst_prepend(t_alst *alst, pointer data)
 {
-	return alist_insert(arraylist, 0, data);
+	return alst_insert(alst, 0, data);
 }
 
-void alist_remove_range(t_alst *arraylist, size_t index,
+void alst_remove_range(t_alst *alst, size_t index,
 						size_t length)
 {
 	/* Check this is a valid range */
 
-	if (index + length > arraylist->length)
+	if (index + length > alst->length)
 		return;
 	/* Move back the entries following the range to be removed */
 
-	memmove(&arraylist->data[index],
-	        &arraylist->data[index + length],
-	        (arraylist->length - (index + length))
+	memmove(&alst->data[index],
+	        &alst->data[index + length],
+	        (alst->length - (index + length))
 	            * sizeof(pointer));
 
 	/* Decrease the counter */
 
-	arraylist->length -= length;
+	alst->length -= length;
 }
 
-void alist_remove(t_alst *arraylist, size_t index)
+void alst_remove(t_alst *alst, size_t index)
 {
-	alist_remove_range(arraylist, index, 1);
+	alst_remove_range(alst, index, 1);
 }
 
-int				alist_contains(t_alst *arraylist, f_equal callback,
+int				alst_contains(t_alst *alst, f_equal callback,
 								  pointer data)
 {
-	return (alist_index_of(arraylist, callback, data) != arraylist->length + 1);
+	return (alst_index_of(alst, callback, data) != alst->length + 1);
 }
 
-size_t alist_index_of(t_alst *arraylist,
+size_t alst_index_of(t_alst *alst,
 					  f_equal callback,
 					  pointer data)
 {
 	size_t i;
 
 //	if (!callback)
-//		callback = arraylist->_equal_val;
+//		callback = alst->_equal_val;
 
 	i = 0;
-	while  (i < arraylist->length) {
-		if (callback(arraylist->data[i], data))
+	while  (i < alst->length) {
+		if (callback(alst->data[i], data))
 			return (i);
 		i++;
 	}
 
-	return (arraylist->length + 1);
+	return (alst->length + 1);
 }
 
-void alist_clear(t_alst *arraylist)
+void alst_clear(t_alst *alst)
 {
 	/* To clear the list, simply set the length to zero */
 
-	arraylist->length = 0;
+	alst->length = 0;
 }
 
-static void arraylist_sort_internal(pointer *list_data,
+static void alst_sort_internal(pointer *list_data,
 									size_t list_length,
 									f_compare compare_func)
 {
@@ -211,19 +211,19 @@ static void arraylist_sort_internal(pointer *list_data,
 
 	/* Recursively sort the sublists. */
 
-	arraylist_sort_internal(list_data, list1_length, compare_func);
+	alst_sort_internal(list_data, list1_length, compare_func);
 
-	arraylist_sort_internal(&list_data[list1_length + 1], list2_length,
+	alst_sort_internal(&list_data[list1_length + 1], list2_length,
 	                        compare_func);
 }
 
-void arraylist_sort(t_alst *arraylist, f_compare compare_func)
+void alst_sort(t_alst *alst, f_compare compare_func)
 {
 //	if (!compare_func)
-//		compare_func = arraylist->_comp_val;
+//		compare_func = alst->_comp_val;
 	/* Perform the recursive sort */
 
-	arraylist_sort_internal(arraylist->data, arraylist->length,
+	alst_sort_internal(alst->data, alst->length,
 	                        compare_func);
 }
 

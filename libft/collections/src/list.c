@@ -158,7 +158,7 @@ pointer				*lst_to_array(t_lst *lst)
 	return (array);
 }
 
-int lst_remove_entry(t_lst *lst, t_node *entry)
+int lst_rm_entry(t_lst *lst, t_node *entry)
 {
 	if((entry = ft_node_del(entry, NULL)))
 	{
@@ -216,8 +216,30 @@ int lst_remove_entry(t_lst *lst, t_node *entry)
 //
 //	return 1;
 }
+
+int					lst_rm_data(t_lst *lst, f_equal equal, pointer data)
+{
+	t_node			*node;
+
+	node = lst->first;
+	while (node)
+	{
+		if (equal(node->data, data))
+		{
+			node = ft_node_del(node, NULL);
+			if (node == lst->first)
+				lst->first = lst->first->next;
+			if (node == lst->last)
+				lst->last = lst->last->prev;
+			lst->length--;
+			return (1);
+		}
+		node = node->next;
+	}
+	return (0);
+}
 //
-//size_t	 lst_remove_data(t_node **lst, f_equal callback,
+//size_t	 lst_rem_data(t_node **lst, f_equal callback,
 //                              pointer data)
 //{
 //	size_t entries_removed;
@@ -371,6 +393,22 @@ static t_node *lst_sort_internal(t_node **node,
 //	} else {
 //		return more_lst_end;
 //	}
+}
+
+int					lst_contains(t_lst *lst, f_equal equal, pointer data)
+{
+	size_t			i;
+	t_node			*node;
+
+	i = 0;
+	node = lst->first;
+	while  (i < lst->length) {
+		if (equal(node->data, data))
+			return (1);
+		i++;
+		node = node->next;
+	}
+	return (0);
 }
 
 void lst_sort(t_lst *lst, f_compare compare_func)

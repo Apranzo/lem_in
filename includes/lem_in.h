@@ -6,11 +6,11 @@
 typedef struct		s_room
 {
 	char			*name;
-	t_lst 			*links;
+	t_lst 			*out;
+	t_lst 			*in;
 	size_t 			ant;
 	int				asc_level;
 	int				desc_level;
-	int				in;
 	int				required;
 //	int				start;
 //	int				end;
@@ -35,8 +35,9 @@ typedef struct				s_path_wrapper
 	size_t					cost;
 }							t_pth;
 
+void				print_res(t_lemin *lem);
 void				bfs(t_lemin *lem);
-int					room_equals(pointer room1, pointer room2);
+int					room_equals(t_room *room1, t_room *room2);
 int 				room_free(pointer room);
 
 #endif

@@ -1,10 +1,11 @@
 #include "includes/lem_in.h"
 
-int				room_equals(pointer room1, pointer room2)
+int				room_equals(t_room *room1, t_room *room2)
 {
-	return (ft_str_hash(room1) == ft_str_hash(room2) &&
-			string_equal(((t_room*)room1)->name, ((t_room*)room2)->name));
+	return (ft_str_hash(room1->name) == ft_str_hash(room2->name) &&
+			ft_strequ(room1->name, room2->name));
 }
+
 
 int 			room_free(pointer room)
 {

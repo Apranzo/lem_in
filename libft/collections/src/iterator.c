@@ -5,6 +5,7 @@ pointer				itr_next(t_itr *iterator)
 {
 	t_node			*current_entry;
 	pointer			data;
+
 	if (!iterator->_cur_node)
 		return (NULL);
 	current_entry = iterator->_cur_node;

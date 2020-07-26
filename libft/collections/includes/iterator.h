@@ -8,6 +8,12 @@
 //typedef pointer 			(*f_itr_next)(t_itr *itr);
 //typedef void				(*f_itr_reset)(t_itr* itr);
 
+//typedef union 				s_iterator_value
+//{
+//	pointer 		blob;
+//	t_pair 			*key_val;
+//}					t_itr_val;
+
 typedef struct 				s_iterator
 {
 	pointer 				collection;
