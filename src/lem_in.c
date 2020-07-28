@@ -265,8 +265,7 @@ static	void 		check_unuses(t_room	*room)
 	node = room->out->first;
 	while (node)
 	{
-		if (((t_room*)node->data)->asc_level <  0 ||
-			((t_room*)node->data)->asc_level == room->asc_level)
+		if (((t_room*)node->data)->asc_level == room->asc_level)
 		{
 			lst_rm_entry(room->out, node);
 			lst_rm_entry(room->in, node);
@@ -287,32 +286,6 @@ static	void 		check_unuses(t_room	*room)
 //		node = node->next;
 //	}
 }
-
-//static	void 		count_input(t_pair *pair)
-//{
-//	t_room			*room;
-//	t_node			*node;
-//
-//	room = pair->value;
-////	node = room->links->first;
-////	while (node)
-////	{
-////		if (((t_room*)node->data)->asc_level <= room->asc_level)
-////		{
-////			((t_room*)node->data)->in--;
-////			lst_rem_entry(room->links, node);
-////		}
-////		node = node->next;
-////	}
-//	node = room->out->first;
-//	while (node)
-//	{
-//		room = node->data;
-//		if (!room->required)
-//			room->in++;
-//		node = node->next;
-//	}
-//}
 
 static	void 		delete_dead_end(t_room	*room)
 {
@@ -396,6 +369,7 @@ void 				delete_unnecerarry(t_lemin *lemin)
 
 	if (!(itr = bfs_trip(lemin->start, NULL, NULL, &get_out_first)))
 		ft_error("Error\n", -1);
+	pr_iter(itr);
 	deb(lemin);
 	itr_foreach(itr, (void (*)(pointer)) &check_unuses); //TODO удаление в итераторе
 //	hm_itr_load(lemin->rooms, itr);
@@ -509,6 +483,7 @@ int					main(void)
 //	bfs_desc_level(lemin);
 	lemin->end->asc_level = INT_MAX;
 	lemin->start->desc_level = INT_MAX;
+	lemin->start->asc_level = -1;
 	deb(lemin);
 	delete_unnecerarry(lemin);
 	deb(lemin);
