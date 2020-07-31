@@ -303,5 +303,32 @@ t_itr 					*hm_itr_load(t_hash_map *hash_map, t_itr *itr)
 	return (itr);
 }
 
+t_lst 					*hm_lst(t_hash_map *hash_map, f_prdct prdct)
+{
+	size_t				chain;
+	t_hm_entry 			*entry;
+	t_lst				*lst;
+
+	chain = 0;
+	if (!(lst = lst_new()))
+		return (NULL);
+	while (chain < hash_map->table_size)
+	{
+		if (hash_map->table[chain])
+		{
+			entry = hash_map->table[chain];
+			while (entry)
+			{
+				if(!prdct || prdct(entry->pair.value))
+					if (!(lst_prepend(lst, entry->pair.value)))
+						return (NULL);
+				entry = entry->next;
+			}
+		}
+		chain++;
+	}
+	return (lst);
+}
+
 
 

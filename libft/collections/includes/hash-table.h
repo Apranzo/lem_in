@@ -3,6 +3,7 @@
 
 #include <coreft.h>
 #include <iterator.h>
+#include "list.h"
 
 typedef void				(*hm_free_key)(pointer value);
 typedef void				(*hm_free_val)(pointer value);
@@ -26,7 +27,7 @@ typedef struct				s_hash_map
 	size_t					prime_index;
 }							t_hash_map;
 
-
+t_lst						*hm_lst(t_hash_map *hash_map, f_prdct prdct);
 void						hm_clear(t_hash_map *hash_map);
 t_hash_map					*hm_init(t_hash_map  *map, f_hash hash_func,
 									   f_equal equal_func);
