@@ -134,10 +134,8 @@ int 				read_intput(int fd, t_lemin *lemin)
 	int 			res;
 
 	line = NULL;
-	while ((res = ft_gnl(fd, &line)) > 0)
+	while ((res = ft_gnl(fd, &line)) > 0 && line)
 	{
-		if (!lemin->raw && !line)
-			assert(0);
 		if (!lst_append(lemin->raw, line))
 			ft_error("read_input Error allocation\n", -1);
 	}
@@ -194,34 +192,32 @@ t_room				*lmn_check_status(t_lemin *lemin, t_room *room, char **line)
 
 void 				parse_rooms(t_lemin *lemin)
 {
-	t_alst			*x_cord;
-	t_alst			*y_cord;
+	t_hash_map 		*cords;
 	char 			*line;
 	t_room			*new;
 
-	x_cord = alst_new(2048, &int_equal, &int_compare);
-	y_cord = alst_new(2048, &int_equal, &int_compare);
+	cords = hm_new(&ft_str_hash, &string_equal);
 //	pr_iter(lemin->filtred);
 	while (itr_has_more(lemin->filtred) &&
 			!ft_strchr(lemin->filtred->_cur_node->data, '-'))
 	{
 		line = itr_next(lemin->filtred);
-		if (!(new = ft_memalloc(sizeof(t_room))) ||
-				!lmn_check_status(lemin, new, &line) ||
-				!(new = lmn_init_room(new ,ft_strsplit(line, ' '))))
+		if (line[0] == 'L'
+			|| !(new = ft_memalloc(sizeof(t_room)))
+			|| !lmn_check_status(lemin, new, &line)
+			|| hm_lookup(cords, ft_strchr(line, ' '))
+			|| !(new = lmn_init_room(new ,ft_strsplit(line, ' '))))
 			ft_error("Error\n", -1);
-		if ((x_cord->length - 1 < new->cords.x || x_cord->data[new->cords.x]) ||
-				(y_cord->length  - 1 < new->cords.y || x_cord->data[new->cords.y]))
-			ft_error("Error\n", -1);
-		alst_insert(x_cord, new->cords.x, (pointer) 1);
-		alst_insert(y_cord, new->cords.y, (pointer) 1);
+		hm_insert(cords, ft_strchr(line, ' '), ft_strchr(line, ' '));
+//		if ((x_cord->length - 1 < new->cords.x || x_cord->data[new->cords.x]) ||
+//				(y_cord->length  - 1 < new->cords.y || x_cord->data[new->cords.y]))
+//			ft_error("Error\n", -1);
 	 	if (!hm_insert(lemin->rooms, new->name, new))
 	 		ft_error("Error\n", -1);
 	}
 	if (!itr_has_more(lemin->filtred))
 		ft_error("Error\n", -1);
-	alst_free(x_cord);
-	alst_free(y_cord);
+	hm_free(cords);
 }
 
 void				parse_links(t_lemin *lemin)
@@ -249,11 +245,10 @@ void				parse_links(t_lemin *lemin)
 
 int			parse_ants_amount(t_lemin *lemin)
 {
-	assert(lemin->raw);
 	char			*str;
 
 	str = itr_next(lemin->filtred);
-	lemin->ants = ft_atoi(str);
+	lemin->ants = str && str[0] != '-' ? ft_atoi(str) : -1;
 	if (lemin->ants <= 0 || !is_num_valid(lemin->ants, str))
 		ft_error("Error\n", -1);
 	lemin->raw->first = lemin->raw->first->next;
@@ -425,13 +420,13 @@ void 				delete_unnecerarry(t_lemin *lemin)
 	lst = hm_lst(lemin->rooms, NULL);
 	lst_sort(lst, (f_compare) &comp_bfs_asc);
 	itr = lst_itr_load(lst, NULL, NULL);
-	pr_iter(itr);
+//	pr_iter(itr);
 //	if (!(itr = bfs_trip(lemin->start, lemin->end, NULL, &get_out_first)))
 //		ft_error("Error\n", -1);
 //	hm_itr_load(lemin->rooms, itr);
-	deb(lemin);
+	//deb(lemin);
 	itr_foreach(itr, (void (*)(pointer)) &check_unuses); //TODO удаление в итераторе
-	deb(lemin);
+	//deb(lemin);
 	itr_reset(itr);
 	itr_foreach(itr, (void (*)(pointer)) &alight);
 	lst_sort(lst, (f_compare) &comp_bfs_asc);
@@ -439,14 +434,14 @@ void 				delete_unnecerarry(t_lemin *lemin)
 	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
 	lst_sort(lst, (f_compare) &comp_bfs_asc);
 	lst_itr_load(lst, itr, NULL);
-	deb(lemin);
+	//deb(lemin);
 	itr_foreach(itr, (void (*)(pointer)) &del_input_forks);
 	lst_sort(lst, (f_compare) &comp_bfs_desc);
 	lst_itr_load(lst, itr, NULL);
 	bfs_desc_level(lemin);
-	deb(lemin);
+	//deb(lemin);
 	itr_foreach(itr, (void (*)(pointer)) &del_output_forks);
-	deb(lemin);
+	//deb(lemin);
 	itr_free(itr);
 }
 
@@ -499,7 +494,7 @@ void 				find_path(t_lemin *lemin)
 	}
 	if (!lemin->paths->length)
 		ft_error("Error\n", -1);
-	pthdeb(lemin);
+//	pthdeb(lemin);
 }
 
 
@@ -532,7 +527,7 @@ int					main(void)
 	parse_rooms(lemin);
 //	pr_iter(lemin->filtred);
 	parse_links(lemin);
-	deb(lemin);
+	//deb(lemin);
 	if (!lemin->start || !lemin->end || !lemin->start->out)
 		ft_error("Error\n", -1);
 //	itr = bfs_trip(lemin->start, lemin->end, NULL);
@@ -544,9 +539,9 @@ int					main(void)
 //	lemin->end->asc_level = INT_MAX;
 //	lemin->start->desc_level = INT_MAX;
 //	lemin->start->asc_level = 0;
-	deb(lemin);
+	////deb(lemin);
 	delete_unnecerarry(lemin);
-	deb(lemin);
+	//deb(lemin);
 	find_path(lemin);
 //	pdeb(lemin);
 	print_res(lemin);

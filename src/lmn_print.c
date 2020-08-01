@@ -13,13 +13,12 @@ void 		sum_prev_ln(t_node *node)
 	pth->cost = 0;
 	while (node->prev)
 	{
-		pth->cost += ((t_pth *)node->data)->rooms->length
-					 - ((t_pth *)node->prev->data)->rooms->length;
+		pth->cost += pth->rooms->length - ((t_pth *)node->prev->data)->rooms->length;
 		node = node->prev;
 	}
 }
 
-static int 				resolv_path( t_pth *pth, int ants, int number)
+static int 				resolv_path(t_pth *pth, int ants, int number)
 {
 	return (ants - number + 1 > pth->cost);
 }
@@ -71,7 +70,12 @@ void				print_res(t_lemin *lem)
 	size_t			number;
 	t_node			*node;
 	t_pth			*pth;
+	t_itr			*itr;
 
+	itr = lst_itr_load(lem->raw, NULL, NULL);
+	while (itr_has_more(itr))
+		ft_printf("%s\n", itr_next(itr));
+	ft_printf("\n");
 	number = 1;
 	lst_sort(lem->paths, (f_compare) &cmpr_lst_ln);
 	lst_foreach(lem->paths, (f_map) &sum_prev_ln);
@@ -93,4 +97,5 @@ void				print_res(t_lemin *lem)
 			node = node->next;
 		}
 	}
+	ft_printf("\n");
 }

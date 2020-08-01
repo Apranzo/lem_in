@@ -22,8 +22,8 @@ typedef struct		s_lemin
 	t_lst 			*raw;
 	t_itr 			*filtred;
 	t_lst 			*paths;
-	size_t			ants;
-	size_t			finished;
+	int	 			ants;
+	int	  			finished;
 	t_hash_map 		*rooms;
 	t_room			*start;
 	t_room			*end;
