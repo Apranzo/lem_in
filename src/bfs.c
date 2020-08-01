@@ -6,6 +6,7 @@ struct s_fuck_the_system
 	t_hash_map		*black;
 	t_qu			*qu;
 	void			(*f_level)(t_room *child, t_room *parent);
+	t_node			*(*get_first)(t_room *);
 	t_lemin			*lemin;
 
 };
@@ -68,27 +69,6 @@ static	void 		calc_desc(t_room *room)
 	room->desc_level = min + 1;
 }
 
-static int 			bfs_rec(t_fck fck)
-{
-	t_node 			*node;
-
-	node = fck.room->out->first;
-	if (!hm_insert(fck.black, fck.room->name, fck.room))
-		return (0);
-	while (node)
-	{
-		if (!hm_lookup(fck.black, ((t_room *)node->data)->name) &&
-			!queue_contains(fck.qu, node->data))
-		{
-			fck.f_level(node->data, fck.room);
-			if (!queue_push_head(fck.qu, node->data))
-				return (0);
-		}
-		node = node->next;
-	}
-	return (1);
-}
-
 static void				pr_iter(t_itr *itr)
 {
 	t_node *node;
@@ -142,6 +122,28 @@ t_itr 			*bfs_trip(t_room *start, t_room *end, t_itr *itr, t_node *(*get_first)(
 	return (itr);
 }
 
+
+static int 			bfs_rec(t_fck fck)
+{
+	t_node 			*node;
+
+	node = fck.get_first(fck.room);
+	if (!hm_insert(fck.black, fck.room->name, fck.room))
+		return (0);
+	while (node)
+	{
+		if (!hm_lookup(fck.black, ((t_room *)node->data)->name) &&
+			!queue_contains(fck.qu, node->data))
+		{
+			fck.f_level(node->data, fck.room);
+			if (!queue_push_head(fck.qu, node->data))
+				return (0);
+		}
+		node = node->next;
+	}
+	return (1);
+}
+
 void			bfs_asc_level(t_lemin *lem)
 {
 	t_hash_map	*black;
@@ -151,10 +153,10 @@ void			bfs_asc_level(t_lemin *lem)
 	if (!(qu = queue_new())
 		|| !(black = hm_new(&ft_str_hash, &string_equal))
 		|| !(queue_push_head(qu, lem->start))
-		|| !(hm_insert(black, lem->end->name, lem->end)))
+		|| !(hm_insert(black, lem->end->name, lem->end->name)))
 				ft_error("Allocation error\n", -1);
 	while (!queue_is_empty(qu))
-		if (!bfs_rec((t_fck){queue_pop_tail(qu), black, qu, &asc_level, lem}))
+		if (!bfs_rec((t_fck){queue_pop_tail(qu), black, qu, &asc_level, &get_out_first, lem}))
 				ft_error("Allocation error\n", -1);
 	hm_clear(black);
 	lem->end->asc_level = INT_MAX;
@@ -172,7 +174,7 @@ void			bfs_desc_level(t_lemin *lem)
 		|| !(hm_insert(black, lem->start->name, lem->start)))
 		ft_error("Allocation error\n", -1);
 	while (!queue_is_empty(qu))
-		if (!bfs_rec((t_fck){queue_pop_tail(qu), black, qu, &desc_level, lem}))
+		if (!bfs_rec((t_fck){queue_pop_tail(qu), black, qu, &desc_level, &get_in_first, lem}))
 			ft_error("Allocation error\n", -1);
 	hm_clear(black);
 	lem->start->desc_level = INT_MAX;

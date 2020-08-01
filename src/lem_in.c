@@ -5,9 +5,10 @@
 # define END "##end"
 # define JAIL "#"
 
+static t_lemin			*lemin;
 
 void pr_room(const t_room *room) {
-	printf("NAME %s\tasc %d\tdesc %d\tin %zu\treq %d\n+++++++++++++++++++\n",
+	printf("NAME %s\tasc %d\tdesc %d\tin %zu\treq %d\n",
 		   room->name, room->asc_level, room->desc_level, room->in->length, room->required);
 }
 
@@ -31,6 +32,7 @@ static void deb(t_lemin *lemin)
 	t_itr *itr;
 	t_pair *pair;
 	t_node	*node;
+	t_room 	*room;
 
 	if (!(itr = ft_memalloc(sizeof(t_itr))))
 		ft_error("Error\n", -1);
@@ -38,8 +40,9 @@ static void deb(t_lemin *lemin)
 	while (itr_has_more(itr))
 	{
 		pair = itr_next(itr);
+		room = pair->value;
 		pr_room(pair->value);
-		node = ((t_room*)pair->value)->out->first;
+		node = room->out->first;
 		printf("out:\t");
 		while (node)
 		{
@@ -47,7 +50,7 @@ static void deb(t_lemin *lemin)
 			node = node->next;
 		}
 		printf("\n");
-		node = ((t_room*)pair->value)->in->first;
+		node = room->in->first;
 		printf("in:\t\t");
 		while (node)
 		{
@@ -80,7 +83,7 @@ static void pthdeb(t_lemin *lemin)
 	while (path_node)
 	{
 		path = ((t_pth *)path_node->data);
-		ft_printf("\n++++++++++++++++++++++++++\nPath#%zu\n", i++);
+		ft_printf("\n++++++++++++++++++++++++++\nPath#%zu l: %zu\n", i++, path->rooms->length);
 		pthpr(path->rooms);
 		path_node = path_node->next;
 	}
@@ -156,7 +159,7 @@ t_room *lmn_init_room(t_room *new, char **room)
 	new->asc_level = -1;
 //	new->in = 0;
 //	new->ant = 0;
-	new->desc_level = INT_MAX;
+	new->desc_level = -1;
 	ft_freematr(room);
 	return (new);
 }
@@ -267,16 +270,34 @@ static	void 		check_unuses(t_room	*room)
 	node = room->out->first;
 	while (node)
 	{
-		if (((t_room*)node->data)->asc_level == room->asc_level)
+		if (room->asc_level < 0)
 		{
-			lst_rm_entry(room->in, node);
 			lst_rm_data(((t_room *) node->data)->out, (f_equal) &room_equals, room);
-			lst_rm_entry(room->out, node);
+			lst_rm_data(((t_room *) node->data)->in, (f_equal) &room_equals, room);
+			lst_rm_data(room->in, (f_equal) &room_equals, node->data);
+			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
+		}
+		else if (((t_room*)node->data)->asc_level == room->asc_level)
+		{
+			lst_rm_data(room->in, (f_equal) &room_equals, node->data);
+			lst_rm_data(((t_room *) node->data)->out, (f_equal) &room_equals, room);
+			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
 			lst_rm_data(((t_room *) node->data)->in, (f_equal) &room_equals, room);
 		}
-		else if (((t_room*)node->data)->asc_level < room->asc_level)
+		node = node->next;
+	}
+}
+
+static	void 		alight(t_room	*room)
+{
+	t_node			*node;
+//	t_node			*tmp; TODO free maybe
+	node = room->out->first;
+	while (node)
+	{
+		if (((t_room*)node->data)->asc_level < room->asc_level)
 		{
-			lst_rm_entry(room->out, node);
+			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
 			lst_rm_data(((t_room *) node->data)->in, (f_equal) &room_equals, room);
 		}
 		node = node->next;
@@ -311,6 +332,37 @@ static	void 		delete_dead_end(t_room	*room)
 //		ft_error("room->in < 0", -2);
 }
 
+static int			comp_bfs_asc(t_room* left, t_room *right)
+{
+	if (left->asc_level > right->asc_level)
+		return (1);
+	else if (left->asc_level < right->asc_level)
+		return (-1);
+	return (0);
+}
+
+static int			comp_bfs_desc(t_room* left, t_room *right)
+{
+	if (left->asc_level > right->asc_level)
+		return (-1);
+	else if (left->asc_level < right->asc_level)
+		return (1);
+	return (0);
+}
+
+static void			dde()
+{
+	t_itr			*itr;
+	t_lst 			*lst;
+
+	lst = hm_lst(lemin->rooms, NULL);
+	lst_sort(lst, (f_compare) &comp_bfs_asc);
+	lst_sort(lst, (f_compare) &comp_bfs_asc);
+	itr = lst_itr_load(lst, NULL, NULL);
+	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
+
+}
+
 static	void 		del_input_forks(t_room	*room) // TODO What?
 {
 	t_node			*node;
@@ -322,6 +374,7 @@ static	void 		del_input_forks(t_room	*room) // TODO What?
 		{
 			lst_rm_entry(room->in, node);
 			lst_rm_data(((t_room*)node->data)->out, (f_equal) &room_equals, room);
+			dde();
 		}
 		node = node->next;
 	}
@@ -359,24 +412,6 @@ static	void 		del_output_forks(t_room	*room)
 		ft_error("del_output_forks\troom->links.length > 1", -2);
 }
 
-static int			comp_bfs_asc(t_room* left, t_room *right)
-{
-	if (left->asc_level > right->asc_level)
-		return (1);
-	else if (left->asc_level < right->asc_level)
-		return (-1);
-	return (0);
-}
-
-static int			comp_bfs_desc(t_room* left, t_room *right)
-{
-	if (left->asc_level > right->asc_level)
-		return (-1);
-	else if (left->asc_level < right->asc_level)
-		return (1);
-	return (0);
-}
-
 static int			filtr_bfs(t_room* room)
 {
 	return (room->asc_level > 0);
@@ -387,7 +422,7 @@ void 				delete_unnecerarry(t_lemin *lemin)
 	t_itr			*itr;
 	t_lst 			*lst;
 
-	lst = hm_lst(lemin->rooms, (f_prdct) filtr_bfs);
+	lst = hm_lst(lemin->rooms, NULL);
 	lst_sort(lst, (f_compare) &comp_bfs_asc);
 	itr = lst_itr_load(lst, NULL, NULL);
 	pr_iter(itr);
@@ -398,8 +433,11 @@ void 				delete_unnecerarry(t_lemin *lemin)
 	itr_foreach(itr, (void (*)(pointer)) &check_unuses); //TODO удаление в итераторе
 	deb(lemin);
 	itr_reset(itr);
+	itr_foreach(itr, (void (*)(pointer)) &alight);
+	lst_sort(lst, (f_compare) &comp_bfs_asc);
+	lst_itr_load(lst, itr, NULL);
 	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
-	lst_sort(lst, (f_compare) &comp_bfs_desc);
+	lst_sort(lst, (f_compare) &comp_bfs_asc);
 	lst_itr_load(lst, itr, NULL);
 	deb(lemin);
 	itr_foreach(itr, (void (*)(pointer)) &del_input_forks);
@@ -424,7 +462,7 @@ int build_path(const t_lemin *lemin, t_lst *br)
 		if (room->out->length > 1)
 			ft_error("find_path\troom->links > 1", -2);
 		if (!room->out->length)
-			return (0);
+			return (0);  //43 45 60
 		lst_append(br, room->out->first->data);
 		entry = entry->next;
 	}
@@ -461,6 +499,7 @@ void 				find_path(t_lemin *lemin)
 	}
 	if (!lemin->paths->length)
 		ft_error("Error\n", -1);
+	pthdeb(lemin);
 }
 
 
@@ -473,7 +512,6 @@ int 				input_filter_predict(char *line)
 
 int					main(void)
 {
-	t_lemin			*lemin;
 
 	freopen("mmm", "r", stdin);
 
