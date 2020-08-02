@@ -39,30 +39,33 @@ static void			move(t_lst *lst)
 		((t_room*)node->data)->ant = 0;
 }
 
-void			print(t_lst *lst)
+int					print(t_lst *lst)
 {
 	t_node 			*node;
+	int				printed;
 
+	printed = 0;
 	node = lst->first;
 	while (node)
 	{
 		if (((t_room*)node->data)->ant)
 		{
-			ft_printf("L%zu-%s", ((t_room *) node->data)->ant,  ((t_room *) node->data)->name);
+			printed += ft_printf("L%zu-%s", ((t_room *) node->data)->ant,  ((t_room *) node->data)->name);
 			if (node->next && ((t_room *) node->next->data)->ant)
 				ft_printf(" ");
 		}
 		node = node->next;
 	}
+	return(printed);
 }
 
-static void 		pass_ants(t_pth *pth, size_t *number, size_t ants)
+static int					pass_ants(t_pth *pth, size_t *number, size_t ants)
 {
 
 	move(pth->rooms);
 	if (resolv_path(pth, ants, *number))
 		((t_room *) pth->rooms->first->data)->ant = (*number)++;
-	print(pth->rooms);
+	return (print(pth->rooms));
 }
 
 void				print_res(t_lemin *lem)
@@ -71,6 +74,7 @@ void				print_res(t_lemin *lem)
 	t_node			*node;
 	t_pth			*pth;
 	t_itr			*itr;
+	int 			printed;
 
 	itr = lst_itr_load(lem->raw, NULL, NULL);
 	while (itr_has_more(itr))
@@ -79,23 +83,22 @@ void				print_res(t_lemin *lem)
 	number = 1;
 	lst_sort(lem->paths, (f_compare) &cmpr_lst_ln);
 	lst_foreach(lem->paths, (f_map) &sum_prev_ln);
-	node = lem->paths->first;
+//	node = lem->paths->first;
 	while (lem->finished < lem->ants)
 	{
-		pth = node->data;
-		pass_ants(pth, &number, lem->ants);
-		if (((t_room*)pth->rooms->last->data)->ant)
-			lem->finished++;
-		if (node == lem->paths->last)
+		node = lem->paths->first;
+		while (node != lem->paths->last)
 		{
-			node = lem->paths->first;
-			ft_printf("\n");
-		}
-		else
-		{
-			ft_printf(" ");
+			pth = node->data;
+			pass_ants(pth, &number, lem->ants);
+			if (((t_room *) pth->rooms->last->data)->ant)
+				lem->finished++;
+//			if (node && lem->finished < lem->ants && printed)
+//				ft_printf(" ");
+//			}
 			node = node->next;
 		}
+		ft_printf("\n");
 	}
-	ft_printf("\n");
+//	ft_printf("\n");
 }

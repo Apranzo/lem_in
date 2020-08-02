@@ -19,14 +19,15 @@
 # include <limits.h>
 # include <fcntl.h>
 //# include "../../printf/includes/ft_printf.h"
-# define BUFF_SIZE 300
+# define BUFF_SIZE 512
 # define BASE_LOWER "0123456789abcdefghijklmnopqrstuvwxyz"
 # define BASE_UPPER "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-typedef void		*pointer;
+typedef void				*pointer;
 
 typedef int					(*f_prdct)(pointer value);
 typedef void 				(*f_map)(pointer value);
+typedef void 				(*f_free)(pointer value);
 typedef size_t				(*f_hash)(pointer value);
 typedef int					(*f_equal)(pointer value1, pointer value2);
 typedef int					(*f_compare)(pointer value1, pointer value2);
@@ -44,7 +45,6 @@ typedef	struct		s_xy
 
 typedef struct		s_node
 {
-//	t_pointer		*data;
 	void			*data;
 	struct s_node	*next;
 	struct s_node	*prev;

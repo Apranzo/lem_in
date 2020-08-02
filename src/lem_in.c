@@ -396,7 +396,7 @@ static	void 		del_output_forks(t_room	*room)
 	{
 		node = room->out->first;
 		while (node) {
-			if (((t_room *) node->data)->desc_level != shortest)
+			if (shortest < 0 || ((t_room *) node->data)->desc_level != shortest)
 				lst_rm_entry(room->out, node);
 			else
 				shortest = -1;

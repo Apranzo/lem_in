@@ -1,21 +1,3 @@
-/**
- * @file arraylist.h
- *
- * @brief Automatically resizing array
- *
- * ArrayLists are arrays of pointers which automatically increase in
- * size.
- *
- * To create an t_alst, use @ref alist_new.
- * To destroy an t_alst, use @ref arraylist_free.
- *
- * To add a pointer to an t_alst, use @ref alist_prepend,
- * @ref arraylist_append, or @ref alist_insert.
- *
- * To remove a pointer from an t_alst, use @ref alist_remove
- * or @ref alist_remove_range.
- */
-
 #ifndef ARRAYLIST_H
 # define ARRAYLIST_H
 

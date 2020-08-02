@@ -18,21 +18,21 @@ t_qu *queue_new(void)
 
 	queue->head = NULL;
 	queue->tail = NULL;
+	queue->len = 0;
 
 	return queue;
 }
 
 void queue_free(t_qu *queue)
 {
-	/* Empty the queue */
-
-	while (!queue_is_empty(queue)) {
-		queue_pop_head(queue);
-	}
-
-	/* Free back the queue */
-
+	queue_clear(queue);
 	free(queue);
+}
+
+void queue_clear(t_qu *queue)
+{
+	while (!queue_is_empty(queue))
+		queue_pop_head(queue);
 }
 
 int queue_push_head(t_qu *queue, que_val data)
@@ -73,7 +73,7 @@ int queue_push_head(t_qu *queue, que_val data)
 
 		queue->head = new_entry;
 	}
-
+	queue->len++;
 	return (1);
 }
 
@@ -111,12 +111,13 @@ que_val queue_pop_head(t_qu *queue)
 
 	free(entry);
 
+	queue->len--;
 	return result;
 }
 
 que_val queue_peek_head(t_qu *queue)
 {
-	return (!queue_is_empty(queue) ? queue->head->data : NULL);
+	return (queue_is_empty(queue) ? queue->head->data : NULL);
 }
 
 int queue_contains(t_qu *qu, que_val data)
@@ -170,7 +171,7 @@ int queue_push_tail(t_qu *queue, que_val data)
 
 		queue->tail = new_entry;
 	}
-
+	queue->len++;
 	return 1;
 }
 
@@ -209,6 +210,7 @@ que_val queue_pop_tail(t_qu *queue)
 
 	free(entry);
 
+	queue->len--;
 	return result;
 }
 
@@ -223,6 +225,6 @@ que_val queue_peek_tail(t_qu *queue)
 
 int queue_is_empty(t_qu *queue)
 {
-	return queue->head == NULL;
+	return ((int) (queue->head));
 }
 

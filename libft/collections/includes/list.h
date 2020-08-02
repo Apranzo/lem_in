@@ -13,9 +13,11 @@ typedef struct s_linked_lst
 
 t_lst					*lst_new();
 
-void lst_free(t_lst *lst);
-t_node *lst_prepend(t_lst *lst, pointer data);
-t_node *lst_append(t_lst *lst, pointer data);
+
+void					lst_clear(t_lst *lst, f_free free_data);
+void					lst_free(t_lst *lst, f_free free_data);
+t_node					*lst_prepend(t_lst *lst, pointer data);
+t_node					*lst_append(t_lst *lst, pointer data);
 
 /**
  * Retrieve the previous entry in a lst.
