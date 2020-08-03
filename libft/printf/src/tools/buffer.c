@@ -25,8 +25,8 @@ void	print_buffer(t_buffer *buffer)
 
 void	write_char(t_buffer *buffer, char c)
 {
-	if (buffer_full(buffer) == 1)
-		print_buffer(buffer);
+	if (buffer_full(buffer))
+		buffer->flush_buf(buffer);
 	buffer->content[buffer->index++] = c;
 	buffer->length++;
 }

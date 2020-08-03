@@ -72,8 +72,10 @@ void				print_res(t_lemin *lem)
 {
 	size_t			number;
 	t_node			*node;
+	t_node			*nroom;
 	t_pth			*pth;
 	t_itr			*itr;
+	char			*line = ft_strnew(0);
 	int 			printed;
 
 	itr = lst_itr_load(lem->raw, NULL, NULL);
@@ -83,22 +85,35 @@ void				print_res(t_lemin *lem)
 	number = 1;
 	lst_sort(lem->paths, (f_compare) &cmpr_lst_ln);
 	lst_foreach(lem->paths, (f_map) &sum_prev_ln);
-//	node = lem->paths->first;
 	while (lem->finished < lem->ants)
 	{
 		node = lem->paths->first;
+		printed = 0;
 		while (node != lem->paths->last)
 		{
 			pth = node->data;
-			pass_ants(pth, &number, lem->ants);
+			move(pth->rooms);
+			if (resolv_path(pth, lem->ants, number))
+				((t_room *) pth->rooms->first->data)->ant = number++;
+			nroom = pth->rooms->first;
+			while (nroom)
+			{
+				if (((t_room*)nroom->data)->ant)
+				{
+					printed += ft_sprintf(&line, "L%zu-%s ", ((t_room *) nroom->data)->ant,  ((t_room *) nroom->data)->name);
+//					if (nroom->next && ((t_room *) nroom->next->data)->ant)
+//						ft_printf(" ");
+				}
+				nroom = nroom->next;
+			}
 			if (((t_room *) pth->rooms->last->data)->ant)
 				lem->finished++;
-//			if (node && lem->finished < lem->ants && printed)
-//				ft_printf(" ");
-//			}
 			node = node->next;
 		}
-		ft_printf("\n");
+		line[printed - 1] = '\n';
 	}
+	if(line[printed - 1] == ' ')
+		line[printed - 1] = '\n';
+	ft_putstr(line);
 //	ft_printf("\n");
 }

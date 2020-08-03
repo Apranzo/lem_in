@@ -225,6 +225,6 @@ que_val queue_peek_tail(t_qu *queue)
 
 int queue_is_empty(t_qu *queue)
 {
-	return ((int) (queue->head));
+	return (!queue->head);
 }
 

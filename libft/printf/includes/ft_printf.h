@@ -16,6 +16,7 @@
 # include <stdarg.h>
 # include <limits.h>
 # include "../../core/includes/coreft.h"
+# include "../../string//includes/string_builder.h"
 
 # define PRINTF_BUFF_SIZE	16192
 # define LENGTH_H	0x01
@@ -27,6 +28,13 @@
 # define LENGTH_Z	0x40
 # define LENGTH_T	0x80
 
+typedef size_t		(*f_flush)(pointer buffer);
+typedef struct	s_stream
+{
+	int			fd;
+	char		buf[PRINTF_BUFF_SIZE];
+}				t_stream;
+
 typedef struct		s_data
 {
 	char			*str;
@@ -37,10 +45,13 @@ typedef struct		s_data
 
 typedef struct		s_buffer
 {
+	char			*out;
 	int				index;
 	int				fd;
 	int				length;
 	char			content[PRINTF_BUFF_SIZE];
+	f_flush			flush_buf;
+
 }					t_buffer;
 
 typedef struct		s_info
@@ -59,7 +70,8 @@ typedef struct		s_info
 	t_buffer		buffer;
 }					t_info;
 
-int					ft_vfprintf(int fd, const char *format, ...);
+int					ft_sprintf(char **str, const char *format, ...);
+int 				ft_vfprintf(int fd, const char *format, ...);
 int					ft_printf(const char *format, ...);
 void				parsing(const char **format, t_info *info);
 
