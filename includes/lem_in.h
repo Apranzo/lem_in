@@ -17,12 +17,20 @@ typedef struct		s_room
 	t_xy			cords;
 }					t_room;
 
+typedef	struct 		s_ant
+{
+	t_node			*node;
+	t_room			*room;
+	int 			number;
+}					t_ant;
+
 typedef struct		s_lemin
 {
 	t_lst 			*raw;
 	t_itr 			*filtred;
 	t_lst 			*paths;
-	int	 			ants;
+	t_lst 			*ants;
+	int	 			amount;
 	int	  			finished;
 	t_hash_map 		*rooms;
 	t_room			*start;

@@ -68,6 +68,22 @@ static int					pass_ants(t_pth *pth, size_t *number, size_t ants)
 	return (print(pth->rooms));
 }
 
+void				pr_by_ants(t_lemin *lemin)
+{
+	t_itr			*itr;
+	t_ant 			*ant;
+
+	lst_sort(lemin->paths, (f_compare) &cmpr_lst_ln);
+	lst_foreach(lemin->paths, (f_map) &sum_prev_ln);
+	itr = lst_itr_load(lemin->ants, NULL, NULL);
+	while (itr_has_more(itr))
+	{
+		ant = itr_next(itr);
+
+	}
+
+}
+
 void				print_res(t_lemin *lem)
 {
 	size_t			number;
@@ -85,7 +101,7 @@ void				print_res(t_lemin *lem)
 	number = 1;
 	lst_sort(lem->paths, (f_compare) &cmpr_lst_ln);
 	lst_foreach(lem->paths, (f_map) &sum_prev_ln);
-	while (lem->finished < lem->ants)
+	while (lem->finished < lem->amount)
 	{
 		node = lem->paths->first;
 		printed = 0;
@@ -93,7 +109,7 @@ void				print_res(t_lemin *lem)
 		{
 			pth = node->data;
 			move(pth->rooms);
-			if (resolv_path(pth, lem->ants, number))
+			if (resolv_path(pth, lem->amount, number))
 				((t_room *) pth->rooms->first->data)->ant = number++;
 			nroom = pth->rooms->first;
 			while (nroom)

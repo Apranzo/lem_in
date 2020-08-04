@@ -248,12 +248,12 @@ int			parse_ants_amount(t_lemin *lemin)
 	char			*str;
 
 	str = itr_next(lemin->filtred);
-	lemin->ants = str && str[0] != '-' ? ft_atoi(str) : -1;
-	if (lemin->ants <= 0 || !is_num_valid(lemin->ants, str))
+	lemin->amount = str && str[0] != '-' ? ft_atoi(str) : -1;
+	if (lemin->amount <= 0 || !is_num_valid(lemin->amount, str))
 		ft_error("Error\n", -1);
 	lemin->raw->first = lemin->raw->first->next;
 //	ft_putnbr(num);
-	return (lemin->ants);
+	return (lemin->amount);
 }
 
 static	void 		check_unuses(t_room	*room)
@@ -502,6 +502,27 @@ int 				input_filter_predict(char *line)
 {
 	return (ft_strncmp(line, JAIL, 1) ||
 			(!ft_strcmp(line, START) ||	!ft_strcmp(line, END)));
+}
+
+static void			cr_ants(t_lemin *lemin)
+{
+	t_lst			*ants;
+	t_ant 			*ant;
+	size_t 			num;
+
+	num = lemin->amount;
+	ants = lst_new();
+	while (num)
+	{
+		if (!(ant = malloc(sizeof(t_ant))))
+			ft_error("Error\n", -1);
+		ant->room = NULL;
+		ant->node = NULL;
+		ant->number = num;
+		lst_append(ants, ant);
+		num--;
+	}
+	lemin->ants = ants;
 }
 
 
