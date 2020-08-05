@@ -19,11 +19,13 @@ void lst_clear(t_lst *lst, f_free free_data)
 	while (entry)
 	{
 		next = entry->next;
-		if(free_data)
+		if (free_data)
 			free_data(entry->data);
 		free(entry);
 		entry = next;
 	}
+	lst->first = NULL;
+	lst->last = NULL;
 	lst->length = 0;
 }
 
@@ -51,7 +53,6 @@ t_node *lst_append(t_lst *lst, pointer data)
 		return (NULL);
 	if (!lst->length)
 		lst->first = new;
-	lst->last = new;
 	lst->length++;
 	return (new);
 }
@@ -174,53 +175,11 @@ int lst_rm_entry(t_lst *lst, t_node *entry)
 		if (entry == lst->last)
 			lst->last = lst->last->prev;
 		lst->length--;
+		entry->prev = NULL;
+		entry->next = NULL;
 		return (1);
 	}
 	return (0);
-//	/* If the lst is empty, or entry is NULL, always fail */
-//
-//	if (lst == NULL || *lst == NULL || entry == NULL) {
-//		return 0;
-//	}
-//
-//	/* Action to take is different if the entry is the first in the lst */
-//
-//	if (entry->prev == NULL) {
-//
-//		/* Unlink the first entry and update the starting pointer */
-//
-//		*lst = entry->next;
-//
-//		/* Update the second entry's prev pointer, if there is a second
-//		 * entry */
-//
-//		if (entry->next != NULL) {
-//			entry->next->prev = NULL;
-//		}
-//
-//	} else {
-//
-//		/* This is not the first in the lst, so we must have a
-//		 * previous entry.  Update its 'next' pointer to the new
-//		 * value */
-//
-//		entry->prev->next = entry->next;
-//
-//		/* If there is an entry following this one, update its 'prev'
-//		 * pointer to the new value */
-//
-//		if (entry->next != NULL) {
-//			entry->next->prev = entry->prev;
-//		}
-//	}
-//
-//	/* Free the lst entry */
-//
-//	free(entry);
-//
-//	/* Operation successful */
-//
-//	return 1;
 }
 
 int					lst_rm_data(t_lst *lst, f_equal equal, pointer data)
@@ -238,70 +197,15 @@ int					lst_rm_data(t_lst *lst, f_equal equal, pointer data)
 			if (node == lst->last)
 				lst->last = lst->last->prev;
 			lst->length--;
+			node->prev = NULL;
+			node->next = NULL;
+			free(node);
 			return (1);
 		}
 		node = node->next;
 	}
 	return (0);
 }
-//
-//size_t	 lst_rem_data(t_node **lst, f_equal callback,
-//                              pointer data)
-//{
-//	size_t entries_removed;
-//	t_node *rover;
-//	t_node *next;
-//
-//	if (lst == NULL || callback == NULL) {
-//		return 0;
-//	}
-//
-//	entries_removed = 0;
-//
-//	/* Iterate over the entries in the lst */
-//
-//	rover = *lst;
-//
-//	while (rover != NULL) {
-//
-//		next = rover->next;
-//
-//		if (callback(rover->data, data)) {
-//
-//			/* This data needs to be removed.  Unlink this entry
-//			 * from the lst. */
-//
-//			if (rover->prev == NULL) {
-//
-//				/* This is the first entry in the lst */
-//
-//				*lst = rover->next;
-//			} else {
-//
-//				/* Point the previous entry at its new
-//				 * location */
-//
-//				rover->prev->next = rover->next;
-//			}
-//
-//			if (rover->next != NULL) {
-//				rover->next->prev = rover->prev;
-//			}
-//
-//			/* Free the entry */
-//
-//			free(rover);
-//
-//			++entries_removed;
-//		}
-//
-//		/* Advance to the next lst entry */
-//
-//		rover = next;
-//	}
-//
-//	return entries_removed;
-//}
 
 /* Function used internally for sorting.  Returns the last entry in the
  * new sorted lst */
@@ -451,10 +355,9 @@ t_itr			*lst_itr_load(t_lst *lst, t_itr *itr, f_prdct prdct)
 	size_t 		i;
 	t_node		*entry;
 
+	itr_clear(itr);
 	if (!itr && !(itr = ft_memalloc(sizeof(t_itr))))
 			return (NULL);
-	itr_clear(itr);
-	itr->collection = lst;
 	entry = lst->last;
 	i = 0;
 	while (i++ < lst->length)

@@ -75,13 +75,17 @@ void			hm_clear(t_hash_map *hash_map)
 	free(hash_map->table);
 }
 
-void			hm_free(t_hash_map *hash_map)
+void			hm_free(t_hash_map *hash_map, f_free free_key, f_free free_val)
 {
 	t_hm_entry *rover;
 	t_hm_entry *next;
 	size_t i;
 
 	i = 0;
+	if (free_key)
+		hash_map->free_key = free_key;
+	if (free_val)
+		hash_map->free_val = free_val;
 	while (i < hash_map->table_size)
 	{
 		rover = hash_map->table[i];
@@ -272,7 +276,6 @@ t_itr 					*hm_itr_load(t_hash_map *hash_map, t_itr *itr)
 
 	/* Default pointer of next if no entries are found. */
 	itr_clear(itr);
-	itr->collection = hash_map;
 	/* Find the first entry */
 	chain = 0;
 	while (chain < hash_map->table_size)

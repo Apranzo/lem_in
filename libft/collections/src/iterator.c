@@ -27,15 +27,7 @@ void		itr_foreach(t_itr *iter, void (*f)(pointer data))
 
 void 					itr_free(t_itr *itr)
 {
-	t_node				*node;
-
-	node = itr->_cur_node;
-	while (node)
-	{
-		itr->_cur_node = itr->_cur_node->next;
-		free(node);
-		node = itr->_cur_node;
-	}
+	itr_clear(itr);
 	free(itr);
 }
 
@@ -43,14 +35,18 @@ void					itr_clear(t_itr *itr)
 {
 	t_node				*node;
 
-	node = itr->_cur_node;
-	while (node)
+	if (itr)
 	{
-		itr->_cur_node = itr->_cur_node->next;
-		free(node);
+		itr_reset(itr);
 		node = itr->_cur_node;
+		while (node)
+		{
+			itr->_cur_node = itr->_cur_node->next;
+			free(node);
+			node = itr->_cur_node;
+		}
+		ft_bzero(itr, sizeof(t_itr));
 	}
-	ft_bzero(itr, sizeof(t_itr));
 }
 
 void					itr_reset(t_itr *itr)

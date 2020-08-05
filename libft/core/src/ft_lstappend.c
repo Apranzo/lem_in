@@ -7,14 +7,16 @@ t_node *ft_node_append(t_node **node, pointer data)
 
 	if (!node || !(new = ft_lstnew(data)))
 		return (NULL);
-	if (!*node)
-		*node = new;
-	else {
+//	if (!*node)
+//		*node = new;
+	if (*node)
+	{
 		rover = *node;
 		while (rover->next)
 			rover = rover->next;
 		new->prev = rover;
 		rover->next = new;
 	}
+	*node = new;
 	return (new);
 }

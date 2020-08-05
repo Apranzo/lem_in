@@ -98,12 +98,12 @@ t_itr 			*bfs_trip(t_room *start, t_room *end, t_itr *itr, t_node *(*get_first)(
 
 	if ((!itr && !(itr = ft_memalloc(sizeof(t_itr)))) ||
 		!(black = hm_new(&ft_str_hash, (f_equal) &string_equal)) ||
-		!(qu = queue_new()) || !(queue_push_head(qu, start))
+		!(qu = qu_new()) || !(qu_push_head(qu, start))
 		|| (end && !hm_insert(black, end->name, end->name))
 		)
 			return (NULL);
 	itr_clear(itr);
-	while ((room = queue_pop_tail(qu)))
+	while ((room = qu_pop_tail(qu)))
 	{
 		if (!hm_insert(black, room->name, room))
 			ft_error("Allocation error\n", -1);
@@ -111,9 +111,9 @@ t_itr 			*bfs_trip(t_room *start, t_room *end, t_itr *itr, t_node *(*get_first)(
 		while (node)
 		{
 			if (!hm_lookup(black, ((t_room *)node->data)->name) &&
-				!queue_contains(qu, node->data))
+				!qu_contains(qu, node->data))
 				if (!ft_node_append(&itr->_cur_node, node->data) ||
-						!queue_push_head(qu, node->data))
+						!qu_push_head(qu, node->data))
 					ft_error("Allocation error\n", -1);
 			node = node->next;
 		}
@@ -133,10 +133,10 @@ static int 			bfs_rec(t_fck fck)
 	while (node)
 	{
 		if (!hm_lookup(fck.black, ((t_room *)node->data)->name) &&
-			!queue_contains(fck.qu, node->data))
+			!qu_contains(fck.qu, node->data))
 		{
 			fck.f_level(node->data, fck.room);
-			if (!queue_push_head(fck.qu, node->data))
+			if (!qu_push_head(fck.qu, node->data))
 				return (0);
 		}
 		node = node->next;
@@ -150,15 +150,16 @@ void			bfs_asc_level(t_lemin *lem)
 	t_qu		*qu;
 
 	lem->start->asc_level = 0;
-	if (!(qu = queue_new())
+	if (!(qu = qu_new())
 		|| !(black = hm_new(&ft_str_hash, &string_equal))
-		|| !(queue_push_head(qu, lem->start))
+		|| !(qu_push_head(qu, lem->start))
 		|| !(hm_insert(black, lem->end->name, lem->end->name)))
 				ft_error("Allocation error\n", -1);
-	while (!queue_is_empty(qu))
-		if (!bfs_rec((t_fck){queue_pop_tail(qu), black, qu, &asc_level, &get_out_first, lem}))
+	while (!qu_is_empty(qu))
+		if (!bfs_rec((t_fck){qu_pop_tail(qu), black, qu, &asc_level, &get_out_first, lem}))
 				ft_error("Allocation error\n", -1);
-	hm_clear(black);
+	hm_free(black, NULL, NULL);
+	qu_free(qu);
 	lem->end->asc_level = INT_MAX;
 }
 
@@ -168,14 +169,15 @@ void			bfs_desc_level(t_lemin *lem)
 	t_qu		*qu;
 
 	lem->end->desc_level = 0;
-	if (!(qu = queue_new())
+	if (!(qu = qu_new())
 		|| !(black = hm_new(&ft_str_hash, &string_equal))
-		|| !(queue_push_head(qu, lem->end))
+		|| !(qu_push_head(qu, lem->end))
 		|| !(hm_insert(black, lem->start->name, lem->start)))
 		ft_error("Allocation error\n", -1);
-	while (!queue_is_empty(qu))
-		if (!bfs_rec((t_fck){queue_pop_tail(qu), black, qu, &desc_level, &get_in_first, lem}))
+	while (!qu_is_empty(qu))
+		if (!bfs_rec((t_fck){qu_pop_tail(qu), black, qu, &desc_level, &get_in_first, lem}))
 			ft_error("Allocation error\n", -1);
-	hm_clear(black);
+	hm_free(black, NULL, NULL);
+	qu_free(qu);
 	lem->start->desc_level = INT_MAX;
 }

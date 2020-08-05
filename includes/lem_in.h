@@ -3,26 +3,29 @@
 
 #include "libft/includes/libft.h"
 
-typedef struct		s_room
+typedef struct s_room t_room;
+typedef struct s_ant t_ant;
+
+struct				s_room
 {
 	char			*name;
 	t_lst 			*out;
 	t_lst 			*in;
-	size_t 			ant;
+	t_ant			*ant;
 	int				asc_level;
 	int				desc_level;
 	int				required;
-//	int				start;
-//	int				end;
 	t_xy			cords;
-}					t_room;
+};
 
-typedef	struct 		s_ant
+struct 		s_ant
 {
-	t_node			*node;
 	t_room			*room;
+	int				finished;
+	int				started;
 	int 			number;
-}					t_ant;
+};
+
 
 typedef struct		s_lemin
 {
@@ -30,6 +33,7 @@ typedef struct		s_lemin
 	t_itr 			*filtred;
 	t_lst 			*paths;
 	t_lst 			*ants;
+	t_qu 			*qu;
 	int	 			amount;
 	int	  			finished;
 	t_hash_map 		*rooms;

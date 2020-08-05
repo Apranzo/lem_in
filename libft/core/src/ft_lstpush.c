@@ -12,9 +12,9 @@
 
 #include <coreft.h>
 
-t_node	*ft_node_prepend(t_node **begin_list, void *data)
+t_node			*ft_node_prepend(t_node **begin_list, void *data)
 {
-	t_node *first;
+	t_node 		*first;
 
 	if (!(first = ft_lstnew(data)))
 		return (NULL);

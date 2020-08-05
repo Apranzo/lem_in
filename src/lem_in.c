@@ -27,7 +27,7 @@ void				pr_iter(t_itr *itr)
 	ft_printf(":::::::::::::::::::::::::::::::\n");
 }
 
-static void deb(t_lemin *lemin)
+static void deb(t_lemin *lem)
 {
 	t_itr *itr;
 	t_pair *pair;
@@ -36,7 +36,7 @@ static void deb(t_lemin *lemin)
 
 	if (!(itr = ft_memalloc(sizeof(t_itr))))
 		ft_error("Error\n", -1);
-	hm_itr_load(lemin->rooms, itr);
+	hm_itr_load(lem->rooms, itr);
 	while (itr_has_more(itr))
 	{
 		pair = itr_next(itr);
@@ -73,13 +73,12 @@ static void pthpr(t_lst *lst)
 	ft_printf("\n");
 }
 
-static void pthdeb(t_lemin *lemin)
+static void pthdeb(t_lemin *lem)
 {
-	t_node	*node;
 	t_node	*path_node;
 	t_pth 	*path;
 	size_t i = 1;
-	path_node = lemin->paths->first;
+	path_node = lem->paths->first;
 	while (path_node)
 	{
 		path = ((t_pth *)path_node->data);
@@ -90,13 +89,13 @@ static void pthdeb(t_lemin *lemin)
 	ft_printf("\n");
 }
 
-static void pdeb(t_lemin *lemin)
+static void pdeb(t_lemin *lem)
 {
 	t_node	*node;
 	t_node	*path_node;
 	t_pth 	*path;
 	size_t i = 1;
-	path_node = lemin->paths->first;
+	path_node = lem->paths->first;
 	ft_printf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 	while (path_node)
 	{
@@ -128,7 +127,7 @@ int			is_num_valid(int value, char *str)
 	return (res);
 }
 
-int 				read_intput(int fd, t_lemin *lemin)
+int 				read_intput(int fd, t_lemin *lem)
 {
 	char 			*line;
 	int 			res;
@@ -136,7 +135,7 @@ int 				read_intput(int fd, t_lemin *lemin)
 	line = NULL;
 	while ((res = ft_gnl(fd, &line)) > 0 && line)
 	{
-		if (!lst_append(lemin->raw, line))
+		if (!lst_append(lem->raw, line))
 			ft_error("read_input Error allocation\n", -1);
 	}
 	return (!res);
@@ -155,56 +154,54 @@ t_room *lmn_init_room(t_room *new, char **room)
 	if (!is_num_valid(new->cords.x, room[1]) || !is_num_valid(new->cords.y, room[2]))
 		return (NULL);
 	new->asc_level = -1;
-//	new->in = 0;
-//	new->ant = 0;
 	new->desc_level = -1;
 	ft_freematr(room);
 	return (new);
 }
 
-t_room				*lmn_check_status(t_lemin *lemin, t_room *room, char **line)
+t_room				*lmn_check_status(t_lemin *lem, t_room *room, char **line)
 {
 
 	if (!strcmp(*line, END))
 	{
-		if (lemin->end || !itr_has_more(lemin->filtred))
+		if (lem->end || !itr_has_more(lem->filtred))
 			return (NULL);
 		else
 		{
-			*line = itr_next(lemin->filtred);
-			(room->required = 1) && (lemin->end = room);
-			return (lmn_check_status(lemin, room, line));
+			*line = itr_next(lem->filtred);
+			(room->required = 1) && (lem->end = room);
+			return (lmn_check_status(lem, room, line));
 		}
 	}
 	else if (!ft_strcmp(*line, START))
 	{
-		if (lemin->start || !itr_has_more(lemin->filtred))
+		if (lem->start || !itr_has_more(lem->filtred))
 			return (NULL);
 		else
 		{
-			*line = itr_next(lemin->filtred);
-			(room->required = 1) && (lemin->start = room);
-			return (lmn_check_status(lemin, room, line));
+			*line = itr_next(lem->filtred);
+			(room->required = 1) && (lem->start = room);
+			return (lmn_check_status(lem, room, line));
 		}
 	}
 	return (room);
 }
 
-void 				parse_rooms(t_lemin *lemin)
+void 				parse_rooms(t_lemin *lem)
 {
 	t_hash_map 		*cords;
 	char 			*line;
 	t_room			*new;
 
 	cords = hm_new(&ft_str_hash, &string_equal);
-//	pr_iter(lemin->filtred);
-	while (itr_has_more(lemin->filtred) &&
-			!ft_strchr(lemin->filtred->_cur_node->data, '-'))
+//	pr_iter(lem->filtred);
+	while (itr_has_more(lem->filtred) &&
+			!ft_strchr(lem->filtred->_cur_node->data, '-'))
 	{
-		line = itr_next(lemin->filtred);
+		line = itr_next(lem->filtred);
 		if (line[0] == 'L'
 			|| !(new = ft_memalloc(sizeof(t_room)))
-			|| !lmn_check_status(lemin, new, &line)
+			|| !lmn_check_status(lem, new, &line)
 			|| hm_lookup(cords, ft_strchr(line, ' '))
 			|| !(new = lmn_init_room(new ,ft_strsplit(line, ' '))))
 			ft_error("Error\n", -1);
@@ -212,30 +209,31 @@ void 				parse_rooms(t_lemin *lemin)
 //		if ((x_cord->length - 1 < new->cords.x || x_cord->data[new->cords.x]) ||
 //				(y_cord->length  - 1 < new->cords.y || x_cord->data[new->cords.y]))
 //			ft_error("Error\n", -1);
-	 	if (!hm_insert(lemin->rooms, new->name, new))
+	 	if (!hm_insert(lem->rooms, new->name, new))
 	 		ft_error("Error\n", -1);
 	}
-	if (!itr_has_more(lemin->filtred))
+	if (!itr_has_more(lem->filtred))
 		ft_error("Error\n", -1);
-	hm_free(cords);
+	hm_free(cords, NULL, NULL);
 }
 
-void				parse_links(t_lemin *lemin)
+void				parse_links(t_lemin *lem)
 {
 	char			*line;
 	char 			**linked;
 	t_room			*left;
 	t_room			*right;
 
-	while ((line = itr_next(lemin->filtred)) && ft_cntwords(line, '-'))
+	while ((line = itr_next(lem->filtred)) && ft_cntwords(line, '-'))
 	{
 		if(!(linked = ft_strsplit(line, '-')) || !*linked || !*(linked + 1))
 			ft_error("Error\n", -1);
-		if (!(left = hm_lookup(lemin->rooms, linked[0])) ||
-			!(right = hm_lookup(lemin->rooms, linked[1])) ||
+		if (!(left = hm_lookup(lem->rooms, linked[0])) ||
+			!(right = hm_lookup(lem->rooms, linked[1])) ||
 			lst_contains(left->out, (f_equal) &room_equals, right) ||
 				lst_contains(right->out, (f_equal) &room_equals, left))
 			ft_error("Error\n", -1);
+		ft_freematr(linked);
 		lst_append(right->out, left);
 		lst_append(left->out, right);
 		lst_append(right->in, left);
@@ -243,23 +241,22 @@ void				parse_links(t_lemin *lemin)
 	}
 }
 
-int			parse_ants_amount(t_lemin *lemin)
+int			parse_ants_amount(t_lemin *lem)
 {
 	char			*str;
 
-	str = itr_next(lemin->filtred);
-	lemin->amount = str && str[0] != '-' ? ft_atoi(str) : -1;
-	if (lemin->amount <= 0 || !is_num_valid(lemin->amount, str))
+	str = itr_next(lem->filtred);
+	lem->amount = str && str[0] != '-' ? ft_atoi(str) : -1;
+	if (lem->amount <= 0 || !is_num_valid(lem->amount, str))
 		ft_error("Error\n", -1);
-	lemin->raw->first = lemin->raw->first->next;
 //	ft_putnbr(num);
-	return (lemin->amount);
+	return (lem->amount);
 }
 
 static	void 		check_unuses(t_room	*room)
 {
 	t_node			*node;
-//	t_node			*tmp; TODO free maybe
+	pointer			*data;
 
 //	room = pair->value;
 	node = room->out->first;
@@ -274,10 +271,10 @@ static	void 		check_unuses(t_room	*room)
 		}
 		else if (((t_room*)node->data)->asc_level == room->asc_level)
 		{
-			lst_rm_data(room->in, (f_equal) &room_equals, node->data);
-			lst_rm_data(((t_room *) node->data)->out, (f_equal) &room_equals, room);
-			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
 			lst_rm_data(((t_room *) node->data)->in, (f_equal) &room_equals, room);
+			lst_rm_data(((t_room *) node->data)->out, (f_equal) &room_equals, room);
+			lst_rm_data(room->in, (f_equal) &room_equals, node->data);
+			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
 		}
 		node = node->next;
 	}
@@ -292,25 +289,27 @@ static	void 		alight(t_room	*room)
 	{
 		if (((t_room*)node->data)->asc_level < room->asc_level)
 		{
-			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
 			lst_rm_data(((t_room *) node->data)->in, (f_equal) &room_equals, room);
+			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
 		}
 		node = node->next;
 	}
 }
 
-static	void 		delete_dead_end(t_room	*room)
+static	void 		delete_dead_end(t_room*room)
 {
 	t_node *node;
+	t_node *tmp;
 
 	if (!room->required && room->in->length && !room->out->length)
 	{
 		node = room->in->first;
 		while (node)
 		{
+			tmp = node->next;
 			lst_rm_data(((t_room*)node->data)->out, (f_equal) &room_equals, room);
 			lst_rm_data(room->in, (f_equal) &room_equals, node->data);
-			node = node->next;
+			node = tmp;
 		}
 	}
 	else if (!room->required && !room->in->length && room->out->length)
@@ -318,13 +317,12 @@ static	void 		delete_dead_end(t_room	*room)
 		node = room->out->first;
 		while (node)
 		{
+			tmp = node->next;
 			lst_rm_data(((t_room*)node->data)->in, (f_equal) &room_equals, room);
 			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
-			node = node->next;
+			node = tmp;
 		}
 	}
-//	if (room->in < 0)
-//		ft_error("room->in < 0", -2);
 }
 
 static int			comp_bfs_asc(t_room* left, t_room *right)
@@ -352,9 +350,10 @@ static void			dde()
 
 	lst = hm_lst(lemin->rooms, NULL);
 	lst_sort(lst, (f_compare) &comp_bfs_asc);
-	lst_sort(lst, (f_compare) &comp_bfs_asc);
 	itr = lst_itr_load(lst, NULL, NULL);
 	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
+	lst_free(lst, NULL);
+	itr_free(itr);
 
 }
 
@@ -407,51 +406,43 @@ static	void 		del_output_forks(t_room	*room)
 		ft_error("del_output_forks\troom->links.length > 1", -2);
 }
 
-static int			filtr_bfs(t_room* room)
-{
-	return (room->asc_level > 0);
-}
-
-void 				delete_unnecerarry(t_lemin *lemin)
+void 				delete_unnecerarry(t_lemin *lem)
 {
 	t_itr			*itr;
 	t_lst 			*lst;
 
-	lst = hm_lst(lemin->rooms, NULL);
+	lst = hm_lst(lem->rooms, NULL);
 	lst_sort(lst, (f_compare) &comp_bfs_asc);
 	itr = lst_itr_load(lst, NULL, NULL);
-//	pr_iter(itr);
-//	if (!(itr = bfs_trip(lemin->start, lemin->end, NULL, &get_out_first)))
-//		ft_error("Error\n", -1);
-//	hm_itr_load(lemin->rooms, itr);
-	//deb(lemin);
 	itr_foreach(itr, (void (*)(pointer)) &check_unuses); //TODO удаление в итераторе
-	//deb(lemin);
 	itr_reset(itr);
 	itr_foreach(itr, (void (*)(pointer)) &alight);
-	lst_sort(lst, (f_compare) &comp_bfs_asc);
-	lst_itr_load(lst, itr, NULL);
+	itr_reset(itr);
 	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
-	lst_sort(lst, (f_compare) &comp_bfs_asc);
-	lst_itr_load(lst, itr, NULL);
-	//deb(lemin);
+	itr_reset(itr);
 	itr_foreach(itr, (void (*)(pointer)) &del_input_forks);
 	lst_sort(lst, (f_compare) &comp_bfs_desc);
 	lst_itr_load(lst, itr, NULL);
-	bfs_desc_level(lemin);
-	//deb(lemin);
+	bfs_desc_level(lem);
 	itr_foreach(itr, (void (*)(pointer)) &del_output_forks);
-	//deb(lemin);
 	itr_free(itr);
+	lst_free(lst, NULL);
 }
 
-int build_path(const t_lemin *lemin, t_lst *br)
+
+static void free_path(t_pth *pth)
+{
+	lst_free(pth->rooms, NULL);
+	free(pth);
+}
+
+int build_path(const t_lemin *lem, t_lst *br)
 {
 	t_node 			*entry;
 	t_room 			*room;
 
 	entry = br->first;
-	while (entry->data != lemin->end)
+	while (entry->data != lem->end)
 	{
 		room = entry->data;
 		if (room->out->length > 1)
@@ -464,7 +455,7 @@ int build_path(const t_lemin *lemin, t_lst *br)
 	return (1);
 }
 
-void 				find_path(t_lemin *lemin)
+void 				find_path(t_lemin *lem)
 {
 	size_t 			i;
 	t_lst			*br;
@@ -473,28 +464,28 @@ void 				find_path(t_lemin *lemin)
 	t_pth 			*path;
 
 	i = 0;
-	lemin->paths = lst_new();
-	links = lemin->start->out;
+	lem->paths = lst_new();
+	links = lem->start->out;
 	while (i < links->length)
 	{
 		br = lst_new();
 		path = ft_memalloc(sizeof(t_pth));
 		path->rooms = br;
-		lst_append(lemin->paths, path);
+		lst_append(lem->paths, path);
 		lst_append(br, lst_nth_data(links, i));
 		i++;
 	}
-	node = lemin->paths->first;
+	node = lem->paths->first;
 	while (node)
 	{
 		br = ((t_pth *)node->data)->rooms;
-		if(!build_path(lemin, br))
-			lst_rm_entry(lemin->paths, node);
+		if(!build_path(lem, br))
+			lst_rm_entry(lem->paths, node);
 		node = node->next;
 	}
-	if (!lemin->paths->length)
+	if (!lem->paths->length)
 		ft_error("Error\n", -1);
-//	pthdeb(lemin);
+//	pthdeb(lem);
 }
 
 
@@ -504,25 +495,28 @@ int 				input_filter_predict(char *line)
 			(!ft_strcmp(line, START) ||	!ft_strcmp(line, END)));
 }
 
-static void			cr_ants(t_lemin *lemin)
+static void			cr_ants(t_lemin *lem)
 {
 	t_lst			*ants;
 	t_ant 			*ant;
 	size_t 			num;
 
-	num = lemin->amount;
+	num = lem->amount;
 	ants = lst_new();
 	while (num)
 	{
 		if (!(ant = malloc(sizeof(t_ant))))
 			ft_error("Error\n", -1);
 		ant->room = NULL;
-		ant->node = NULL;
+		ant->finished = 0;
+		ant->started = 0;
 		ant->number = num;
 		lst_append(ants, ant);
 		num--;
 	}
-	lemin->ants = ants;
+	lem->ants = ants;
+	if (!(lem->qu = qu_by_lst(lem->ants)))
+		ft_error("Error\n", -1);
 }
 
 
@@ -535,35 +529,26 @@ int					main(void)
 			!(lemin->raw = lst_new()))
 		ft_error("main alloc error", -1);
 	read_intput(STDIN_FILENO, lemin);
-	if (!(lemin->filtred = lst_itr_load(lemin->raw, lemin->filtred,
+	if (!(lemin->filtred = lst_itr_load(lemin->raw, NULL,
 										(f_prdct) input_filter_predict)))
 		ft_error("main alloc error", -1);
-//	while (--y)
 	parse_ants_amount(lemin);
-//	pr_iter(lemin->filtred);
-//	ft_putnbr(parse_ants_amount(lemin));
 	lemin->rooms = hm_new(&ft_str_hash, &string_equal);
-	assert(lemin->rooms);
-//	pr_iter(lemin->filtred);
 	parse_rooms(lemin);
-//	pr_iter(lemin->filtred);
 	parse_links(lemin);
-	//deb(lemin);
 	if (!lemin->start || !lemin->end || !lemin->start->out)
 		ft_error("Error\n", -1);
-//	itr = bfs_trip(lemin->start, lemin->end, NULL);
-//	pr_iter(itr);
-//	lemin->start->asc_level = 0;
-//	lemin->end->desc_level = 0;
+	cr_ants(lemin);
 	bfs_asc_level(lemin);
-//	lemin->start->desc_level = INT_MAX;
-//	lemin->end->asc_level = INT_MAX;
-//	lemin->start->desc_level = INT_MAX;
-//	lemin->start->asc_level = 0;
-	////deb(lemin);
 	delete_unnecerarry(lemin);
-	//deb(lemin);
 	find_path(lemin);
-//	pdeb(lemin);
 	print_res(lemin);
+//	free(lemin->raw);
+	lst_free(lemin->raw, free);
+	itr_free(lemin->filtred);
+	lst_free(lemin->paths, (f_free) &free_path);
+	lst_free(lemin->ants, free);
+	qu_free(lemin->qu);
+	hm_free(lemin->rooms, NULL, (f_free) &room_free);
+	free(lemin);
 }

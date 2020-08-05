@@ -33,7 +33,8 @@ t_hash_map					*hm_init(t_hash_map  *map, f_hash hash_func,
 									   f_equal equal_func);
 t_hash_map					*hm_new(f_hash hash_func,
 									  f_equal equal_func);
-void						hm_free(t_hash_map *hash_map);
+void						hm_free(t_hash_map *hash_map,
+										f_free free_key, f_free free_val);
 void						hm_register_free_functions(t_hash_map *hash_map,
 														hm_free_key key_free_func,
 														hm_free_val value_free_func);

@@ -2,6 +2,7 @@
 # define QUEUE_H
 
 #include <coreft.h>
+#include <libft/collections/includes/list.h>
 
 typedef pointer				que_val;
 
@@ -26,17 +27,18 @@ typedef struct 				s_queue
  *                   the memory.
  */
 
-int							queue_contains(t_qu *qu, que_val data);
-t_qu						*queue_new(void);
-void						queue_free(t_qu *queue);
-void						queue_clear(t_qu *queue);
-int							queue_push_head(t_qu *queue, que_val data);
-que_val						queue_pop_head(t_qu *queue);
-que_val						queue_peek_head(t_qu *queue);
-int							queue_push_tail(t_qu *queue, que_val data);
-que_val						queue_pop_tail(t_qu *queue);
-que_val						queue_peek_tail(t_qu *queue);
-int							queue_is_empty(t_qu *queue);
+t_qu						*qu_by_lst(t_lst *lst);
+int							qu_contains(t_qu *qu, que_val data);
+t_qu						*qu_new(void);
+void						qu_free(t_qu *queue);
+void						qu_clear(t_qu *queue);
+int							qu_push_head(t_qu *queue, que_val data);
+que_val						qu_pop_head(t_qu *queue);
+que_val						qu_peek_head(t_qu *queue);
+int							qu_push_tail(t_qu *queue, que_val data);
+que_val						qu_pop_tail(t_qu *queue);
+que_val						qu_peek_tail(t_qu *queue);
+int							qu_is_empty(t_qu *queue);
 
 #endif
 

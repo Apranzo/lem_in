@@ -19,10 +19,11 @@ static 	int 		flush_to_str_bld(t_buffer *bf)
 	size_t			len;
 
 	str = bf->out;
-	len = ft_strlen(str);
+	len = str ? ft_strlen(str) : 0;
 	if(!(new = ft_strnew(len + bf->index + 1)))
 		return (-1);
-	ft_memcpy(new, str, len);
+	if (str)
+		ft_memcpy(new, str, len);
 	ft_memcpy(new + len, bf->content, bf->index);
 	bf->out = new;
 	free(str);

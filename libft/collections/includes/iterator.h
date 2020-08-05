@@ -3,25 +3,11 @@
 
 #include <coreft.h>
 
-//typedef struct s_iterator 	t_itr;
-
-//typedef pointer 			(*f_itr_next)(t_itr *itr);
-//typedef void				(*f_itr_reset)(t_itr* itr);
-
-//typedef union 				s_iterator_value
-//{
-//	pointer 		blob;
-//	t_pair 			*key_val;
-//}					t_itr_val;
-
 typedef struct 				s_iterator
 {
-	pointer 				collection;
+//	pointer 				collection;
 	t_node 					*_cur_node;
 	t_node 					*_start_node;
-//	size_t					next_chain;
-//	f_itr_next				f_next;
-//	f_itr_reset 			f_reset;
 }							t_itr;
 
 void					itr_reset(t_itr *itr);

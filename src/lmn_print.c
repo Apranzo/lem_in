@@ -26,17 +26,27 @@ static int 				resolv_path(t_pth *pth, int ants, int number)
 static void			move(t_lst *lst)
 {
 	t_node			*node;
+	t_ant 			*prev;
 
 	node = lst->last;
-	((t_room*)node->data)->ant = node->prev ? ((t_room*)node->prev->data)->ant : ((t_room*)node->data)->ant;
+	prev = ((t_room*)node->prev->data)->ant;
+	if (node->prev && prev)
+	{
+		((t_room*)node->data)->ant = prev;
+		prev->room = node->data;
+	}
 	node = node->prev;
 	while (node && node->prev)
 	{
+		prev = ((t_room*)node->prev->data)->ant;
+		((t_room*)node->data)->ant = prev;
+		if (prev)
+			prev->room = node->data;
 		((t_room*)node->data)->ant = ((t_room*)node->prev->data)->ant;
 		node = node->prev;
 	}
-	if(node)
-		((t_room*)node->data)->ant = 0;
+	if (node)
+		((t_room*)node->data)->ant = NULL;
 }
 
 int					print(t_lst *lst)
@@ -59,13 +69,22 @@ int					print(t_lst *lst)
 	return(printed);
 }
 
-static int					pass_ants(t_pth *pth, size_t *number, size_t ants)
+static int					pass_ants(t_pth *pth, t_lemin *lemin)
 {
+	t_room					*room;
 
 	move(pth->rooms);
-	if (resolv_path(pth, ants, *number))
-		((t_room *) pth->rooms->first->data)->ant = (*number)++;
-	return (print(pth->rooms));
+	if (!qu_is_empty(lemin->qu)
+		&& resolv_path(pth, lemin->amount, ((t_ant*)qu_peek_head(lemin->qu))->number))
+	{
+		room = pth->rooms->first->data;
+		room->ant = qu_pop_head(lemin->qu);
+		room->ant->room = pth->rooms->first->data;
+		room->ant->started = 1;
+	}
+//		((t_room *) pth->rooms->first->data)->ant = (*number)++;
+	return (1);
+//	return (print(pth->rooms));
 }
 
 void				pr_by_ants(t_lemin *lemin)
@@ -86,50 +105,46 @@ void				pr_by_ants(t_lemin *lemin)
 
 void				print_res(t_lemin *lem)
 {
-	size_t			number;
 	t_node			*node;
-	t_node			*nroom;
 	t_pth			*pth;
 	t_itr			*itr;
-	char			*line = ft_strnew(0);
+	t_ant 			*ant;
+	char			*line;
 	int 			printed;
 
+	line = NULL;
 	itr = lst_itr_load(lem->raw, NULL, NULL);
 	while (itr_has_more(itr))
 		ft_printf("%s\n", itr_next(itr));
 	ft_printf("\n");
-	number = 1;
+	itr_clear(itr);
 	lst_sort(lem->paths, (f_compare) &cmpr_lst_ln);
 	lst_foreach(lem->paths, (f_map) &sum_prev_ln);
+	lst_itr_load(lem->ants, itr, NULL);
+	printed = 0;
 	while (lem->finished < lem->amount)
 	{
 		node = lem->paths->first;
-		printed = 0;
-		while (node != lem->paths->last)
+//		printed = 0;
+		while (node)
 		{
 			pth = node->data;
-			move(pth->rooms);
-			if (resolv_path(pth, lem->amount, number))
-				((t_room *) pth->rooms->first->data)->ant = number++;
-			nroom = pth->rooms->first;
-			while (nroom)
-			{
-				if (((t_room*)nroom->data)->ant)
-				{
-					printed += ft_sprintf(&line, "L%zu-%s ", ((t_room *) nroom->data)->ant,  ((t_room *) nroom->data)->name);
-//					if (nroom->next && ((t_room *) nroom->next->data)->ant)
-//						ft_printf(" ");
-				}
-				nroom = nroom->next;
-			}
-			if (((t_room *) pth->rooms->last->data)->ant)
-				lem->finished++;
+			pass_ants(pth, lem);
 			node = node->next;
 		}
-		line[printed - 1] = '\n';
+		while (itr_has_more(itr))
+		{
+			ant = itr_next(itr);
+			if (ant->started && !ant->finished)
+				printed += ft_sprintf(&line, "L%zu-%s ", ant->number,  ant->room->name);
+			if (!ant->finished && ant->room == lem->end)
+				lem->finished += (ant->finished = 1);
+		}
+		if (line[printed - 1] == ' ')
+			line[printed - 1] = '\n';
+		itr_reset(itr);
 	}
-	if(line[printed - 1] == ' ')
-		line[printed - 1] = '\n';
 	ft_putstr(line);
-//	ft_printf("\n");
+	free(line);
+	itr_free(itr);
 }

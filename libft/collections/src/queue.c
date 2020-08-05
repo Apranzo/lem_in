@@ -1,3 +1,4 @@
+
 #include "queue.h"
 
 /* malloc() / free() testing */
@@ -6,121 +7,116 @@
 /* A double-ended queue */
 
 
-t_qu *queue_new(void)
+t_qu *qu_new(void)
 {
-	t_qu *queue;
+	t_qu *qu;
 
-	queue = (t_qu *) malloc(sizeof(t_qu));
-
-	if (queue == NULL) {
-		return NULL;
-	}
-
-	queue->head = NULL;
-	queue->tail = NULL;
-	queue->len = 0;
-
-	return queue;
+	if (!(qu = (t_qu *) malloc(sizeof(t_qu))))
+		return (NULL);
+	qu->head = NULL;
+	qu->tail = NULL;
+	qu->len = 0;
+	return qu;
 }
 
-void queue_free(t_qu *queue)
+t_qu			*qu_by_lst(t_lst *lst)
 {
-	queue_clear(queue);
-	free(queue);
-}
+	t_qu		*qu;
+	t_node		*node;
+	size_t		i;
 
-void queue_clear(t_qu *queue)
-{
-	while (!queue_is_empty(queue))
-		queue_pop_head(queue);
-}
-
-int queue_push_head(t_qu *queue, que_val data)
-{
-	t_qu_entry *new_entry;
-
-	/* Create the new entry and fill in the fields in the structure */
-
-	new_entry = malloc(sizeof(t_qu_entry));
-
-	if (new_entry == NULL) {
-		return 0;
-	}
-
-	new_entry->data = data;
-	new_entry->prev = NULL;
-	new_entry->next = queue->head;
-
-	/* Insert into the queue */
-
-	if (!queue->head)
+	if (!(qu = qu_new()))
+		return (NULL);
+	node = lst->first;
+	i = 0;
+	while (i++ < lst->length)
 	{
-
-		/* If the queue was previously empty, both the head and
-		 * tail must be pointed at the new entry */
-
-		queue->head = new_entry;
-		queue->tail = new_entry;
-
-	} else {
-
-		/* First entry in the list must have prev pointed back to this
-		 * new entry */
-
-		queue->head->prev = new_entry;
-
-		/* Only the head must be pointed at the new entry */
-
-		queue->head = new_entry;
+		if (!(qu_push_head(qu, node->data)))
+			return (NULL);
+		node = node->next;
 	}
-	queue->len++;
+	return qu;
+}
+
+void qu_free(t_qu *qu)
+{
+	qu_clear(qu);
+	free(qu);
+}
+
+void qu_clear(t_qu *qu)
+{
+	while (!qu_is_empty(qu))
+		qu_pop_head(qu);
+}
+
+int qu_push_head(t_qu *qu, que_val data)
+{
+	t_qu_entry *node;
+
+	if(!qu || !(node = malloc(sizeof(t_qu_entry))))
+		return (0);
+	node->data = data;
+	node->prev = NULL;
+	node->next = qu->head;
+	if (!qu->head)
+	{
+		qu->head = node;
+		qu->tail = node;
+
+	} else
+	{
+		qu->head->prev = node;
+		qu->head = node;
+	}
+	qu->len++;
 	return (1);
 }
 
-que_val queue_pop_head(t_qu *queue)
+que_val qu_pop_head(t_qu *qu)
 {
 	t_qu_entry *entry;
 	que_val result;
 
-	/* Check the queue is not empty */
+	/* Check the qu is not empty */
 
-	if (queue_is_empty(queue)) {
+	if (qu_is_empty(qu)) {
 		return NULL;
 	}
 
-	/* Unlink the first entry from the head of the queue */
+	/* Unlink the first entry from the head of the qu */
 
-	entry = queue->head;
-	queue->head = entry->next;
+	entry = qu->head;
+	qu->head = entry->next;
 	result = entry->data;
 
-	if (queue->head == NULL) {
+	if (qu->head == NULL) {
 
-		/* If doing this has unlinked the last entry in the queue, set
+		/* If doing this has unlinked the last entry in the qu, set
 		 * tail to NULL as well. */
 
-		queue->tail = NULL;
+		qu->tail = NULL;
 	} else {
 
-		/* The new first in the queue has no previous entry */
+		/* The new first in the qu has no previous entry */
 
-		queue->head->prev = NULL;
+		qu->head->prev = NULL;
 	}
 
-	/* Free back the queue entry structure */
+	/* Free back the qu entry structure */
 
 	free(entry);
 
-	queue->len--;
+	qu->len--;
 	return result;
 }
 
-que_val queue_peek_head(t_qu *queue)
+que_val qu_peek_head(t_qu *qu)
 {
-	return (queue_is_empty(queue) ? queue->head->data : NULL);
+	return (!qu_is_empty(qu) ? qu->head->data : NULL);
 }
 
-int queue_contains(t_qu *qu, que_val data)
+int qu_contains(t_qu *qu, que_val data)
 {
 	t_qu_entry	*ent;
 
@@ -134,7 +130,7 @@ int queue_contains(t_qu *qu, que_val data)
 	return (0);
 }
 
-int queue_push_tail(t_qu *queue, que_val data)
+int qu_push_tail(t_qu *qu, que_val data)
 {
 	t_qu_entry *new_entry;
 
@@ -147,84 +143,84 @@ int queue_push_tail(t_qu *queue, que_val data)
 	}
 
 	new_entry->data = data;
-	new_entry->prev = queue->tail;
+	new_entry->prev = qu->tail;
 	new_entry->next = NULL;
 
-	/* Insert into the queue tail */
+	/* Insert into the qu tail */
 
-	if (queue->tail == NULL) {
+	if (qu->tail == NULL) {
 
-		/* If the queue was previously empty, both the head and
+		/* If the qu was previously empty, both the head and
 		 * tail must be pointed at the new entry */
 
-		queue->head = new_entry;
-		queue->tail = new_entry;
+		qu->head = new_entry;
+		qu->tail = new_entry;
 
 	} else {
 
 		/* The current entry at the tail must have next pointed to this
 		 * new entry */
 
-		queue->tail->next = new_entry;
+		qu->tail->next = new_entry;
 
 		/* Only the tail must be pointed at the new entry */
 
-		queue->tail = new_entry;
+		qu->tail = new_entry;
 	}
-	queue->len++;
+	qu->len++;
 	return 1;
 }
 
-que_val queue_pop_tail(t_qu *queue)
+que_val qu_pop_tail(t_qu *qu)
 {
 	t_qu_entry *entry;
 	que_val result;
 
-	/* Check the queue is not empty */
+	/* Check the qu is not empty */
 
-	if (queue_is_empty(queue)) {
+	if (qu_is_empty(qu)) {
 		return NULL;
 	}
 
-	/* Unlink the first entry from the tail of the queue */
+	/* Unlink the first entry from the tail of the qu */
 
-	entry = queue->tail;
-	queue->tail = entry->prev;
+	entry = qu->tail;
+	qu->tail = entry->prev;
 	result = entry->data;
 
-	if (queue->tail == NULL) {
+	if (qu->tail == NULL) {
 
-		/* If doing this has unlinked the last entry in the queue, set
+		/* If doing this has unlinked the last entry in the qu, set
 		 * head to NULL as well. */
 
-		queue->head = NULL;
+		qu->head = NULL;
 
 	} else {
 
 		/* The new entry at the tail has no next entry. */
 
-		queue->tail->next = NULL;
+		qu->tail->next = NULL;
 	}
 
-	/* Free back the queue entry structure */
+	/* Free back the qu entry structure */
 
 	free(entry);
 
-	queue->len--;
+	qu->len--;
 	return result;
 }
 
-que_val queue_peek_tail(t_qu *queue)
+que_val qu_peek_tail(t_qu *qu)
 {
-	if (queue_is_empty(queue)) {
+	if (qu_is_empty(qu)) {
 		return NULL;
 	} else {
-		return queue->tail->data;
+		return qu->tail->data;
 	}
 }
 
-int queue_is_empty(t_qu *queue)
+int qu_is_empty(t_qu *qu)
 {
-	return (!queue->head);
+	return (!qu->head);
 }
 

@@ -17,9 +17,15 @@ t_node 			*get_in_first(t_room *room)
 	return (room->in->first);
 }
 
-int 			room_free(pointer room)
+int 			room_free(pointer data)
 {
-	free(((t_room*)room)->name);
+	t_room		*room;
+
+	room = data;
+//	free(room->ant);
+	lst_free(room->in, NULL);
+	lst_free(room->out, NULL);
+	free(room->name);
 	free(room);
 	return (1);
 }
