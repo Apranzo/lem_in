@@ -157,9 +157,6 @@ int					lst_rm_data(t_lst *lst, f_equal equal, pointer data)
 	return (0);
 }
 
-/* Function used internally for sorting.  Returns the last entry in the
- * new sorted lst */
-
 static t_node *lst_sort_internal(t_node **node,
                                      f_compare compare_func)
 {
@@ -173,15 +170,7 @@ static t_node *lst_sort_internal(t_node **node,
 		return (NULL);
 	if (!*node || !(*node)->next)
 		return (*node);
-
-	/* The first entry is the pivot */
-
 	pivot =	*node;
-
-	/* Iterate over the lst, starting from the second entry.  Sort
-	 * all entries into the less and more lsts based on comparisons
-	 * with the pivot */
-
 	less_lst = NULL;
 	more_lst = NULL;
 	rover = pivot->next;
@@ -203,9 +192,6 @@ static t_node *lst_sort_internal(t_node **node,
 		}
 		else
 		{
-
-			/* Place this in the more lst */
-
 			rover->prev = NULL;
 			rover->next = more_lst;
 			if (more_lst)
@@ -214,19 +200,9 @@ static t_node *lst_sort_internal(t_node **node,
 		}
 		rover = next;
 	}
-
-	/* Sort the sublsts recursively */
-
 	less_lst_end = lst_sort_internal(&less_lst, compare_func);
 	more_lst_end = lst_sort_internal(&more_lst, compare_func);
-
-	/* Create the new lst starting from the less lst */
-
 	*node = less_lst;
-
-	/* Append the pivot to the end of the less lst.  If the less lst
-	 * was empty, start from the pivot */
-
 	if (!less_lst)
 	{
 		pivot->prev = NULL;
@@ -237,22 +213,10 @@ static t_node *lst_sort_internal(t_node **node,
 		pivot->prev = less_lst_end;
 		less_lst_end->next = pivot;
 	}
-
-	/* Append the more lst after the pivot */
-
 	pivot->next = more_lst;
 	if (more_lst)
 		more_lst->prev = pivot;
-	/* Work out what the last entry in the lst is.  If the more lst was
-	 * empty, the pivot was the last entry.  Otherwise, the end of the
-	 * more lst is the end of the total lst. */
 	return (!more_lst ? pivot : more_lst_end);
-
-//	if (more_lst) {
-//		return pivot;
-//	} else {
-//		return more_lst_end;
-//	}
 }
 
 int					lst_contains(t_lst *lst, f_equal equal, pointer data)

@@ -3,6 +3,10 @@
 
 #include "libft/includes/libft.h"
 
+# define START "##start"
+# define END "##end"
+# define JAIL "#"
+
 typedef struct s_room t_room;
 typedef struct s_ant t_ant;
 
@@ -47,7 +51,20 @@ typedef struct				s_path_wrapper
 	size_t					cost;
 }							t_pth;
 
-
+int 				read_intput(int fd, t_lemin *lem);
+void				create_ants(t_lemin *lem);
+void				lmn_del_dead_end(const t_lst *lst);
+void				lmn_check_unuses(const t_lst *lst);
+void				lmn_alight(const t_lst *lst);
+void				lmn_del_input_forks(const t_lst *lst);
+void				lmn_del_output_forks(const t_lst *lst);
+void				free_path(t_pth *pth);
+int					build_path(const t_lemin *lem, t_lst *br);
+void 				find_path(t_lemin *lem);
+t_room				*lmn_init_room(t_room *new, char **room);
+void 				parse_rooms(t_lemin *lem);
+void				parse_links(t_lemin *lem);
+int					parse_ants_amount(t_lemin *lem);
 t_node 				*get_out_first(t_room *room);
 t_node 				*get_in_first(t_room *room);
 t_itr 				*bfs_trip(t_room *start, t_room *end, t_itr *itr,
