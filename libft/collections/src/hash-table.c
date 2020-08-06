@@ -154,50 +154,38 @@ int hm_insert(t_hash_map *hash_map, pointer key,
 	t_hm_entry *newentry;
 	size_t index;
 
-	/* If there are too many items in the table with respect to the table
-	 * size, the number of hash collisions increases and performance
-	 * decreases. Enlarge the table size to prevent this happening */
 
 	if ((hash_map->entries * 3) / hash_map->table_size > 0 &&
 		!hm_enlarge(hash_map))
 		return (0);
-	/* Generate the hash of the key and hence the index into the table */
 	index = hash_map->hash_func(key) % hash_map->table_size;
-	/* Traverse the chain at this location and look for an existing
-	 * entry with the same key */
 	rover = hash_map->table[index];
 	while (rover)
 	{
-		/* Fetch rover's HashTablePair entry */
 		pair = &(rover->pair);
-		if (hash_map->equal_func(pair->key, key)) {
-			/* Same key: overwrite this entry with new data */
-			/* If there is a pointer free function, free the old data
-			 * before adding in the new data */
+		if (hash_map->equal_func(pair->key, key))
+		{
 			if (hash_map->free_val)
 				hash_map->free_val(pair->value);
-			/* Same with the key: use the new key pointer and free
-			 * the old one */
 			if (hash_map->free_key)
 				hash_map->free_key(pair->key);
+//			lst_rm_data(&hash_map->values, hash_map->equal_func, pair->value);
 			pair->key = key;
 			pair->value = value;
-			/* Finished */
+//			lst_append(&hash_map->values, value);
 			return (1);
 		}
 		rover = rover->next;
 	}
-	/* Not in the hash table yet.  Create a new entry */
+
 	if (!(newentry = (t_hm_entry *) malloc(sizeof(t_hm_entry))))
 		return (0);
 	newentry->pair.key = key;
 	newentry->pair.value = value;
-	/* Link into the list */
 	newentry->next = hash_map->table[index];
 	hash_map->table[index] = newentry;
-	/* Maintain the count of the number of entries */
+//	lst_append(&hash_map->values, value);
 	hash_map->entries++;
-	/* Added successfully */
 	return (1);
 }
 
@@ -207,16 +195,12 @@ pointer hm_lookup(t_hash_map *hash_map, pointer key)
 	t_pair *pair;
 	size_t index;
 
-	/* Generate the hash of the key and hence the index into the table */
 	index = hash_map->hash_func(key) % hash_map->table_size;
-	/* Walk the chain at this index until the corresponding entry is
-	 * found */
 	rover = hash_map->table[index];
 	while (rover)
 	{
 		pair = &(rover->pair);
 		if (hash_map->equal_func(key, pair->key))
-			/* Found the entry.  Return the data. */
 			return (pair->value);
 		rover = rover->next;
 	}
@@ -232,12 +216,7 @@ int hm_remove(t_hash_map *hash_map, pointer key)
 	size_t index;
 	int result;
 
-	/* Generate the hash of the key and hence the index into the table */
 	index = hash_map->hash_func(key) % hash_map->table_size;
-	/* Rover points at the pointer which points at the current entry
-	 * in the chain being inspected.  ie. the entry in the table, or
-	 * the "next" pointer of the previous entry in the chain.  This
-	 * allows us to unlink the entry when we find it. */
 	result = 0;
 	rover = &hash_map->table[index];
 	while (*rover)
@@ -245,18 +224,13 @@ int hm_remove(t_hash_map *hash_map, pointer key)
 		pair = &((*rover)->pair);
 		if (hash_map->equal_func(key, pair->key))
 		{
-			/* This is the entry to remove */
 			entry = *rover;
-			/* Unlink from the list */
 			*rover = entry->next;
-			/* Destroy the entry structure */
 			hm_free_entry(hash_map, entry);
-			/* Track count of entries */
 			hash_map->entries--;
 			result = 1;
 			break ;
 		}
-		/* Advance to the next entry */
 		rover = &((*rover)->next);
 	}
 	return (result);

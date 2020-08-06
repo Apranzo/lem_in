@@ -57,40 +57,6 @@ t_node *lst_append(t_lst *lst, pointer data)
 	return (new);
 }
 
-//pointer lst_data(t_node *t_node)
-//{
-//	if (t_node == NULL) {
-//		return lst_NULL;
-//	}
-//
-//	return t_node->data;
-//}
-
-//void lst_set_data(t_node *t_node, pointer value)
-//{
-//	if (t_node != NULL) {
-//		t_node->data = value;
-//	}
-//}
-
-//t_node *lst_prev(t_node *t_node)
-//{
-//	if (t_node == NULL) {
-//		return NULL;
-//	}
-//
-//	return t_node->prev;
-//}
-
-//t_node *lst_next(t_node *t_node)
-//{
-//	if (t_node == NULL) {
-//		return NULL;
-//	}
-//
-//	return t_node->next;
-//}
-
 t_lst				*lst_new()
 {
 	return (ft_memalloc(sizeof(t_lst)));
@@ -126,26 +92,6 @@ pointer			lst_nth_data(t_lst *lst, size_t index)
 	return (entry ? entry->data : NULL);
 }
 
-//size_t lst_length(t_node *lst)
-//{
-//	t_node *entry;
-//	size_t length;
-//
-//	length = 0;
-//	entry = lst;
-//
-//	while (entry != NULL) {
-//
-//		/* Count the number of entries */
-//
-//		++length;
-//
-//		entry = entry->next;
-//	}
-//
-//	return length;
-//}
-
 pointer				*lst_to_array(t_lst *lst)
 {
 	t_node			*rover;
@@ -166,8 +112,10 @@ pointer				*lst_to_array(t_lst *lst)
 	return (array);
 }
 
-int lst_rm_entry(t_lst *lst, t_node *entry)
+t_node 		*lst_rm_entry(t_lst *lst, t_node *entry)
 {
+	t_node	*next;
+
 	if((entry = ft_node_del(entry, NULL)))
 	{
 		if (entry == lst->first)
@@ -175,11 +123,13 @@ int lst_rm_entry(t_lst *lst, t_node *entry)
 		if (entry == lst->last)
 			lst->last = lst->last->prev;
 		lst->length--;
+		next = entry->next;
 		entry->prev = NULL;
 		entry->next = NULL;
-		return (1);
+		free(entry);
+		return (next);
 	}
-	return (0);
+	return (NULL);
 }
 
 int					lst_rm_data(t_lst *lst, f_equal equal, pointer data)

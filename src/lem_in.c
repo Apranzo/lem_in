@@ -194,7 +194,6 @@ void 				parse_rooms(t_lemin *lem)
 	t_room			*new;
 
 	cords = hm_new(&ft_str_hash, &string_equal);
-//	pr_iter(lem->filtred);
 	while (itr_has_more(lem->filtred) &&
 			!ft_strchr(lem->filtred->_cur_node->data, '-'))
 	{
@@ -206,9 +205,6 @@ void 				parse_rooms(t_lemin *lem)
 			|| !(new = lmn_init_room(new ,ft_strsplit(line, ' '))))
 			ft_error("Error\n", -1);
 		hm_insert(cords, ft_strchr(line, ' '), ft_strchr(line, ' '));
-//		if ((x_cord->length - 1 < new->cords.x || x_cord->data[new->cords.x]) ||
-//				(y_cord->length  - 1 < new->cords.y || x_cord->data[new->cords.y]))
-//			ft_error("Error\n", -1);
 	 	if (!hm_insert(lem->rooms, new->name, new))
 	 		ft_error("Error\n", -1);
 	}
@@ -305,17 +301,19 @@ static	void 		alight(t_room	*room)
 
 static	void 		delete_dead_end(t_room	*room)
 {
-	t_node *node;
-	t_node *tmp;
+	t_node 			*node;
+	t_node 			*tmp;
+	pointer			data;
 
 	if (!room->required && room->in->length && !room->out->length)
 	{
 		node = room->in->first;
 		while (node)
 		{
+			data = node->data;
 			tmp = node->next;
-			lst_rm_data(((t_room*)node->data)->out, (f_equal) &room_equals, room);
-			lst_rm_data(room->in, (f_equal) &room_equals, node->data);
+			lst_rm_data(((t_room*)data)->out, (f_equal) &room_equals, room);
+			lst_rm_data(room->in, (f_equal) &room_equals, data);
 			node = tmp;
 		}
 	}
@@ -324,9 +322,10 @@ static	void 		delete_dead_end(t_room	*room)
 		node = room->out->first;
 		while (node)
 		{
+			data = node->data;
 			tmp = node->next;
-			lst_rm_data(((t_room*)node->data)->in, (f_equal) &room_equals, room);
-			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
+			lst_rm_data(((t_room*)data)->in, (f_equal) &room_equals, room);
+			lst_rm_data(room->out, (f_equal) &room_equals, data);
 			node = tmp;
 		}
 	}
@@ -364,21 +363,25 @@ static void			dde()
 
 }
 
-static	void 		del_input_forks(t_room	*room) // TODO What?
+static	int 		del_input_forks(t_room	*room) // TODO What?
 {
 	t_node			*node;
+	pointer			data;
 
 	node = room->in->first;
 	while (!room->required && node)
 	{
 		if (!((t_room*)node->data)->required && room->in->length != 1)
 		{
-			lst_rm_entry(room->in, node);
-			lst_rm_data(((t_room*)node->data)->out, (f_equal) &room_equals, room);
-			dde();
+			data = node->data;
+			node = lst_rm_entry(room->in, node);
+			lst_rm_data(((t_room*)data)->out, (f_equal) &room_equals, room);
+			return (1);
 		}
-		node = node->next;
+		else
+			node = node->next;
 	}
+	return (0);
 }
 
 static	void 		del_output_forks(t_room	*room)
@@ -403,39 +406,72 @@ static	void 		del_output_forks(t_room	*room)
 		node = room->out->first;
 		while (node) {
 			if (shortest < 0 || ((t_room *) node->data)->desc_level != shortest)
-				lst_rm_entry(room->out, node);
+				node = lst_rm_entry(room->out, node);
 			else
+			{
 				shortest = -1;
-			node = node->next;
+				node = node->next;
+			}
 		}
 	}
 	if (!room->required && room->out->length > 1)
 		ft_error("del_output_forks\troom->links.length > 1", -2);
 }
 
+void			dde2(const t_lst *lst)
+{
+	t_node		*node;
+
+	node = lst->first;
+	while (node)
+	{
+		delete_dead_end(node->data);
+		node = node->next;
+	}
+}
+
 void 				delete_unnecerarry(t_lemin *lem)
 {
-	t_itr			*itr;
 	t_lst 			*lst;
+	t_node			*node;
 
 	lst = hm_lst(lem->rooms, NULL);
 	lst_sort(lst, (f_compare) &comp_bfs_asc);
-	itr = lst_itr_load(lst, NULL, NULL);
-	itr_foreach(itr, (void (*)(pointer)) &check_unuses); //TODO удаление в итераторе
-	itr_reset(itr);
-	itr_foreach(itr, (void (*)(pointer)) &alight);
-	lst_sort(lst, (f_compare) &comp_bfs_asc);
-	lst_itr_load(lst, itr, NULL);
-	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
-	lst_sort(lst, (f_compare) &comp_bfs_asc);
-	lst_itr_load(lst, itr, NULL);
-	//deb(lemin);
-	itr_foreach(itr, (void (*)(pointer)) &del_input_forks);
-	lst_sort(lst, (f_compare) &comp_bfs_desc);
-	lst_itr_load(lst, itr, NULL);
+	node = lst->first;
+	while (node)
+	{
+		check_unuses(node->data);
+		node = node->next;
+	}
+
+//	itr_foreach(itr, (void (*)(pointer)) &check_unuses);
+
+	node = lst->first;
+	while (node)
+	{
+		alight(node->data);
+		node = node->next;
+	}
+	dde2(lst);
+	node = lst->first;
+	while (node)
+	{
+		if (del_input_forks(node->data))
+		{
+			dde2(lst);
+			node = lst->first;
+		}
+		else
+			node = node->next;
+	}
 	bfs_desc_level(lem);
-	itr_foreach(itr, (void (*)(pointer)) &del_output_forks);
-	itr_free(itr);
+	lst_sort(lst, (f_compare) &comp_bfs_desc);
+	node = lst->first;
+	while (node)
+	{
+		del_output_forks(node->data);
+		node = node->next;
+	}
 	lst_free(lst, NULL);
 }
 
@@ -490,12 +526,15 @@ void 				find_path(t_lemin *lem)
 	{
 		br = ((t_pth *)node->data)->rooms;
 		if(!build_path(lem, br))
-			lst_rm_entry(lem->paths, node);
-		node = node->next;
+		{
+			free_path(node->data);
+			node = lst_rm_entry(lem->paths, node);
+		}
+		else
+			node = node->next;
 	}
 	if (!lem->paths->length)
 		ft_error("Error\n", -1);
-//	pthdeb(lem);
 }
 
 

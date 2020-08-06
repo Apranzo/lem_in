@@ -31,11 +31,6 @@ typedef void 				(*f_free)(pointer value);
 typedef size_t				(*f_hash)(pointer value);
 typedef int					(*f_equal)(pointer value1, pointer value2);
 typedef int					(*f_compare)(pointer value1, pointer value2);
-//typedef union
-//{
-//	pointer 		blob;
-//	char 			*str;
-//}					t_pointer;
 
 typedef	struct		s_xy
 {

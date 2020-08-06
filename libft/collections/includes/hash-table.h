@@ -18,9 +18,10 @@ typedef struct				s_hash_map_entry
 typedef struct				s_hash_map
 {
 	t_hm_entry				**table;
+	t_lst					values;
 	size_t					table_size;
-	f_hash				hash_func;
-	f_equal				equal_func;
+	f_hash					hash_func;
+	f_equal					equal_func;
 	hm_free_key				free_key;
 	hm_free_val				free_val;
 	size_t					entries;

@@ -22,7 +22,6 @@ int 			room_free(pointer data)
 	t_room		*room;
 
 	room = data;
-//	free(room->ant);
 	lst_free(room->in, NULL);
 	lst_free(room->out, NULL);
 	free(room->name);

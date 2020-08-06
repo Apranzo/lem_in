@@ -70,7 +70,7 @@ void					lst_sort(t_lst *lst, f_compare compare_func);
 t_node 					*lst_nth_entry(t_lst *lst, size_t index);
 pointer					lst_nth_data(t_lst *lst, size_t index);
 pointer					*lst_to_array(t_lst *lst);
-int						lst_rm_entry(t_lst *lst, t_node *entry);
+t_node 					*lst_rm_entry(t_lst *lst, t_node *entry);
 int						lst_rm_data(t_lst *lst, f_equal equal, pointer data);
 t_itr					*lst_itr_load(t_lst *lst, t_itr *itr, f_prdct prdct);
 
