@@ -87,22 +87,6 @@ static int					pass_ants(t_pth *pth, t_lemin *lemin)
 //	return (print(pth->rooms));
 }
 
-void				pr_by_ants(t_lemin *lemin)
-{
-	t_itr			*itr;
-	t_ant 			*ant;
-
-	lst_sort(lemin->paths, (f_compare) &cmpr_lst_ln);
-	lst_foreach(lemin->paths, (f_map) &sum_prev_ln);
-	itr = lst_itr_load(lemin->ants, NULL, NULL);
-	while (itr_has_more(itr))
-	{
-		ant = itr_next(itr);
-
-	}
-
-}
-
 void				print_res(t_lemin *lem)
 {
 	t_node			*node;

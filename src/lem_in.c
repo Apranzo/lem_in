@@ -271,10 +271,10 @@ static	void 		check_unuses(t_room	*room)
 		}
 		else if (((t_room*)node->data)->asc_level == room->asc_level)
 		{
-			lst_rm_data(((t_room *) node->data)->in, (f_equal) &room_equals, room);
-			lst_rm_data(((t_room *) node->data)->out, (f_equal) &room_equals, room);
 			lst_rm_data(room->in, (f_equal) &room_equals, node->data);
+			lst_rm_data(((t_room *) node->data)->out, (f_equal) &room_equals, room);
 			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
+			lst_rm_data(((t_room *) node->data)->in, (f_equal) &room_equals, room);
 		}
 		node = node->next;
 	}
@@ -289,14 +289,14 @@ static	void 		alight(t_room	*room)
 	{
 		if (((t_room*)node->data)->asc_level < room->asc_level)
 		{
-			lst_rm_data(((t_room *) node->data)->in, (f_equal) &room_equals, room);
 			lst_rm_data(room->out, (f_equal) &room_equals, node->data);
+			lst_rm_data(((t_room *) node->data)->in, (f_equal) &room_equals, room);
 		}
 		node = node->next;
 	}
 }
 
-static	void 		delete_dead_end(t_room*room)
+static	void 		delete_dead_end(t_room	*room)
 {
 	t_node *node;
 	t_node *tmp;
@@ -417,9 +417,12 @@ void 				delete_unnecerarry(t_lemin *lem)
 	itr_foreach(itr, (void (*)(pointer)) &check_unuses); //TODO удаление в итераторе
 	itr_reset(itr);
 	itr_foreach(itr, (void (*)(pointer)) &alight);
-	itr_reset(itr);
+	lst_sort(lst, (f_compare) &comp_bfs_asc);
+	lst_itr_load(lst, itr, NULL);
 	itr_foreach(itr, (void (*)(pointer)) &delete_dead_end);
-	itr_reset(itr);
+	lst_sort(lst, (f_compare) &comp_bfs_asc);
+	lst_itr_load(lst, itr, NULL);
+	//deb(lemin);
 	itr_foreach(itr, (void (*)(pointer)) &del_input_forks);
 	lst_sort(lst, (f_compare) &comp_bfs_desc);
 	lst_itr_load(lst, itr, NULL);
