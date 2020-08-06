@@ -3,8 +3,8 @@
 void				create_ants(t_lemin *lem)
 {
 	t_lst			*ants;
-	t_ant 			*ant;
-	size_t 			num;
+	t_ant			*ant;
+	size_t			num;
 
 	num = lem->amount;
 	ants = lst_new();

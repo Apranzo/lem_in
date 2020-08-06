@@ -1,6 +1,6 @@
 #include "includes/lem_in.h"
 
-static	int 		del_input_forks(t_room	*room) // TODO What?
+static int 			del_input_forks(t_room	*room)
 {
 	t_node			*node;
 	pointer			data;
