@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lmn_bfs.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/08/07 14:17:13 by cshinoha          #+#    #+#             */
+/*   Updated: 2020/08/07 14:19:13 by cshinoha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/lem_in.h"
 
 struct s_fuck_the_system
 {
 	t_room			*room;
-	t_hash_map		*black;
+	t_hm		*black;
 	t_qu			*qu;
 	void			(*f_level)(t_room *child, t_room *parent);
 	t_node			*(*get_first)(t_room *);
@@ -49,9 +61,9 @@ static int 			bfs_rec(t_fck fck)
 	return (1);
 }
 
-void			bfs_asc_level(t_lemin *lem)
+void			lmn_bfs_asc(t_lemin *lem)
 {
-	t_hash_map	*black;
+	t_hm	*black;
 	t_qu		*qu;
 
 	lem->start->asc_level = 0;
@@ -69,9 +81,9 @@ void			bfs_asc_level(t_lemin *lem)
 	lem->end->asc_level = INT_MAX;
 }
 
-void			bfs_desc_level(t_lemin *lem)
+void			lmt_bfs_desc(t_lemin *lem)
 {
-	t_hash_map	*black;
+	t_hm	*black;
 	t_qu		*qu;
 
 	lem->end->desc_level = 0;

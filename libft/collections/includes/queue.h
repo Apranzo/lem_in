@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   queue.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/08/07 15:06:24 by cshinoha          #+#    #+#             */
+/*   Updated: 2020/08/07 15:06:24 by cshinoha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef QUEUE_H
 # define QUEUE_H
 
@@ -8,7 +20,7 @@ typedef pointer				que_val;
 
 typedef struct				s_queue_entry
 {
-	que_val data;
+	que_val					data;
 	struct s_queue_entry	*prev;
 	struct s_queue_entry	*next;
 }							t_qu_entry;

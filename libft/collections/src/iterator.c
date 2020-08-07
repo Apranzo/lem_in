@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   iterator.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/08/07 15:06:59 by cshinoha          #+#    #+#             */
+/*   Updated: 2020/08/07 15:06:59 by cshinoha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <coreft.h>
 #include <iterator.h>
 
@@ -19,7 +31,7 @@ int 				itr_has_more(t_itr *itr)
 	return ((int)itr->_cur_node);
 }
 
-void		itr_foreach(t_itr *iter, void (*f)(pointer data))
+void					itr_foreach(t_itr *iter, void (*f)(pointer data))
 {
 	while (itr_has_more(iter))
 		f(itr_next(iter));

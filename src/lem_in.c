@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lem_in.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
+/*   Updated: 2020/08/07 14:16:41 by cshinoha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include "includes/lem_in.h"
 
@@ -29,7 +41,7 @@ void				delete_unnecerarry(t_lemin *lem)
 	lmn_alight(lst);
 	lmn_del_dead_end(lst);
 	lmn_del_input_forks(lst);
-	bfs_desc_level(lem);
+	lmt_bfs_desc(lem);
 	lst_sort(lst, (f_compare) &comp_bfs_desc);
 	lmn_del_output_forks(lst);
 	lst_free(lst, NULL);
@@ -62,7 +74,7 @@ int					main(void)
 	if (!lemin->start || !lemin->end || !lemin->start->out)
 		ft_error("Error\n", -1);
 	create_ants(lemin);
-	bfs_asc_level(lemin);
+	lmn_bfs_asc(lemin);
 	delete_unnecerarry(lemin);
 	find_path(lemin);
 	print_res(lemin);

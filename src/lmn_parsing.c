@@ -1,5 +1,16 @@
-#include "includes/lem_in.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lmn_parsing.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/08/07 14:18:50 by cshinoha          #+#    #+#             */
+/*   Updated: 2020/08/07 14:19:13 by cshinoha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "includes/lem_in.h"
 
 static t_room		*lmn_check_status(t_lemin *lem, t_room *room, char **line)
 {
@@ -30,7 +41,7 @@ static t_room		*lmn_check_status(t_lemin *lem, t_room *room, char **line)
 
 void 				parse_rooms(t_lemin *lem)
 {
-	t_hash_map 		*cords;
+	t_hm 		*cords;
 	char 			*line;
 	t_room			*new;
 

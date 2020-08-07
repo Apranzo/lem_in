@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/08/07 15:06:18 by cshinoha          #+#    #+#             */
+/*   Updated: 2020/08/07 15:06:18 by cshinoha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef lst_H
 # define lst_H
 
@@ -18,52 +30,6 @@ void					lst_clear(t_lst *lst, f_free free_data);
 void					lst_free(t_lst *lst, f_free free_data);
 t_node					*lst_prepend(t_lst *lst, pointer data);
 t_node					*lst_append(t_lst *lst, pointer data);
-
-/**
- * Retrieve the previous entry in a lst.
- *
- * @param t_node    Pointer to the lst entry.
- * @return             The previous entry in the lst, or NULL if this
- *                     was the first entry in the lst.
- */
-
-//t_node *lst_prev(t_node *t_node);
-
-/**
- * Retrieve the next entry in a lst.
- *
- * @param t_node    Pointer to the lst entry.
- * @return             The next entry in the lst, or NULL if this was the
- *                     last entry in the lst.
- */
-
-//t_node *lst_next(t_node *t_node);
-
-/**
- * Retrieve the value at a lst entry.
- *
- * @param t_node    Pointer to the lst entry.
- * @return             The value stored at the lst entry.
- */
-
-//pointer lst_data(t_node *t_node);
-
-/**
- * Set the value at a lst entry. The value provided will be written to the 
- * given t_node. If t_node is NULL nothing is done.
- *
- * @param t_node 	Pointer to the lst entry.
- * @param value			The value to set.
- */
-//void lst_set_data(t_node *t_node, pointer value);
-
-/**
- * Retrieve the entry at a specified index in a lst.
- *
- * @param lst       The lst.
- * @param index     The index into the lst .
- * @return          The entry at the specified index, or NULL if out of range.
- */
 int						lst_contains(t_lst *lst, f_equal equal, pointer data);
 void					lst_foreach(t_lst *lst, f_map merge_func);
 void					lst_sort(t_lst *lst, f_compare compare_func);
