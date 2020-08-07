@@ -21,7 +21,7 @@ static int hm_allocate_table(t_hm *hm)
 			ft_tmemalloc(sizeof(t_hm_entry *), hm->table_size)));
 }
 
-static void hm_free_entry(t_hm *hash_map, t_hm_entry *entry)
+void	hm_free_entry(t_hm *hash_map, t_hm_entry *entry)
 {
 	if (hash_map->free_key)
 		hash_map->free_key(entry->pair.key);

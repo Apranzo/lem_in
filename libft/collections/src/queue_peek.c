@@ -1,38 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_hash.c                                          :+:      :+:    :+:   */
+/*   queue_peek.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/07 15:06:51 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 17:51:10 by cshinoha         ###   ########.fr       */
+/*   Created: 2020/08/07 17:55:11 by cshinoha          #+#    #+#             */
+/*   Updated: 2020/08/07 17:55:11 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ft_hash.h"
+#include "queue.h"
 
-size_t				ft_str_hash(pointer pointer)
+
+que_val			qu_peek_head(t_qu *qu)
 {
-	size_t			result;
-	unsigned char	*p;
-
-	result = 5381;
-	p = (unsigned char *) pointer;
-	while (*p != '\0')
-	{
-		result = (result << 5) + result + *p;
-		++p;
-	}
-	return (result);
+	return (!qu_is_empty(qu) ? qu->head->data : NULL);
 }
 
-size_t				int_hash(pointer pointer)
+que_val			qu_peek_tail(t_qu *qu)
 {
-	return ((size_t) pointer);
+	if (qu_is_empty(qu))
+		return (NULL);
+	return (qu->tail->data);
 }
 
-size_t				pointer_hash(pointer pointer)
+int				qu_is_empty(t_qu *qu)
 {
-	return ((size_t) pointer);
+	return (!qu->head);
 }

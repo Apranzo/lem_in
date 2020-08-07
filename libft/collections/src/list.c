@@ -1,19 +1,21 @@
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/08/07 17:56:41 by cshinoha          #+#    #+#             */
+/*   Updated: 2020/08/07 17:58:39 by cshinoha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "list.h"
 
-/* malloc() / free() testing */
-
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
-
-/* A doubly-linked lst */
-
-void lst_clear(t_lst *lst, f_free free_data)
+void					lst_clear(t_lst *lst, f_free free_data)
 {
-	t_node *entry;
-	t_node *next;
+	t_node				*entry;
+	t_node				*next;
 
 	entry = lst->first;
 	while (entry)
@@ -29,13 +31,13 @@ void lst_clear(t_lst *lst, f_free free_data)
 	lst->length = 0;
 }
 
-void lst_free(t_lst *lst, f_free free_data)
+void				lst_free(t_lst *lst, f_free free_data)
 {
 	lst_clear(lst, free_data);
 	free(lst);
 }
 
-t_node *lst_prepend(t_lst *lst, pointer data)
+t_node				*lst_prepend(t_lst *lst, pointer data)
 {
 	t_node			*new;
 
@@ -45,7 +47,7 @@ t_node *lst_prepend(t_lst *lst, pointer data)
 	return (new);
 }
 
-t_node *lst_append(t_lst *lst, pointer data)
+t_node				*lst_append(t_lst *lst, pointer data)
 {
 	t_node			*new;
 
@@ -112,9 +114,9 @@ pointer				*lst_to_array(t_lst *lst)
 	return (array);
 }
 
-t_node 		*lst_rm_entry(t_lst *lst, t_node *entry)
+t_node				*lst_rm_entry(t_lst *lst, t_node *entry)
 {
-	t_node	*next;
+	t_node			*next;
 
 	if((entry = ft_node_del(entry, NULL)))
 	{
@@ -157,68 +159,6 @@ int					lst_rm_data(t_lst *lst, f_equal equal, pointer data)
 	return (0);
 }
 
-static t_node *lst_sort_internal(t_node **node,
-                                     f_compare compare_func)
-{
-	t_node *pivot;
-	t_node *rover;
-	t_node *less_lst;
-	t_node *more_lst;
-	t_node *less_lst_end, *more_lst_end;
-
-	if (!node || !compare_func)
-		return (NULL);
-	if (!*node || !(*node)->next)
-		return (*node);
-	pivot =	*node;
-	less_lst = NULL;
-	more_lst = NULL;
-	rover = pivot->next;
-
-	while (rover)
-	{
-		t_node *next = rover->next;
-		if (compare_func(rover->data, pivot->data) < 0)
-		{
-
-			/* Place this in the less lst */
-
-			rover->prev = NULL;
-			rover->next = less_lst;
-			if (less_lst)
-				less_lst->prev = rover;
-			less_lst = rover;
-
-		}
-		else
-		{
-			rover->prev = NULL;
-			rover->next = more_lst;
-			if (more_lst)
-				more_lst->prev = rover;
-			more_lst = rover;
-		}
-		rover = next;
-	}
-	less_lst_end = lst_sort_internal(&less_lst, compare_func);
-	more_lst_end = lst_sort_internal(&more_lst, compare_func);
-	*node = less_lst;
-	if (!less_lst)
-	{
-		pivot->prev = NULL;
-		*node = pivot;
-	}
-	else
-	{
-		pivot->prev = less_lst_end;
-		less_lst_end->next = pivot;
-	}
-	pivot->next = more_lst;
-	if (more_lst)
-		more_lst->prev = pivot;
-	return (!more_lst ? pivot : more_lst_end);
-}
-
 int					lst_contains(t_lst *lst, f_equal equal, pointer data)
 {
 	size_t			i;
@@ -235,27 +175,15 @@ int					lst_contains(t_lst *lst, f_equal equal, pointer data)
 	return (0);
 }
 
-void lst_sort(t_lst *lst, f_compare compare_func)
-{
-	lst->last = lst_sort_internal(&lst->first, compare_func);
-}
-
 t_node *lst_find_data(t_node *lst,
-                          f_equal callback,
-                          pointer data)
+                          f_equal callback, pointer data)
 {
 	t_node *rover;
-
-	/* Iterate over entries in the lst until the data is found */
-
 	for (rover=lst; rover != NULL; rover=rover->next) {
 		if (callback(rover->data, data) != 0) {
 			return rover;
 		}
 	}
-
-	/* Not found */
-
 	return NULL;
 }
 

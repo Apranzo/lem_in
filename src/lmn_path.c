@@ -20,8 +20,8 @@ void				free_path(t_pth *pth)
 
 int					build_path(const t_lemin *lem, t_lst *br)
 {
-	t_node 			*entry;
-	t_room 			*room;
+	t_node			*entry;
+	t_room			*room;
 
 	entry = br->first;
 	while (entry->data != lem->end)
@@ -37,11 +37,11 @@ int					build_path(const t_lemin *lem, t_lst *br)
 	return (1);
 }
 
-void 				find_path(t_lemin *lem)
+void				find_path(t_lemin *lem)
 {
 	t_node			*node;
 	t_lst			*br;
-	t_pth 			*path;
+	t_pth			*path;
 
 	node = lem->start->out->first;
 	lem->paths = lst_new();
@@ -51,7 +51,7 @@ void 				find_path(t_lemin *lem)
 		path = ft_memalloc(sizeof(t_pth));
 		path->rooms = br;
 		lst_append(br, node->data);
-		if(!build_path(lem, br))
+		if (!build_path(lem, br))
 			free_path(path);
 		else
 			lst_append(lem->paths, path);

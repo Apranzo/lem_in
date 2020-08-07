@@ -6,13 +6,13 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:36 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:18:36 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/07 20:26:51 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/lem_in.h"
 
-static int 			del_input_forks(t_room	*room)
+static int			del_input_forks(t_room *room)
 {
 	t_node			*node;
 	pointer			data;
@@ -35,7 +35,7 @@ static int 			del_input_forks(t_room	*room)
 
 void				lmn_del_input_forks(const t_lst *lst)
 {
-	t_node		*node;
+	t_node			*node;
 
 	node = lst->first;
 	while (node)

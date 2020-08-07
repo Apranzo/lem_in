@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:28 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:16:28 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/07 20:39:42 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ int				room_equals(t_room *room1, t_room *room2)
 			ft_strequ(room1->name, room2->name));
 }
 
-t_node 			*get_out_first(t_room *room)
+t_node			*get_out_first(t_room *room)
 {
 	return (room->out->first);
 }
 
-t_node 			*get_in_first(t_room *room)
+t_node			*get_in_first(t_room *room)
 {
 	return (room->in->first);
 }
 
-int 			room_free(pointer data)
+int				room_free(pointer data)
 {
 	t_room		*room;
 
@@ -40,7 +40,7 @@ int 			room_free(pointer data)
 	return (1);
 }
 
-t_room				*lmn_init_room(t_room *new, char **room)
+t_room			*lmn_init_room(t_room *new, char **room)
 {
 	if (!new || !room ||
 		!room[0] || !room[1] || !room[2] ||

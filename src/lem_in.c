@@ -6,14 +6,14 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:16:41 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/07 20:19:04 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "includes/lem_in.h"
 
-static int			comp_bfs_asc(t_room* left, t_room *right)
+static int			comp_bfs_asc(t_room *left, t_room *right)
 {
 	if (left->asc_level > right->asc_level)
 		return (1);
@@ -22,7 +22,7 @@ static int			comp_bfs_asc(t_room* left, t_room *right)
 	return (0);
 }
 
-static int			comp_bfs_desc(t_room* left, t_room *right)
+static int			comp_bfs_desc(t_room *left, t_room *right)
 {
 	if (left->asc_level > right->asc_level)
 		return (-1);
@@ -33,7 +33,7 @@ static int			comp_bfs_desc(t_room* left, t_room *right)
 
 void				delete_unnecerarry(t_lemin *lem)
 {
-	t_lst 			*lst;
+	t_lst			*lst;
 
 	lst = hm_lst(lem->rooms, NULL);
 	lst_sort(lst, (f_compare) &comp_bfs_asc);
@@ -47,7 +47,7 @@ void				delete_unnecerarry(t_lemin *lem)
 	lst_free(lst, NULL);
 }
 
-static void 		free_lemin(t_lemin *lemin)
+static void			free_lemin(t_lemin *lemin)
 {
 	lst_free(lemin->raw, free);
 	itr_free(lemin->filtred);
@@ -61,8 +61,8 @@ static void 		free_lemin(t_lemin *lemin)
 int					main(void)
 {
 	static t_lemin	*lemin;
-	freopen("mmm", "r", stdin);
 
+	freopen("mmm", "r", stdin);
 	if (!(lemin = ft_memalloc(sizeof(t_lemin))) ||
 			!(lemin->raw = lst_new()))
 		ft_error("main alloc error", -1);

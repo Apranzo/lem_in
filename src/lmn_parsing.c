@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:50 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:19:13 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/07 20:30:09 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static t_room		*lmn_check_status(t_lemin *lem, t_room *room, char **line)
 		else
 		{
 			*line = itr_next(lem->filtred);
-			(room->required = 1) && (lem->end = room);
+			room->required = 1;
+			lem->end = room;
 			return (lmn_check_status(lem, room, line));
 		}
 	}
@@ -32,29 +33,30 @@ static t_room		*lmn_check_status(t_lemin *lem, t_room *room, char **line)
 		else
 		{
 			*line = itr_next(lem->filtred);
-			(room->required = 1) && (lem->start = room);
+			room->required = 1;
+			lem->start = room;
 			return (lmn_check_status(lem, room, line));
 		}
 	}
 	return (room);
 }
 
-void 				parse_rooms(t_lemin *lem)
+void				parse_rooms(t_lemin *lem)
 {
-	t_hm 		*cords;
-	char 			*line;
+	t_hm			*cords;
+	char			*line;
 	t_room			*new;
 
 	cords = hm_new(&ft_str_hash, &string_equal);
 	while (itr_has_more(lem->filtred) &&
-		   !ft_strchr(lem->filtred->_cur_node->data, '-'))
+			!ft_strchr(lem->filtred->_cur_node->data, '-'))
 	{
 		line = itr_next(lem->filtred);
 		if (line[0] == 'L'
 			|| !(new = ft_memalloc(sizeof(t_room)))
 			|| !lmn_check_status(lem, new, &line)
 			|| hm_lookup(cords, ft_strchr(line, ' '))
-			|| !(new = lmn_init_room(new ,ft_strsplit(line, ' '))))
+			|| !(new = lmn_init_room(new, ft_strsplit(line, ' '))))
 			ft_error("Error\n", -1);
 		hm_insert(cords, ft_strchr(line, ' '), ft_strchr(line, ' '));
 		if (!hm_insert(lem->rooms, new->name, new))
@@ -68,18 +70,18 @@ void 				parse_rooms(t_lemin *lem)
 void				parse_links(t_lemin *lem)
 {
 	char			*line;
-	char 			**linked;
+	char			**linked;
 	t_room			*left;
 	t_room			*right;
 
 	while ((line = itr_next(lem->filtred)) && ft_cntwords(line, '-'))
 	{
-		if(!(linked = ft_strsplit(line, '-')) || !*linked || !*(linked + 1))
+		if (!(linked = ft_strsplit(line, '-')) || !*linked || !*(linked + 1))
 			ft_error("Error\n", -1);
 		if (!(left = hm_lookup(lem->rooms, linked[0])) ||
 			!(right = hm_lookup(lem->rooms, linked[1])) ||
-			lst_contains(left->out, (f_equal) &room_equals, right) ||
-			lst_contains(right->out, (f_equal) &room_equals, left))
+			lst_contains(left->out, (f_equal)&room_equals, right) ||
+			lst_contains(right->out, (f_equal)&room_equals, left))
 			ft_error("Error\n", -1);
 		ft_freematr(linked);
 		lst_append(right->out, left);

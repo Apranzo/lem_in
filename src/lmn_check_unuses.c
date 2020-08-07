@@ -6,13 +6,13 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:21 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:18:21 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/07 20:24:59 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/lem_in.h"
 
-static	void 		check_unuses(t_room	*room)
+static void			check_unuses(t_room *room)
 {
 	t_node			*node;
 	t_node			*next;
@@ -25,17 +25,17 @@ static	void 		check_unuses(t_room	*room)
 		data = node->data;
 		if (room->asc_level < 0)
 		{
-			lst_rm_data(((t_room *) data)->out, (f_equal) &room_equals, room);
-			lst_rm_data(((t_room *) data)->in, (f_equal) &room_equals, room);
-			lst_rm_data(room->in, (f_equal) &room_equals, data);
-			lst_rm_data(room->out, (f_equal) &room_equals, data);
+			lst_rm_data(((t_room *)data)->out, (f_equal) &room_equals, room);
+			lst_rm_data(((t_room *)data)->in, (f_equal) &room_equals, room);
+			lst_rm_data(room->in, (f_equal)&room_equals, data);
+			lst_rm_data(room->out, (f_equal)&room_equals, data);
 		}
 		else if (((t_room*)node->data)->asc_level == room->asc_level)
 		{
 			lst_rm_data(room->in, (f_equal) &room_equals, data);
-			lst_rm_data(((t_room *) data)->out, (f_equal) &room_equals, room);
-			lst_rm_data(room->out, (f_equal) &room_equals, data);
-			lst_rm_data(((t_room *) data)->in, (f_equal) &room_equals, room);
+			lst_rm_data(((t_room *)data)->out, (f_equal)&room_equals, room);
+			lst_rm_data(room->out, (f_equal)&room_equals, data);
+			lst_rm_data(((t_room *)data)->in, (f_equal)&room_equals, room);
 		}
 		node = next;
 	}
@@ -43,7 +43,7 @@ static	void 		check_unuses(t_room	*room)
 
 void				lmn_check_unuses(const t_lst *lst)
 {
-	t_node		*node;
+	t_node			*node;
 
 	node = lst->first;
 	while (node)

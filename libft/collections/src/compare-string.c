@@ -14,7 +14,7 @@
 
 int			string_equal(void *string1, void *string2)
 {
-	return !ft_strcmp((char *) string1, (char *) string2);
+	return (!ft_strcmp((char *) string1, (char *) string2));
 }
 
 int			string_compare(void *string1, void *string2)
@@ -26,6 +26,6 @@ int			string_compare(void *string1, void *string2)
 		return (-1);
 	if (result > 0)
 		return (1);
-	return 9;
+	return (0);
 }
 

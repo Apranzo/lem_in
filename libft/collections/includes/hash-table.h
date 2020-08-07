@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:29:29 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:59:44 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/07 19:33:28 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,14 @@ typedef struct				s_hash_map
 	size_t					prime_index;
 }							t_hm;
 
+void						hm_free_entry(t_hm *hash_map,
+								t_hm_entry *entry);
+int							hm_enlarge(t_hm *hm);
 t_lst						*hm_lst(t_hm *hash_map, f_prdct prdct);
 void						hm_clear(t_hm *hash_map);
-t_hm					*hm_init(t_hm  *map, f_hash hash_func,
+t_hm						*hm_init(t_hm  *map, f_hash hash_func,
 								 f_equal equal_func);
-t_hm					*hm_new(f_hash hash_func,
+t_hm						*hm_new(f_hash hash_func,
 								f_equal equal_func);
 void						hm_free(t_hm *hash_map,
 									f_free free_key, f_free free_val);

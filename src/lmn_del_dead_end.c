@@ -6,16 +6,16 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:29 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:18:29 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/07 20:26:09 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/lem_in.h"
 
-static	void 		delete_dead_end(t_room	*room)
+static void			delete_dead_end(t_room *room)
 {
-	t_node 			*node;
-	t_node 			*tmp;
+	t_node			*node;
+	t_node			*tmp;
 	pointer			data;
 
 	if (!room->required && room->in->length && !room->out->length)

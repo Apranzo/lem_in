@@ -51,6 +51,15 @@ typedef struct				s_path_wrapper
 	size_t					cost;
 }							t_pth;
 
+typedef struct			s_fuck_the_system
+{
+	t_room				*room;
+	t_hm				*black;
+	t_qu				*qu;
+	void				(*f_level)(t_room *child, t_room *parent);
+	t_node				*(*get_first)(t_room *);
+}						t_fck;
+
 int 				read_intput(int fd, t_lemin *lem);
 void				create_ants(t_lemin *lem);
 void				lmn_del_dead_end(const t_lst *lst);

@@ -42,6 +42,7 @@ int hm_insert(t_hm *hm, pointer key, pointer value)
 		entry->next = hm->table[index];
 	entry->pair.key = key;
 	entry->pair.value = value;
+	hm->table[index] = entry;
 	hm->entries++;
 	return (1);
 }
