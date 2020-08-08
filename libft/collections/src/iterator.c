@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <coreft.h>
+#include "../../core/includes/coreft.h"
 #include <iterator.h>
 
 t_pntr				itr_next(t_itr *iterator)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/lem_in.h"
+#include "../includes/lem_in.h"
 
 static void			check_unuses(t_room *room)
 {

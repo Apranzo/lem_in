@@ -6,15 +6,15 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 15:06:24 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 11:49:56 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 19:24:47 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef QUEUE_H
 # define QUEUE_H
 
-# include <coreft.h>
-# include <libft/collections/includes/list.h>
+# include "../../core/includes/coreft.h"
+# include "list.h"
 
 typedef struct				s_queue_entry
 {

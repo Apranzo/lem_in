@@ -6,7 +6,7 @@
 #    By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/28 23:59:53 by cmeowth           #+#    #+#              #
-#    Updated: 2020/08/08 16:07:52 by cshinoha         ###   ########.fr        #
+#    Updated: 2020/08/08 19:32:35 by cshinoha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,9 @@ NAME		= libft.a
 GCC			= /usr/bin/clang
 WOPT		= -Wall -Wextra -Werror
 OOPT		= -O2
-IOPT		= -I ./core/includes -I ./collections/includes -I ./printf/includes
+IOPT		= -I ./core/includes		\
+              -I ./collections/includes	\
+              -I ./printf/includes		\
 
 AR			= /usr/bin/ar -rc
 RM			= /bin/rm -rf
@@ -69,6 +71,7 @@ SRCNAME		= printf/src/ft_printf.c				\
 			  core/src/ft_strcmp.c				\
 			  core/src/ft_strncmp.c				\
 			  core/src/ft_atoi.c				\
+			  core/src/ft_atoi_check.c				\
 			  core/src/ft_isalpha.c				\
 			  core/src/ft_isdigit.c				\
 			  core/src/ft_isalnum.c				\
@@ -132,20 +135,30 @@ SRCNAME		= printf/src/ft_printf.c				\
 			  core/src/ft_lstfree.c				\
 			  core/src/ft_strfrjoin.c			\
 			  core/src/ft_strindexof.c			\
-			  core/src/ft_lstpush.c				\
+			  core/src/ft_node_prepend.c		\
+			  core/src/ft_node_append.c			\
+			  core/src/ft_node_del.c			\
 			  core/src/ft_error.c				\
 			  core/src/ft_min.c					\
 			  core/src/ft_max.c					\
 			  core/src/ft_abs.c					\
 			  core/src/ft_free.c				\
-			  collections/src/arraylist.c		\
-			  collections/src/compare-int.c		\
-			  collections/src/compare-pointer.c	\
-			  collections/src/compare-string.c  \
 			  collections/src/ft_hash.c			\
 			  collections/src/queue.c			\
-			  collections/src/set.c			\
-			  collections/src/hash-table.c
+			  collections/src/list.c			\
+              collections/src/list_get.c		\
+              collections/src/list_conv.c		\
+              collections/src/list_insert.c		\
+              collections/src/list_remove.c     \
+			  collections/src/list_sort.c       \
+              collections/src/ft_hash.c						\
+              collections/src/hash_map.c					\
+              collections/src/hm_init_free_clear.c			\
+              collections/src/hm_lookup_remove_insert.c		\
+              collections/src/iterator.c					\
+              collections/src/queue.c						\
+              collections/src/queue_push_pop.c				\
+              collections/src/queue_peek.c
 
 SRC			= $(addprefix $(SRCDIR)/, $(SRCNAME))
 OBJ			= $(addprefix $(OBJDIR)/, $(SRCNAME:.c=.o))

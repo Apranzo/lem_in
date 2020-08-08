@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/lem_in.h"
+#include "../includes/lem_in.h"
 
 void				free_path(t_pth *pth)
 {

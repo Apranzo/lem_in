@@ -6,15 +6,15 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:29:29 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 17:57:12 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 19:24:47 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HASH_MAP_H
 # define HASH_MAP_H
 
-# include <coreft.h>
-# include <iterator.h>
+# include "../../core/includes/coreft.h"
+# include "iterator.h"
 # include "list.h"
 
 static const size_t			g_hm_primes[] = {

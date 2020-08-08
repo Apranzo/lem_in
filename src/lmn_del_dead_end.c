@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/lem_in.h"
+#include "../includes/lem_in.h"
 
 static void			delete_dead_end(t_room *room)
 {

@@ -6,11 +6,11 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:28 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 20:39:42 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 16:12:10 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/lem_in.h"
+#include "../includes/lem_in.h"
 
 int				room_equals(t_room *room1, t_room *room2)
 {

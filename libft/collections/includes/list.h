@@ -6,15 +6,15 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 15:06:18 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 16:12:31 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 19:24:47 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_H
 # define LIST_H
 
-# include <coreft.h>
-# include <iterator.h>
+# include "../../core/includes/coreft.h"
+# include "iterator.h"
 
 typedef struct			s_linked_lst
 {

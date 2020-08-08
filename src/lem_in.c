@@ -6,12 +6,12 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 15:02:32 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 16:16:13 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "includes/lem_in.h"
+#include "../includes/lem_in.h"
 
 static int			comp_bfs_asc(t_room *left, t_room *right)
 {

@@ -13,7 +13,7 @@
 #ifndef ITERATOR_H
 # define ITERATOR_H
 
-# include <coreft.h>
+# include "../../core/includes/coreft.h"
 
 typedef struct			s_iterator
 {

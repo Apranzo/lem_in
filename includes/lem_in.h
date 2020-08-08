@@ -6,14 +6,14 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:56:15 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 18:59:44 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 18:59:53 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEM_IN_H
 # define LEM_IN_H
 
-# include "libft/includes/libft.h"
+# include "../libft/includes/libft.h"
 
 # define START "##start"
 # define END "##end"

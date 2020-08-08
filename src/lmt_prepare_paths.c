@@ -6,11 +6,11 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:22:49 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 18:51:23 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 18:54:53 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/lem_in.h"
+#include "../includes/lem_in.h"
 
 static int			cmpr_lst_ln(t_pth *lft, t_pth *rght)
 {
