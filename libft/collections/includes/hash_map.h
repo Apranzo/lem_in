@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:29:29 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 16:12:31 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 17:57:12 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static const size_t			g_hm_primes[] = {
 	402653189, 805306457, 1610612741
 };
 
-static const size_t g_hm_num_primes = sizeof(g_hm_primes) / sizeof(size_t);
+static const size_t			g_hm_num_primes =
+sizeof(g_hm_primes) / sizeof(size_t);
 typedef void				(*t_hm_free_key)(t_pntr value);
 typedef void				(*t_hm_free_val)(t_pntr value);
 typedef struct				s_hash_map_entry
@@ -38,7 +39,7 @@ typedef struct				s_hash_map
 	t_hm_entry				**table;
 	size_t					table_size;
 	t_fhash					hash_func;
-	t_fequal					equal_func;
+	t_fequal				equal_func;
 	t_hm_free_key			free_key;
 	t_hm_free_val			free_val;
 	size_t					entries;
@@ -51,7 +52,7 @@ int							hm_enlarge(t_hm *hm);
 t_lst						*hm_lst(t_hm *hash_map, t_fprdct prdct);
 void						hm_clear(t_hm *hash_map);
 t_hm						*hm_init(t_hm *map, t_fhash hash_func,
-									 t_fequal equal_func);
+									t_fequal equal_func);
 t_hm						*hm_new(t_fhash hash_func,
 									t_fequal equal_func);
 void						hm_free(t_hm *hash_map,

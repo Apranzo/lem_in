@@ -6,13 +6,14 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:51:14 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 16:12:10 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 17:58:06 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hash_map.h"
 
-static t_hm_entry	*find_in_backet(t_hm_entry *rover, t_pntr key, t_fequal f_equal)
+static t_hm_entry	*find_in_backet(t_hm_entry *rover,
+		t_pntr key, t_fequal f_equal)
 {
 	while (rover && !f_equal(rover->pair.key, key))
 		rover = rover->next;
@@ -36,7 +37,7 @@ int					hm_insert(t_hm *hm, t_pntr key, t_pntr value)
 		if (hm->free_key)
 			hm->free_key(entry->pair.key);
 	}
-	else if (!(entry = (t_hm_entry *) malloc(sizeof(t_hm_entry))))
+	else if (!(entry = (t_hm_entry *)malloc(sizeof(t_hm_entry))))
 		return (0);
 	else
 		entry->next = hm->table[index];

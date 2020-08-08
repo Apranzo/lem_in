@@ -6,16 +6,16 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:56:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 16:12:31 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 18:10:28 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "list.h"
 
-void					lst_clear(t_lst *lst, t_ffree free_data)
+void			lst_clear(t_lst *lst, t_ffree free_data)
 {
-	t_node				*entry;
-	t_node				*next;
+	t_node		*entry;
+	t_node		*next;
 
 	entry = lst->first;
 	while (entry)
@@ -31,142 +31,26 @@ void					lst_clear(t_lst *lst, t_ffree free_data)
 	lst->length = 0;
 }
 
-void				lst_free(t_lst *lst, t_ffree free_data)
+void			lst_free(t_lst *lst, t_ffree free_data)
 {
 	lst_clear(lst, free_data);
 	free(lst);
 }
 
-t_node				*lst_prepend(t_lst *lst, t_pntr data)
-{
-	t_node			*new;
-
-	if (!lst || !(new = ft_node_prepend(&lst->first, data)))
-		return (NULL);
-	lst->length++;
-	return (new);
-}
-
-t_node				*lst_append(t_lst *lst, t_pntr data)
-{
-	t_node			*new;
-
-	if (!lst || !(new = ft_node_append(&lst->last, data)))
-		return (NULL);
-	if (!lst->length)
-		lst->first = new;
-	lst->length++;
-	return (new);
-}
-
-t_lst				*lst_new()
+t_lst			*lst_new(void)
 {
 	return (ft_memalloc(sizeof(t_lst)));
 }
 
-t_node				*lst_nth_entry(t_lst *lst, size_t index)
+int				lst_contains(t_lst *lst, t_fequal equal, t_pntr data)
 {
-	t_node			*entry;
-	size_t			i;
+	size_t		i;
+	t_node		*node;
 
 	i = 0;
-	entry = NULL;
-	if (lst->length / 2 > index)
-	{
-		entry = lst->first;
-		while (i++ < index)
-			entry = entry->next;
-	}
-	else if(lst->length > index)
-	{
-		entry = lst->last;
-		while (i++ < lst->length - index - 1)
-			entry = entry->prev;
-	}
-	return (entry);
-}
-
-t_pntr			lst_nth_data(t_lst *lst, size_t index)
-{
-	t_node		*entry;
-
-	entry = lst_nth_entry(lst, index);
-	return (entry ? entry->data : NULL);
-}
-
-t_pntr				*lst_to_array(t_lst *lst)
-{
-	t_node			*rover;
-	t_pntr			*array;
-	size_t			i;
-
-	if (!(array = ft_tmalloc(sizeof(t_pntr), lst->length + 1)))
-		return (NULL);
-	array[lst->length] = NULL;
-	i = 0;
-	rover = lst->first;
+	node = lst->first;
 	while (i < lst->length)
 	{
-		array[i] = rover->data;
-		rover = rover->next;
-		i++;
-	}
-	return (array);
-}
-
-t_node				*lst_rm_entry(t_lst *lst, t_node *entry)
-{
-	t_node			*next;
-
-	if((entry = ft_node_del(entry, NULL)))
-	{
-		if (entry == lst->first)
-			lst->first = lst->first->next;
-		if (entry == lst->last)
-			lst->last = lst->last->prev;
-		lst->length--;
-		next = entry->next;
-		entry->prev = NULL;
-		entry->next = NULL;
-		free(entry);
-		return (next);
-	}
-	return (NULL);
-}
-
-int					lst_rm_data(t_lst *lst, t_fequal equal, t_pntr data)
-{
-	t_node			*node;
-
-	node = lst->first;
-	while (node)
-	{
-		if (equal(node->data, data))
-		{
-			node = ft_node_del(node, NULL);
-			if (node == lst->first)
-				lst->first = lst->first->next;
-			if (node == lst->last)
-				lst->last = lst->last->prev;
-			lst->length--;
-			node->prev = NULL;
-			node->next = NULL;
-			free(node);
-			return (1);
-		}
-		node = node->next;
-	}
-	return (0);
-}
-
-int					lst_contains(t_lst *lst, t_fequal equal, t_pntr data)
-{
-	size_t			i;
-	t_node			*node;
-
-	i = 0;
-	node = lst->first;
-	while  (i < lst->length) {
 		if (equal(node->data, data))
 			return (1);
 		i++;
@@ -175,40 +59,7 @@ int					lst_contains(t_lst *lst, t_fequal equal, t_pntr data)
 	return (0);
 }
 
-t_node *lst_find_data(t_node *lst,
-					  t_fequal callback, t_pntr data)
-{
-	t_node *rover;
-	for (rover=lst; rover != NULL; rover=rover->next) {
-		if (callback(rover->data, data) != 0) {
-			return rover;
-		}
-	}
-	return NULL;
-}
-
-void lst_foreach(t_lst *lst, t_fmap merge_func)
+void			lst_foreach(t_lst *lst, t_fmap merge_func)
 {
 	ft_lstiter(lst->first, (void (*)(t_node *)) merge_func);
 }
-
-t_itr			*lst_itr_load(t_lst *lst, t_itr *itr, t_fprdct prdct)
-{
-	size_t 		i;
-	t_node		*entry;
-
-	itr_clear(itr);
-	if (!itr && !(itr = ft_memalloc(sizeof(t_itr))))
-			return (NULL);
-	entry = lst->last;
-	i = 0;
-	while (i++ < lst->length)
-	{
-		if (!prdct || prdct(entry->data))
-			ft_node_prepend(&itr->cur_node, entry->data);
-		entry = entry->prev;
-	}
-	itr->start_node = itr->cur_node;
-	return (itr);
-}
-

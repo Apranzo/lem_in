@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 15:06:51 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 17:51:10 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 16:46:16 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t				ft_str_hash(t_pntr pointer)
 	unsigned char	*p;
 
 	result = 5381;
-	p = (unsigned char *) pointer;
+	p = (unsigned char *)pointer;
 	while (*p != '\0')
 	{
 		result = (result << 5) + result + *p;
@@ -29,10 +29,10 @@ size_t				ft_str_hash(t_pntr pointer)
 
 size_t				int_hash(t_pntr pointer)
 {
-	return ((size_t) pointer);
+	return ((size_t)pointer);
 }
 
 size_t				pointer_hash(t_pntr pointer)
 {
-	return ((size_t) pointer);
+	return ((size_t)pointer);
 }

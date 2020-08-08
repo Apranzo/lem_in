@@ -13,8 +13,8 @@
 #include "list.h"
 
 static void		sort_internal(t_node *pivot,
-								 t_node **less_lst, t_node **more_lst,
-								 t_fcompare compare_func)
+		t_node **less_lst, t_node **more_lst,
+		t_fcompare compare_func)
 {
 	t_node		*rover;
 	t_node		*next;

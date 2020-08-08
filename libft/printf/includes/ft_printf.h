@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 16:39:28 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 16:42:57 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 16:43:17 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <stdarg.h>
 # include <limits.h>
 # include "../../core/includes/coreft.h"
-# include "../../string//includes/string_builder.h"
 
 # define PRINTF_BUFF_SIZE	16192
 # define LENGTH_H	0x01
