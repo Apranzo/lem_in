@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:29:29 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 11:45:45 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 16:12:31 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static const size_t			g_hm_primes[] = {
 };
 
 static const size_t g_hm_num_primes = sizeof(g_hm_primes) / sizeof(size_t);
-typedef void				(*t_hm_free_key)(pointer value);
-typedef void				(*t_hm_free_val)(pointer value);
+typedef void				(*t_hm_free_key)(t_pntr value);
+typedef void				(*t_hm_free_val)(t_pntr value);
 typedef struct				s_hash_map_entry
 {
 	t_pair					pair;
@@ -37,8 +37,8 @@ typedef struct				s_hash_map
 {
 	t_hm_entry				**table;
 	size_t					table_size;
-	f_hash					hash_func;
-	f_equal					equal_func;
+	t_fhash					hash_func;
+	t_fequal					equal_func;
 	t_hm_free_key			free_key;
 	t_hm_free_val			free_val;
 	size_t					entries;
@@ -48,21 +48,20 @@ typedef struct				s_hash_map
 void						hm_free_entry(t_hm *hash_map,
 								t_hm_entry *entry);
 int							hm_enlarge(t_hm *hm);
-t_lst						*hm_lst(t_hm *hash_map, f_prdct prdct);
+t_lst						*hm_lst(t_hm *hash_map, t_fprdct prdct);
 void						hm_clear(t_hm *hash_map);
-t_hm						*hm_init(t_hm *map, f_hash hash_func,
-										f_equal equal_func);
-t_hm						*hm_new(f_hash hash_func,
-								f_equal equal_func);
+t_hm						*hm_init(t_hm *map, t_fhash hash_func,
+									 t_fequal equal_func);
+t_hm						*hm_new(t_fhash hash_func,
+									t_fequal equal_func);
 void						hm_free(t_hm *hash_map,
-									f_free free_key, f_free free_val);
+									t_ffree free_key, t_ffree free_val);
 void						hm_register_free_functions(t_hm *hash_map,
 												t_hm_free_key key_free_func,
 												t_hm_free_val value_free_func);
-int							hm_insert(t_hm *hm, pointer key, pointer value);
-pointer						hm_lookup(t_hm *hm, pointer key);
-int							hm_remove(t_hm *hash_map, pointer key);
+int							hm_insert(t_hm *hm, t_pntr key, t_pntr value);
+t_pntr						hm_lookup(t_hm *hm, t_pntr key);
+int							hm_remove(t_hm *hash_map, t_pntr key);
 size_t						hm_num_entries(t_hm *hash_map);
-t_itr						*hm_itr_load(t_hm *hash_map, t_itr *itr);
 
 #endif

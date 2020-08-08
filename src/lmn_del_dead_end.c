@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:29 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 20:26:09 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 16:12:10 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void			delete_dead_end(t_room *room)
 {
 	t_node			*node;
 	t_node			*tmp;
-	pointer			data;
+	t_pntr			data;
 
 	if (!room->required && room->in->length && !room->out->length)
 	{
@@ -25,8 +25,8 @@ static void			delete_dead_end(t_room *room)
 		{
 			data = node->data;
 			tmp = node->next;
-			lst_rm_data(((t_room*)data)->out, (f_equal) &room_equals, room);
-			lst_rm_data(room->in, (f_equal) &room_equals, data);
+			lst_rm_data(((t_room*)data)->out, (t_fequal) &room_equals, room);
+			lst_rm_data(room->in, (t_fequal) &room_equals, data);
 			node = tmp;
 		}
 	}
@@ -35,8 +35,8 @@ static void			delete_dead_end(t_room *room)
 	{
 		data = node->data;
 		tmp = node->next;
-		lst_rm_data(((t_room*)data)->in, (f_equal) &room_equals, room);
-		lst_rm_data(room->out, (f_equal) &room_equals, data);
+		lst_rm_data(((t_room*)data)->in, (t_fequal) &room_equals, room);
+		lst_rm_data(room->out, (t_fequal) &room_equals, data);
 		node = tmp;
 	}
 }

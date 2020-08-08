@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:17:13 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 20:23:55 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 15:02:42 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void			lmn_bfs_asc(t_lemin *lem)
 
 	lem->start->asc_level = 0;
 	if (!(qu = qu_new())
-		|| !(black = hm_new(&ft_str_hash, &ft_strequ))
+		|| !(black = hm_new(&ft_str_hash, (t_fequal) & ft_strequ))
 		|| !(qu_push_head(qu, lem->start))
 		|| !(hm_insert(black, lem->end->name, lem->end->name)))
 		ft_error("Allocation error\n", -1);
@@ -76,7 +76,7 @@ void			lmt_bfs_desc(t_lemin *lem)
 
 	lem->end->desc_level = 0;
 	if (!(qu = qu_new())
-		|| !(black = hm_new(&ft_str_hash, &ft_strequ))
+		|| !(black = hm_new(&ft_str_hash, (t_fequal) & ft_strequ))
 		|| !(qu_push_head(qu, lem->end))
 		|| !(hm_insert(black, lem->start->name, lem->start)))
 		ft_error("Allocation error\n", -1);

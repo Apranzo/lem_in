@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:21 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 20:24:59 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 16:12:10 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void			check_unuses(t_room *room)
 {
 	t_node			*node;
 	t_node			*next;
-	pointer			*data;
+	t_pntr			*data;
 
 	node = room->out->first;
 	while (node)
@@ -25,17 +25,17 @@ static void			check_unuses(t_room *room)
 		data = node->data;
 		if (room->asc_level < 0)
 		{
-			lst_rm_data(((t_room *)data)->out, (f_equal) &room_equals, room);
-			lst_rm_data(((t_room *)data)->in, (f_equal) &room_equals, room);
-			lst_rm_data(room->in, (f_equal)&room_equals, data);
-			lst_rm_data(room->out, (f_equal)&room_equals, data);
+			lst_rm_data(((t_room *)data)->out, (t_fequal) &room_equals, room);
+			lst_rm_data(((t_room *)data)->in, (t_fequal) &room_equals, room);
+			lst_rm_data(room->in, (t_fequal)&room_equals, data);
+			lst_rm_data(room->out, (t_fequal)&room_equals, data);
 		}
 		else if (((t_room*)node->data)->asc_level == room->asc_level)
 		{
-			lst_rm_data(room->in, (f_equal) &room_equals, data);
-			lst_rm_data(((t_room *)data)->out, (f_equal)&room_equals, room);
-			lst_rm_data(room->out, (f_equal)&room_equals, data);
-			lst_rm_data(((t_room *)data)->in, (f_equal)&room_equals, room);
+			lst_rm_data(room->in, (t_fequal) &room_equals, data);
+			lst_rm_data(((t_room *)data)->out, (t_fequal)&room_equals, room);
+			lst_rm_data(room->out, (t_fequal)&room_equals, data);
+			lst_rm_data(((t_room *)data)->in, (t_fequal)&room_equals, room);
 		}
 		node = next;
 	}

@@ -13,8 +13,8 @@
 #include "list.h"
 
 static void		sort_internal(t_node *pivot,
-								t_node **less_lst, t_node **more_lst,
-								f_compare compare_func)
+								 t_node **less_lst, t_node **more_lst,
+								 t_fcompare compare_func)
 {
 	t_node		*rover;
 	t_node		*next;
@@ -61,7 +61,7 @@ static void		insert_pivot(t_node **node,
 }
 
 static t_node	*lst_sort_internal(t_node **node,
-									f_compare compare_func)
+									t_fcompare compare_func)
 {
 	t_node *pivot;
 	t_node *less_lst;
@@ -87,7 +87,7 @@ static t_node	*lst_sort_internal(t_node **node,
 	return (!more_lst ? pivot : more_lst_end);
 }
 
-void			lst_sort(t_lst *lst, f_compare compare_func)
+void			lst_sort(t_lst *lst, t_fcompare compare_func)
 {
 	lst->last = lst_sort_internal(&lst->first, compare_func);
 }

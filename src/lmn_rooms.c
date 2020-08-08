@@ -28,7 +28,7 @@ t_node			*get_in_first(t_room *room)
 	return (room->in->first);
 }
 
-int				room_free(pointer data)
+int				room_free(t_pntr data)
 {
 	t_room		*room;
 

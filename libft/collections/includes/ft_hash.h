@@ -15,10 +15,10 @@
 
 # include <coreft.h>
 
-size_t	ft_str_hash(pointer pointer);
+size_t	ft_str_hash(t_pntr pointer);
 size_t	string_nocase_hash(void *string);
-size_t	int_hash(pointer pointer);
-size_t	pointer_hash(pointer pointer);
+size_t	int_hash(t_pntr pointer);
+size_t	pointer_hash(t_pntr pointer);
 
 #endif
 

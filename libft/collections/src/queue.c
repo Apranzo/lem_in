@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 15:07:06 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 17:55:44 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 15:12:06 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_qu			*qu_new(void)
 {
 	t_qu		*qu;
 
-	if (!(qu = (t_qu *) malloc(sizeof(t_qu))))
+	if (!(qu = (t_qu *)malloc(sizeof(t_qu))))
 		return (NULL);
 	qu->head = NULL;
 	qu->tail = NULL;
@@ -55,7 +55,7 @@ void			qu_clear(t_qu *qu)
 		qu_pop_head(qu);
 }
 
-int				qu_contains(t_qu *qu, pointer data)
+int				qu_contains(t_qu *qu, t_pntr data)
 {
 	t_qu_entry	*ent;
 
@@ -68,6 +68,3 @@ int				qu_contains(t_qu *qu, pointer data)
 	}
 	return (0);
 }
-
-
-

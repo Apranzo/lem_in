@@ -18,7 +18,7 @@
 
 typedef struct				s_queue_entry
 {
-	pointer					data;
+	t_pntr					data;
 	struct s_queue_entry	*prev;
 	struct s_queue_entry	*next;
 }							t_qu_entry;
@@ -31,16 +31,16 @@ typedef struct				s_queue
 }							t_qu;
 
 t_qu						*qu_by_lst(t_lst *lst);
-int							qu_contains(t_qu *qu, pointer data);
+int							qu_contains(t_qu *qu, t_pntr data);
 t_qu						*qu_new(void);
 void						qu_free(t_qu *queue);
 void						qu_clear(t_qu *queue);
-int							qu_push_head(t_qu *queue, pointer data);
-pointer						qu_pop_head(t_qu *queue);
-pointer						qu_peek_head(t_qu *queue);
-int							qu_push_tail(t_qu *queue, pointer data);
-pointer						qu_pop_tail(t_qu *queue);
-pointer						qu_peek_tail(t_qu *queue);
+int							qu_push_head(t_qu *queue, t_pntr data);
+t_pntr						qu_pop_head(t_qu *queue);
+t_pntr						qu_peek_head(t_qu *queue);
+int							qu_push_tail(t_qu *queue, t_pntr data);
+t_pntr						qu_pop_tail(t_qu *queue);
+t_pntr						qu_peek_tail(t_qu *queue);
 int							qu_is_empty(t_qu *queue);
 
 #endif

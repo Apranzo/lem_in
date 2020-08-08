@@ -6,13 +6,13 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:56:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 17:58:39 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 16:12:31 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "list.h"
 
-void					lst_clear(t_lst *lst, f_free free_data)
+void					lst_clear(t_lst *lst, t_ffree free_data)
 {
 	t_node				*entry;
 	t_node				*next;
@@ -31,13 +31,13 @@ void					lst_clear(t_lst *lst, f_free free_data)
 	lst->length = 0;
 }
 
-void				lst_free(t_lst *lst, f_free free_data)
+void				lst_free(t_lst *lst, t_ffree free_data)
 {
 	lst_clear(lst, free_data);
 	free(lst);
 }
 
-t_node				*lst_prepend(t_lst *lst, pointer data)
+t_node				*lst_prepend(t_lst *lst, t_pntr data)
 {
 	t_node			*new;
 
@@ -47,7 +47,7 @@ t_node				*lst_prepend(t_lst *lst, pointer data)
 	return (new);
 }
 
-t_node				*lst_append(t_lst *lst, pointer data)
+t_node				*lst_append(t_lst *lst, t_pntr data)
 {
 	t_node			*new;
 
@@ -86,7 +86,7 @@ t_node				*lst_nth_entry(t_lst *lst, size_t index)
 	return (entry);
 }
 
-pointer			lst_nth_data(t_lst *lst, size_t index)
+t_pntr			lst_nth_data(t_lst *lst, size_t index)
 {
 	t_node		*entry;
 
@@ -94,13 +94,13 @@ pointer			lst_nth_data(t_lst *lst, size_t index)
 	return (entry ? entry->data : NULL);
 }
 
-pointer				*lst_to_array(t_lst *lst)
+t_pntr				*lst_to_array(t_lst *lst)
 {
 	t_node			*rover;
-	pointer			*array;
+	t_pntr			*array;
 	size_t			i;
 
-	if (!(array = ft_tmalloc(sizeof(pointer),  lst->length + 1)))
+	if (!(array = ft_tmalloc(sizeof(t_pntr), lst->length + 1)))
 		return (NULL);
 	array[lst->length] = NULL;
 	i = 0;
@@ -134,7 +134,7 @@ t_node				*lst_rm_entry(t_lst *lst, t_node *entry)
 	return (NULL);
 }
 
-int					lst_rm_data(t_lst *lst, f_equal equal, pointer data)
+int					lst_rm_data(t_lst *lst, t_fequal equal, t_pntr data)
 {
 	t_node			*node;
 
@@ -159,7 +159,7 @@ int					lst_rm_data(t_lst *lst, f_equal equal, pointer data)
 	return (0);
 }
 
-int					lst_contains(t_lst *lst, f_equal equal, pointer data)
+int					lst_contains(t_lst *lst, t_fequal equal, t_pntr data)
 {
 	size_t			i;
 	t_node			*node;
@@ -176,7 +176,7 @@ int					lst_contains(t_lst *lst, f_equal equal, pointer data)
 }
 
 t_node *lst_find_data(t_node *lst,
-                          f_equal callback, pointer data)
+					  t_fequal callback, t_pntr data)
 {
 	t_node *rover;
 	for (rover=lst; rover != NULL; rover=rover->next) {
@@ -187,12 +187,12 @@ t_node *lst_find_data(t_node *lst,
 	return NULL;
 }
 
-void lst_foreach(t_lst *lst, f_map merge_func)
+void lst_foreach(t_lst *lst, t_fmap merge_func)
 {
 	ft_lstiter(lst->first, (void (*)(t_node *)) merge_func);
 }
 
-t_itr			*lst_itr_load(t_lst *lst, t_itr *itr, f_prdct prdct)
+t_itr			*lst_itr_load(t_lst *lst, t_itr *itr, t_fprdct prdct)
 {
 	size_t 		i;
 	t_node		*entry;

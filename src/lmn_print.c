@@ -89,8 +89,8 @@ void				print_res(t_lemin *lem)
 		ft_printf("%s\n", itr_next(itr));
 	ft_printf("\n");
 	itr_clear(itr);
-	lst_sort(lem->paths, (f_compare)&cmpr_lst_ln);
-	lst_foreach(lem->paths, (f_map)&sum_prev_ln);
+	lst_sort(lem->paths, (t_fcompare)&cmpr_lst_ln);
+	lst_foreach(lem->paths, (t_fmap)&sum_prev_ln);
 	lst_itr_load(lem->ants, itr, NULL);
 	printed = 0;
 	while (lem->finished < lem->amount)

@@ -6,15 +6,14 @@
 /*   By: cshinoha <cshinoha@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/30 21:31:14 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/07/04 15:45:00 by cshinoha         ###   ########.ru       */
+/*   Updated: 2020/08/08 16:09:52 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/coreft.h"
+#include <coreft.h>
 
 int		ft_free(void *p)
 {
 	free(p);
 	return (1);
 }
-

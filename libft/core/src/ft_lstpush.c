@@ -6,7 +6,7 @@
 /*   By: cshinoha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 23:16:49 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/07/04 15:45:00 by cshinoha         ###   ########.ru       */
+/*   Updated: 2020/08/08 16:09:52 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_node			*ft_node_prepend(t_node **begin_list, void *data)
 {
-	t_node 		*first;
+	t_node		*first;
 
 	if (!(first = ft_lstnew(data)))
 		return (NULL);

@@ -6,14 +6,13 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:53:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 17:53:41 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 15:13:56 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "queue.h"
 
-
-int				qu_push_tail(t_qu *qu, pointer data)
+int				qu_push_tail(t_qu *qu, t_pntr data)
 {
 	t_qu_entry	*new_entry;
 
@@ -36,17 +35,16 @@ int				qu_push_tail(t_qu *qu, pointer data)
 	return (1);
 }
 
-pointer			qu_pop_tail(t_qu *qu)
+t_pntr			qu_pop_tail(t_qu *qu)
 {
 	t_qu_entry	*entry;
-	pointer		result;
+	t_pntr		result;
 
 	if (qu_is_empty(qu))
 		return (NULL);
 	entry = qu->tail;
 	qu->tail = entry->prev;
 	result = entry->data;
-
 	if (!qu->tail)
 		qu->head = NULL;
 	else
@@ -56,12 +54,11 @@ pointer			qu_pop_tail(t_qu *qu)
 	return (result);
 }
 
-
-int				qu_push_head(t_qu *qu, pointer data)
+int				qu_push_head(t_qu *qu, t_pntr data)
 {
 	t_qu_entry	*node;
 
-	if(!qu || !(node = malloc(sizeof(t_qu_entry))))
+	if (!qu || !(node = malloc(sizeof(t_qu_entry))))
 		return (0);
 	node->data = data;
 	node->prev = NULL;
@@ -70,8 +67,8 @@ int				qu_push_head(t_qu *qu, pointer data)
 	{
 		qu->head = node;
 		qu->tail = node;
-
-	} else
+	}
+	else
 	{
 		qu->head->prev = node;
 		qu->head = node;
@@ -80,10 +77,10 @@ int				qu_push_head(t_qu *qu, pointer data)
 	return (1);
 }
 
-pointer			qu_pop_head(t_qu *qu)
+t_pntr			qu_pop_head(t_qu *qu)
 {
 	t_qu_entry	*entry;
-	pointer		result;
+	t_pntr		result;
 
 	if (qu_is_empty(qu))
 		return (NULL);
@@ -96,5 +93,5 @@ pointer			qu_pop_head(t_qu *qu)
 		qu->head->prev = NULL;
 	free(entry);
 	qu->len--;
-	return result;
+	return (result);
 }

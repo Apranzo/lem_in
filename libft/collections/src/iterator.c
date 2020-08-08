@@ -6,17 +6,17 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 15:06:59 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 15:06:59 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 15:11:02 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <coreft.h>
 #include <iterator.h>
 
-pointer				itr_next(t_itr *iterator)
+t_pntr				itr_next(t_itr *iterator)
 {
 	t_node			*current_entry;
-	pointer			data;
+	t_pntr			data;
 
 	if (!iterator->cur_node)
 		return (NULL);
@@ -26,26 +26,20 @@ pointer				itr_next(t_itr *iterator)
 	return (data);
 }
 
-int 				itr_has_more(t_itr *itr)
+int					itr_has_more(t_itr *itr)
 {
 	return ((int)itr->cur_node);
 }
 
-void					itr_foreach(t_itr *iter, void (*f)(pointer data))
-{
-	while (itr_has_more(iter))
-		f(itr_next(iter));
-}
-
-void 					itr_free(t_itr *itr)
+void				itr_free(t_itr *itr)
 {
 	itr_clear(itr);
 	free(itr);
 }
 
-void					itr_clear(t_itr *itr)
+void				itr_clear(t_itr *itr)
 {
-	t_node				*node;
+	t_node			*node;
 
 	if (itr)
 	{
@@ -61,7 +55,7 @@ void					itr_clear(t_itr *itr)
 	}
 }
 
-void					itr_reset(t_itr *itr)
+void				itr_reset(t_itr *itr)
 {
 	itr->cur_node = itr->start_node;
 }

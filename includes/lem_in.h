@@ -27,7 +27,7 @@ struct 		s_ant
 	t_room			*room;
 	int				finished;
 	int				started;
-	int 			number;
+	size_t			number;
 };
 
 
@@ -82,6 +82,6 @@ void				print_res(t_lemin *lem);
 void				lmn_bfs_asc(t_lemin *lem);
 void				lmt_bfs_desc(t_lemin *lem);
 int					room_equals(t_room *room1, t_room *room2);
-int 				room_free(pointer room);
+int 				room_free(t_pntr room);
 
 #endif

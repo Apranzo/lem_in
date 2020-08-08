@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/27 14:14:47 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/07/05 00:32:39 by cshinoha         ###   ########.ru       */
+/*   Created: 2020/08/08 16:39:28 by cshinoha          #+#    #+#             */
+/*   Updated: 2020/08/08 16:42:57 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,7 @@
 # define LENGTH_Z	0x40
 # define LENGTH_T	0x80
 
-typedef size_t		(*f_flush)(pointer buffer);
-typedef struct	s_stream
-{
-	int			fd;
-	char		buf[PRINTF_BUFF_SIZE];
-}				t_stream;
+typedef size_t		(*t_fflush)(t_pntr buffer);
 
 typedef struct		s_data
 {
@@ -50,7 +45,7 @@ typedef struct		s_buffer
 	int				fd;
 	int				length;
 	char			content[PRINTF_BUFF_SIZE];
-	f_flush			flush_buf;
+	t_fflush		flush_buf;
 
 }					t_buffer;
 
@@ -71,7 +66,7 @@ typedef struct		s_info
 }					t_info;
 
 int					ft_sprintf(char **str, const char *format, ...);
-int 				ft_vfprintf(int fd, const char *format, ...);
+int					ft_vfprintf(int fd, const char *format, ...);
 int					ft_printf(const char *format, ...);
 void				parsing(const char **format, t_info *info);
 
@@ -87,29 +82,20 @@ void				get_si(intmax_t *number, t_info *info);
 void				get_ui(uintmax_t *number, t_info *info);
 void				get_f(long double *number, t_info *info);
 void				apply_specs(t_info *info, t_data *data);
-
-/*
-** A pointer to a handler function
-*/
-
 typedef void		(*t_handler)(const char **format, t_info *info);
-
 void				flag_hash(const char **format, t_info *info);
 void				flag_zero(const char **format, t_info *info);
 void				flag_plus(const char **format, t_info *info);
 void				flag_minus(const char **format, t_info *info);
 void				flag_space(const char **format, t_info *info);
-
 void				digit(const char **format, t_info *info);
 void				set_width(const char **format, t_info *info);
 void				set_precision(const char **format, t_info *info);
-
 void				length_h(const char **format, t_info *info);
 void				length_j(const char **format, t_info *info);
 void				length_l(const char **format, t_info *info);
 void				length_t(const char **format, t_info *info);
 void				length_z(const char **format, t_info *info);
-
 void				type_b(const char **format, t_info *info);
 void				type_c(const char **format, t_info *info);
 void				type_d(const char **format, t_info *info);
@@ -120,7 +106,6 @@ void				type_s(const char **format, t_info *info);
 void				type_u(const char **format, t_info *info);
 void				type_x(const char **format, t_info *info);
 void				unknown(const char **format, t_info *info);
-
 void				percent(const char **format, t_info *info);
 void				wildcard(const char **format, t_info *info);
 

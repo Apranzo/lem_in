@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:29:37 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 11:37:35 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 16:12:31 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,18 @@
 
 static int		hm_allocate_table(t_hm *hash_map)
 {
-	hash_map->table_size = hash_map->prime_index < g_hm_num_primes ?
-						   g_hm_primes[hash_map->prime_index] :
-					 hash_map->entries * 10;
-	return ((int)(hash_map->table =	ft_tmemalloc(sizeof(t_hm_entry *), hash_map->table_size)));
+	hash_map->table_size = hash_map->prime_index < g_hm_num_primes
+							? g_hm_primes[hash_map->prime_index]
+							: hash_map->entries * 10;
+	return ((int)(hash_map->table =
+			ft_tmemalloc(sizeof(t_hm_entry *), hash_map->table_size)));
 }
 
-t_hm *hm_new(f_hash hash_func, f_equal equal_func)
+t_hm			*hm_new(t_fhash hash_func, t_fequal equal_func)
 {
-	t_hm *map;
+	t_hm		*map;
 
-	if (!(map = (t_hm *) malloc(sizeof(t_hm))))
+	if (!(map = (t_hm *)malloc(sizeof(t_hm))))
 		return (NULL);
 	return (hm_init(map, hash_func, equal_func));
 }
@@ -40,9 +41,8 @@ int				hm_enlarge(t_hm *hm)
 	old_table = hm->table;
 	old_table_size = hm->table_size;
 	hm->prime_index++;
-	if (!hm_allocate_table(hm))
+	if ((i = 0) || !hm_allocate_table(hm))
 		return (0);
-	i = 0;
 	while (i < old_table_size)
 	{
 		while (old_table[i])
@@ -59,51 +59,11 @@ int				hm_enlarge(t_hm *hm)
 	return (1);
 }
 
-size_t			hm_num_entries(t_hm *hash_map)
+t_lst			*hm_lst(t_hm *hash_map, t_fprdct prdct)
 {
-	return (hash_map->entries);
-}
-
-t_itr 				*hm_itr_load(t_hm *hash_map, t_itr *itr)
-{
-	size_t			chain;
-	t_hm_entry 		*entry;
-	t_node 			*new;
-	t_node 			*tail;
-
-	itr_clear(itr);
-	chain = 0;
-	while (chain < hash_map->table_size)
-	{
-		if (hash_map->table[chain])
-		{
-			entry = hash_map->table[chain];
-			while (entry)
-			{
-				if (!(new = ft_lstnew(&entry->pair)))
-					return (NULL);
-				if (!itr->cur_node) //TODO fix
-					itr->cur_node = new;
-				else
-				{
-					new->prev = tail;
-					tail->next = new;
-				}
-				tail = new;
-				entry = entry->next;
-			}
-		}
-		chain++;
-	}
-	itr->start_node = itr->cur_node;
-	return (itr);
-}
-
-t_lst 				*hm_lst(t_hm *hash_map, f_prdct prdct)
-{
-	size_t			chain;
-	t_hm_entry 		*entry;
-	t_lst			*lst;
+	size_t		chain;
+	t_hm_entry	*entry;
+	t_lst		*lst;
 
 	chain = 0;
 	if (!(lst = lst_new()))
@@ -115,7 +75,7 @@ t_lst 				*hm_lst(t_hm *hash_map, f_prdct prdct)
 			entry = hash_map->table[chain];
 			while (entry)
 			{
-				if(!prdct || prdct(entry->pair.value))
+				if (!prdct || prdct(entry->pair.value))
 					if (!(lst_prepend(lst, entry->pair.value)))
 						return (NULL);
 				entry = entry->next;
@@ -125,6 +85,3 @@ t_lst 				*hm_lst(t_hm *hash_map, f_prdct prdct)
 	}
 	return (lst);
 }
-
-
-

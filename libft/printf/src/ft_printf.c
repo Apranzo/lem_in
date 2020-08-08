@@ -6,21 +6,21 @@
 /*   By: cmeowth <cmeowth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/29 03:53:57 by cmeowth           #+#    #+#             */
-/*   Updated: 2020/07/05 01:05:24 by cshinoha         ###   ########.ru       */
+/*   Updated: 2020/08/08 16:39:13 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 
-static 	int 		flush_to_str_bld(t_buffer *bf)
+static int		flush_to_str_bld(t_buffer *bf)
 {
-	char 			*str;
-	char 			*new;
-	size_t			len;
+	char		*str;
+	char		*new;
+	size_t		len;
 
 	str = bf->out;
 	len = str ? ft_strlen(str) : 0;
-	if(!(new = ft_strnew(len + bf->index + 1)))
+	if (!(new = ft_strnew(len + bf->index + 1)))
 		return (-1);
 	if (str)
 		ft_memcpy(new, str, len);
@@ -62,7 +62,7 @@ int				ft_printf(const char *format, ...)
 	int			len;
 
 	initialize_buffer(1, &info.buffer);
-	info.buffer.flush_buf = (f_flush) &print_buffer;
+	info.buffer.flush_buf = (t_fflush)&print_buffer;
 	va_start(info.ap, format);
 	len = ft_common(format, &info);
 	va_end(info.ap);
@@ -75,7 +75,7 @@ int				ft_vfprintf(int fd, const char *format, ...)
 	int			len;
 
 	initialize_buffer(fd, &info.buffer);
-	info.buffer.flush_buf = (f_flush) &print_buffer;
+	info.buffer.flush_buf = (t_fflush)&print_buffer;
 	va_start(info.ap, format);
 	len = ft_common(format, &info);
 	va_end(info.ap);
@@ -90,7 +90,7 @@ int				ft_sprintf(char **str, const char *format, ...)
 	va_start(info.ap, format);
 	initialize_buffer(0, &info.buffer);
 	info.buffer.out = *str;
-	info.buffer.flush_buf = (f_flush) &flush_to_str_bld;
+	info.buffer.flush_buf = (t_fflush)&flush_to_str_bld;
 	len = ft_common(format, &info);
 	*str = info.buffer.out;
 	va_end(info.ap);

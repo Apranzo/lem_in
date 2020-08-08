@@ -1,14 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_lstappend.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/08/08 16:29:22 by cshinoha          #+#    #+#             */
+/*   Updated: 2020/08/08 16:29:22 by cshinoha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <coreft.h>
 
-t_node *ft_node_append(t_node **node, pointer data)
+t_node		*ft_node_append(t_node **node, t_pntr data)
 {
-	t_node *rover;
-	t_node *new;
+	t_node	*rover;
+	t_node	*new;
 
 	if (!node || !(new = ft_lstnew(data)))
 		return (NULL);
-//	if (!*node)
-//		*node = new;
 	if (*node)
 	{
 		rover = *node;

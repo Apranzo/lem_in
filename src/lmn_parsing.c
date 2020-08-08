@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:50 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 11:34:24 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 15:02:32 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void				parse_rooms(t_lemin *lem)
 	char			*line;
 	t_room			*new;
 
-	cords = hm_new(&ft_str_hash, &ft_strequ);
+	cords = hm_new(&ft_str_hash, (t_fequal)&ft_strequ);
 	while (itr_has_more(lem->filtred) &&
 			!ft_strchr(lem->filtred->cur_node->data, '-'))
 	{
@@ -80,8 +80,8 @@ void				parse_links(t_lemin *lem)
 			ft_error("Error\n", -1);
 		if (!(left = hm_lookup(lem->rooms, linked[0])) ||
 			!(right = hm_lookup(lem->rooms, linked[1])) ||
-			lst_contains(left->out, (f_equal)&room_equals, right) ||
-			lst_contains(right->out, (f_equal)&room_equals, left))
+			lst_contains(left->out, (t_fequal)&room_equals, right) ||
+			lst_contains(right->out, (t_fequal)&room_equals, left))
 			ft_error("Error\n", -1);
 		ft_freematr(linked);
 		lst_append(right->out, left);

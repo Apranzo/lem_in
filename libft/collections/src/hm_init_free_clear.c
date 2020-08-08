@@ -6,22 +6,22 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:55:10 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 11:36:57 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 15:00:18 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hash_map.h"
 
-static int hm_allocate_table(t_hm *hm)
+static int		hm_allocate_table(t_hm *hash_map)
 {
-	hm->table_size = hm->prime_index < g_hm_num_primes ?
-					 g_hm_primes[hm->prime_index] :
-					 hm->entries * 10;
-	return ((int)(hm->table =
-			ft_tmemalloc(sizeof(t_hm_entry *), hm->table_size)));
+	hash_map->table_size = hash_map->prime_index < g_hm_num_primes
+							? g_hm_primes[hash_map->prime_index]
+							: hash_map->entries * 10;
+	return ((int)(hash_map->table =
+			ft_tmemalloc(sizeof(t_hm_entry *), hash_map->table_size)));
 }
 
-void	hm_free_entry(t_hm *hash_map, t_hm_entry *entry)
+void			hm_free_entry(t_hm *hash_map, t_hm_entry *entry)
 {
 	if (hash_map->free_key)
 		hash_map->free_key(entry->pair.key);
@@ -30,7 +30,7 @@ void	hm_free_entry(t_hm *hash_map, t_hm_entry *entry)
 	free(entry);
 }
 
-t_hm *hm_init(t_hm *map, f_hash hash_func, f_equal equal_func)
+t_hm			*hm_init(t_hm *map, t_fhash hash_func, t_fequal equal_func)
 {
 	map->hash_func = hash_func;
 	map->equal_func = equal_func;
@@ -46,9 +46,9 @@ t_hm *hm_init(t_hm *map, f_hash hash_func, f_equal equal_func)
 
 void			hm_clear(t_hm *hash_map)
 {
-	t_hm_entry *rover;
-	t_hm_entry *next;
-	size_t i;
+	t_hm_entry	*rover;
+	t_hm_entry	*next;
+	size_t		i;
 
 	i = 0;
 	while (i < hash_map->table_size)
@@ -65,11 +65,11 @@ void			hm_clear(t_hm *hash_map)
 	free(hash_map->table);
 }
 
-void			hm_free(t_hm *hash_map, f_free free_key, f_free free_val)
+void			hm_free(t_hm *hash_map, t_ffree free_key, t_ffree free_val)
 {
-	t_hm_entry *rover;
-	t_hm_entry *next;
-	size_t i;
+	t_hm_entry	*rover;
+	t_hm_entry	*next;
+	size_t		i;
 
 	i = 0;
 	if (free_key)

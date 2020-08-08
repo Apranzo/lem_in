@@ -24,8 +24,8 @@ typedef struct			s_iterator
 void					itr_reset(t_itr *itr);
 void					itr_free(t_itr *itr);
 void					itr_clear(t_itr *itr);
-pointer					itr_next(t_itr *iterator);
+t_pntr					itr_next(t_itr *iterator);
 int						itr_has_more(t_itr *itr);
-void					itr_foreach(t_itr *iter, void (*f)(pointer data));
+void					itr_foreach(t_itr *iter, void (*f)(t_pntr data));
 
 #endif

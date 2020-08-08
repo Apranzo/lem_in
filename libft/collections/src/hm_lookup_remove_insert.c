@@ -6,23 +6,23 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:51:14 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:51:45 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 16:12:10 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hash_map.h"
 
-static t_hm_entry *find_in_backet(t_hm_entry *rover, pointer key, f_equal f_equal)
+static t_hm_entry	*find_in_backet(t_hm_entry *rover, t_pntr key, t_fequal f_equal)
 {
 	while (rover && !f_equal(rover->pair.key, key))
 		rover = rover->next;
 	return (rover);
 }
 
-int hm_insert(t_hm *hm, pointer key, pointer value)
+int					hm_insert(t_hm *hm, t_pntr key, t_pntr value)
 {
-	t_hm_entry *entry;
-	size_t index;
+	t_hm_entry		*entry;
+	size_t			index;
 
 	if ((hm->entries * 3) / hm->table_size > 0 &&
 		!hm_enlarge(hm))
@@ -47,23 +47,23 @@ int hm_insert(t_hm *hm, pointer key, pointer value)
 	return (1);
 }
 
-pointer					hm_lookup(t_hm *hm, pointer key)
+t_pntr				hm_lookup(t_hm *hm, t_pntr key)
 {
-	t_hm_entry			*entry;
-	size_t				index;
+	t_hm_entry		*entry;
+	size_t			index;
 
 	index = hm->hash_func(key) % hm->table_size;
 	entry = find_in_backet(hm->table[index], key, hm->equal_func);
 	return (entry ? (&(entry->pair))->value : NULL);
 }
 
-int hm_remove(t_hm *hash_map, pointer key)
+int					hm_remove(t_hm *hash_map, t_pntr key)
 {
-	t_hm_entry **rover;
-	t_hm_entry *entry;
-	t_pair *pair;
-	size_t index;
-	int result;
+	t_hm_entry		**rover;
+	t_hm_entry		*entry;
+	t_pair			*pair;
+	size_t			index;
+	int				result;
 
 	index = hash_map->hash_func(key) % hash_map->table_size;
 	result = 0;

@@ -12,7 +12,7 @@
 
 #include "../includes/ft_hash.h"
 
-size_t				ft_str_hash(pointer pointer)
+size_t				ft_str_hash(t_pntr pointer)
 {
 	size_t			result;
 	unsigned char	*p;
@@ -27,12 +27,12 @@ size_t				ft_str_hash(pointer pointer)
 	return (result);
 }
 
-size_t				int_hash(pointer pointer)
+size_t				int_hash(t_pntr pointer)
 {
 	return ((size_t) pointer);
 }
 
-size_t				pointer_hash(pointer pointer)
+size_t				pointer_hash(t_pntr pointer)
 {
 	return ((size_t) pointer);
 }

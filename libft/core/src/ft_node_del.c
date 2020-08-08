@@ -6,13 +6,13 @@
 /*   By: cshinoha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 17:27:01 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/07/04 15:45:00 by cshinoha         ###   ########.ru       */
+/*   Updated: 2020/08/08 16:12:10 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <coreft.h>
 
-pointer 		ft_node_del(t_node *node, void (*del)(void *))
+t_pntr		ft_node_del(t_node *node, void (*del)(void *))
 {
 	t_node	*tmp;
 

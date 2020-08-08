@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 14:42:59 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/07/05 01:03:41 by cshinoha         ###   ########.ru       */
+/*   Updated: 2020/08/08 16:16:40 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <fcntl.h>
-//# include "../../printf/includes/ft_printf.h"
+
 # define BUFF_SIZE 512
 # define BASE_LOWER "0123456789abcdefghijklmnopqrstuvwxyz"
 # define BASE_UPPER "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-typedef void				*pointer;
+typedef void				*t_pntr;
 
-typedef int					(*f_prdct)(pointer value);
-typedef void 				(*f_map)(pointer value);
-typedef void 				(*f_free)(pointer value);
-typedef size_t				(*f_hash)(pointer value);
-typedef int					(*f_equal)(pointer value1, pointer value2);
-typedef int					(*f_compare)(pointer value1, pointer value2);
+typedef int			(*t_fprdct)(t_pntr value);
+typedef void		(*t_fmap)(t_pntr value);
+typedef void		(*t_ffree)(t_pntr value);
+typedef size_t		(*t_fhash)(t_pntr value);
+typedef int			(*t_fequal)(t_pntr value1, t_pntr value2);
+typedef int			(*t_fcompare)(t_pntr value1, t_pntr value2);
 
 typedef	struct		s_xy
 {
@@ -51,13 +51,13 @@ typedef struct		s_statement
 	int				fd;
 }					t_stmt;
 
-typedef struct				s_pair
+typedef struct		s_pair
 {
-	pointer					key;
-	pointer					value;
-}							t_pair;
+	t_pntr			key;
+	t_pntr			value;
+}					t_pair;
 
-pointer 			ft_node_del(t_node *node, void (*del)(void *));
+t_pntr				ft_node_del(t_node *node, void (*del)(void *));
 int					ft_free(void *p);
 void				ft_error(char *mes, int code);
 void				ft_error_fd(int fd, char *mes, int code);
