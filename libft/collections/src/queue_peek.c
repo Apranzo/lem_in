@@ -13,12 +13,12 @@
 #include "queue.h"
 
 
-que_val			qu_peek_head(t_qu *qu)
+pointer			qu_peek_head(t_qu *qu)
 {
 	return (!qu_is_empty(qu) ? qu->head->data : NULL);
 }
 
-que_val			qu_peek_tail(t_qu *qu)
+pointer			qu_peek_tail(t_qu *qu)
 {
 	if (qu_is_empty(qu))
 		return (NULL);

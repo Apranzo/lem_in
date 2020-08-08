@@ -6,16 +6,16 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:55:10 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:59:44 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 11:36:57 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "hash-table.h"
+#include "hash_map.h"
 
 static int hm_allocate_table(t_hm *hm)
 {
-	hm->table_size = hm->prime_index < hm_num_primes ?
-					 hm_primes[hm->prime_index] :
+	hm->table_size = hm->prime_index < g_hm_num_primes ?
+					 g_hm_primes[hm->prime_index] :
 					 hm->entries * 10;
 	return ((int)(hm->table =
 			ft_tmemalloc(sizeof(t_hm_entry *), hm->table_size)));

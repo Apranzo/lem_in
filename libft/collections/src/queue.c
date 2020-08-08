@@ -55,7 +55,7 @@ void			qu_clear(t_qu *qu)
 		qu_pop_head(qu);
 }
 
-int				qu_contains(t_qu *qu, que_val data)
+int				qu_contains(t_qu *qu, pointer data)
 {
 	t_qu_entry	*ent;
 

@@ -18,17 +18,17 @@ pointer				itr_next(t_itr *iterator)
 	t_node			*current_entry;
 	pointer			data;
 
-	if (!iterator->_cur_node)
+	if (!iterator->cur_node)
 		return (NULL);
-	current_entry = iterator->_cur_node;
-	iterator->_cur_node = current_entry->next;
+	current_entry = iterator->cur_node;
+	iterator->cur_node = current_entry->next;
 	data = current_entry->data;
 	return (data);
 }
 
 int 				itr_has_more(t_itr *itr)
 {
-	return ((int)itr->_cur_node);
+	return ((int)itr->cur_node);
 }
 
 void					itr_foreach(t_itr *iter, void (*f)(pointer data))
@@ -50,12 +50,12 @@ void					itr_clear(t_itr *itr)
 	if (itr)
 	{
 		itr_reset(itr);
-		node = itr->_cur_node;
+		node = itr->cur_node;
 		while (node)
 		{
-			itr->_cur_node = itr->_cur_node->next;
+			itr->cur_node = itr->cur_node->next;
 			free(node);
-			node = itr->_cur_node;
+			node = itr->cur_node;
 		}
 		ft_bzero(itr, sizeof(t_itr));
 	}
@@ -63,5 +63,5 @@ void					itr_clear(t_itr *itr)
 
 void					itr_reset(t_itr *itr)
 {
-	itr->_cur_node = itr->_start_node;
+	itr->cur_node = itr->start_node;
 }

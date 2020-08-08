@@ -68,7 +68,7 @@ int					main(void)
 		ft_error("main alloc error", -1);
 	read_intput(STDIN_FILENO, lemin);
 	parse_ants_amount(lemin);
-	lemin->rooms = hm_new(&ft_str_hash, &string_equal);
+	lemin->rooms = hm_new(&ft_str_hash, &ft_strequ);
 	parse_rooms(lemin);
 	parse_links(lemin);
 	if (!lemin->start || !lemin->end || !lemin->start->out)

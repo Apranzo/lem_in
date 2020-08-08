@@ -205,10 +205,10 @@ t_itr			*lst_itr_load(t_lst *lst, t_itr *itr, f_prdct prdct)
 	while (i++ < lst->length)
 	{
 		if (!prdct || prdct(entry->data))
-			ft_node_prepend(&itr->_cur_node, entry->data);
+			ft_node_prepend(&itr->cur_node, entry->data);
 		entry = entry->prev;
 	}
-	itr->_start_node = itr->_cur_node;
+	itr->start_node = itr->cur_node;
 	return (itr);
 }
 

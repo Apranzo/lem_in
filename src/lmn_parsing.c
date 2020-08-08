@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:50 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 20:30:09 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 11:34:24 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void				parse_rooms(t_lemin *lem)
 	char			*line;
 	t_room			*new;
 
-	cords = hm_new(&ft_str_hash, &string_equal);
+	cords = hm_new(&ft_str_hash, &ft_strequ);
 	while (itr_has_more(lem->filtred) &&
-			!ft_strchr(lem->filtred->_cur_node->data, '-'))
+			!ft_strchr(lem->filtred->cur_node->data, '-'))
 	{
 		line = itr_next(lem->filtred);
 		if (line[0] == 'L'

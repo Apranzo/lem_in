@@ -6,16 +6,16 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:29:37 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:59:44 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/08 11:37:35 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/hash-table.h"
+#include "../includes/hash_map.h"
 
 static int		hm_allocate_table(t_hm *hash_map)
 {
-	hash_map->table_size = hash_map->prime_index < hm_num_primes ?
-					 hm_primes[hash_map->prime_index] :
+	hash_map->table_size = hash_map->prime_index < g_hm_num_primes ?
+						   g_hm_primes[hash_map->prime_index] :
 					 hash_map->entries * 10;
 	return ((int)(hash_map->table =	ft_tmemalloc(sizeof(t_hm_entry *), hash_map->table_size)));
 }
@@ -82,8 +82,8 @@ t_itr 				*hm_itr_load(t_hm *hash_map, t_itr *itr)
 			{
 				if (!(new = ft_lstnew(&entry->pair)))
 					return (NULL);
-				if (!itr->_cur_node) //TODO fix
-					itr->_cur_node = new;
+				if (!itr->cur_node) //TODO fix
+					itr->cur_node = new;
 				else
 				{
 					new->prev = tail;
@@ -95,7 +95,7 @@ t_itr 				*hm_itr_load(t_hm *hash_map, t_itr *itr)
 		}
 		chain++;
 	}
-	itr->_start_node = itr->_cur_node;
+	itr->start_node = itr->cur_node;
 	return (itr);
 }
 

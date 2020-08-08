@@ -13,7 +13,7 @@
 #include "queue.h"
 
 
-int				qu_push_tail(t_qu *qu, que_val data)
+int				qu_push_tail(t_qu *qu, pointer data)
 {
 	t_qu_entry	*new_entry;
 
@@ -36,10 +36,10 @@ int				qu_push_tail(t_qu *qu, que_val data)
 	return (1);
 }
 
-que_val			qu_pop_tail(t_qu *qu)
+pointer			qu_pop_tail(t_qu *qu)
 {
 	t_qu_entry	*entry;
-	que_val		result;
+	pointer		result;
 
 	if (qu_is_empty(qu))
 		return (NULL);
@@ -57,7 +57,7 @@ que_val			qu_pop_tail(t_qu *qu)
 }
 
 
-int				qu_push_head(t_qu *qu, que_val data)
+int				qu_push_head(t_qu *qu, pointer data)
 {
 	t_qu_entry	*node;
 
@@ -80,10 +80,10 @@ int				qu_push_head(t_qu *qu, que_val data)
 	return (1);
 }
 
-que_val			qu_pop_head(t_qu *qu)
+pointer			qu_pop_head(t_qu *qu)
 {
 	t_qu_entry	*entry;
-	que_val		result;
+	pointer		result;
 
 	if (qu_is_empty(qu))
 		return (NULL);

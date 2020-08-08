@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "hash-table.h"
+#include "hash_map.h"
 
 static t_hm_entry *find_in_backet(t_hm_entry *rover, pointer key, f_equal f_equal)
 {
