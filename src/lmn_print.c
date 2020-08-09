@@ -91,7 +91,7 @@ void			print_res(t_lemin *lem)
 	int			printed;
 
 	print_input(lem);
-	prepare_paths(lem);
+	lmn_prepare_paths(lem);
 	itr = lst_itr_load(lem->ants, NULL, NULL);
 	printed = 0;
 	line = ft_strdup("\n");

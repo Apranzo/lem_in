@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:22:49 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 18:54:53 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/09 17:39:07 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static void			sum_prev_ln(t_node *node)
 	}
 }
 
-void				prepare_paths(const t_lemin *lem)
+void				lmn_prepare_paths(const t_lemin *lem)
 {
-	lst_sort(lem->paths, (t_fcompare)&cmpr_lst_ln);
-	lst_foreach(lem->paths, (t_fmap)&sum_prev_ln);
+	lst_sort(lem->paths, (t_fcompare) & cmpr_lst_ln);
+	lst_foreach(lem->paths, (t_fmap) & sum_prev_ln);
 }

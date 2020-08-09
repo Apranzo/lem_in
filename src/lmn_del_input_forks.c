@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:36 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 16:12:10 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/09 17:43:53 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int			del_input_forks(t_room *room)
 		{
 			data = node->data;
 			lst_rm_entry(room->in, node);
-			lst_rm_data(((t_room*)data)->out, (t_fequal) &room_equals, room);
+			lst_rm_data(((t_room*)data)->out, (t_fequal) & room_equals, room);
 			return (1);
 		}
 		else

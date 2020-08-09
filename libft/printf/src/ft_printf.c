@@ -62,7 +62,7 @@ int				ft_printf(const char *format, ...)
 	int			len;
 
 	initialize_buffer(1, &info.buffer);
-	info.buffer.flush_buf = (t_fflush)&print_buffer;
+	info.buffer.flush_buf = (t_fflush) & print_buffer;
 	va_start(info.ap, format);
 	len = ft_common(format, &info);
 	va_end(info.ap);
@@ -75,7 +75,7 @@ int				ft_vfprintf(int fd, const char *format, ...)
 	int			len;
 
 	initialize_buffer(fd, &info.buffer);
-	info.buffer.flush_buf = (t_fflush)&print_buffer;
+	info.buffer.flush_buf = (t_fflush) & print_buffer;
 	va_start(info.ap, format);
 	len = ft_common(format, &info);
 	va_end(info.ap);
@@ -90,7 +90,7 @@ int				ft_sprintf(char **str, const char *format, ...)
 	va_start(info.ap, format);
 	initialize_buffer(0, &info.buffer);
 	info.buffer.out = *str;
-	info.buffer.flush_buf = (t_fflush)&flush_to_str_bld;
+	info.buffer.flush_buf = (t_fflush) & flush_to_str_bld;
 	len = ft_common(format, &info);
 	*str = info.buffer.out;
 	va_end(info.ap);

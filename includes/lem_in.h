@@ -71,7 +71,7 @@ typedef struct			s_fuck_the_system
 	t_node				*(*get_first)(t_room *);
 }						t_fck;
 
-void					prepare_paths(const t_lemin *lem);
+void					lmn_prepare_paths(const t_lemin *lem);
 int						read_intput(int fd, t_lemin *lem);
 void					create_ants(t_lemin *lem);
 void					lmn_del_dead_end(const t_lst *lst);
