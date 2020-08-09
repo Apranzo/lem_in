@@ -62,6 +62,7 @@ void			print_input(const t_lemin *lem)
 	itr = lst_itr_load(lem->raw, NULL, NULL);
 	while (itr_has_more(itr))
 		ft_printf("%s\n", itr_next(itr));
+	itr_free(itr);
 }
 
 int				produce_line(t_lemin *lem, t_itr *itr, char **line, int printed)
