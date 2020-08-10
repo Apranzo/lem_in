@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:56:15 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 18:59:53 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/10 19:27:53 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,10 @@ typedef struct			s_fuck_the_system
 	t_node				*(*get_first)(t_room *);
 }						t_fck;
 
+void					lmn_produce_output(t_lemin *lem,
+											t_itr *itr,
+											t_str_bld *bld);
+void					print_input(const t_lemin *lem);
 void					lmn_prepare_paths(const t_lemin *lem);
 int						read_intput(int fd, t_lemin *lem);
 void					create_ants(t_lemin *lem);

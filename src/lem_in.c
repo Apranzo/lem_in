@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/09 17:43:53 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/10 19:17:21 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int					main(void)
 {
 	static t_lemin	*lemin;
 
-	freopen("mmm", "r", stdin);
+//	freopen("mmm", "r", stdin);
 	if (!(lemin = ft_memalloc(sizeof(t_lemin))) ||
 			!(lemin->raw = lst_new()))
 		ft_error("main alloc error", -1);
@@ -77,6 +77,7 @@ int					main(void)
 	lmn_bfs_asc(lemin);
 	delete_unnecerarry(lemin);
 	find_path(lemin);
+	print_input(lemin);
 	print_res(lemin);
 	free_lemin(lemin);
 }

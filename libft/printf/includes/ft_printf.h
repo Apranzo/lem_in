@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 16:39:28 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 16:43:17 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/10 20:08:31 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdarg.h>
 # include <limits.h>
 # include "../../core/includes/coreft.h"
+# include "../../string/includes/string_builder.h"
 
 # define PRINTF_BUFF_SIZE	16192
 # define LENGTH_H	0x01
@@ -39,7 +40,7 @@ typedef struct		s_data
 
 typedef struct		s_buffer
 {
-	char			*out;
+	t_pntr			out;
 	int				index;
 	int				fd;
 	int				length;
@@ -64,6 +65,8 @@ typedef struct		s_info
 	t_buffer		buffer;
 }					t_info;
 
+int					ft_common(const char *format, t_info *info);
+int					ft_sbprintf(t_str_bld *str, const char *format, ...);
 int					ft_sprintf(char **str, const char *format, ...);
 int					ft_vfprintf(int fd, const char *format, ...);
 int					ft_printf(const char *format, ...);

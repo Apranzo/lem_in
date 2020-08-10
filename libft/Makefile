@@ -6,7 +6,7 @@
 #    By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/28 23:59:53 by cmeowth           #+#    #+#              #
-#    Updated: 2020/08/08 19:33:01 by cshinoha         ###   ########.fr        #
+#    Updated: 2020/08/10 20:22:25 by cshinoha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ OOPT		= -O2
 IOPT		= -I ./core/includes		\
               -I ./collections/includes	\
               -I ./printf/includes		\
+              -I ./string/includes
 
 AR			= /usr/bin/ar -rc
 RM			= /bin/rm -rf
@@ -28,6 +29,7 @@ SRCDIR		= .
 OBJDIR		= ./objects
 
 SRCNAME		= printf/src/ft_printf.c				\
+              printf/src/ft_printf_extend.c			\
 			  printf/src/parsing.c					\
 			  printf/src/tools/buffer.c				\
 			  printf/src/tools/initialization.c		\
@@ -71,7 +73,7 @@ SRCNAME		= printf/src/ft_printf.c				\
 			  core/src/ft_strcmp.c				\
 			  core/src/ft_strncmp.c				\
 			  core/src/ft_atoi.c				\
-			  core/src/ft_atoi_check.c				\
+			  core/src/ft_atoi_check.c			\
 			  core/src/ft_isalpha.c				\
 			  core/src/ft_isdigit.c				\
 			  core/src/ft_isalnum.c				\
@@ -158,7 +160,9 @@ SRCNAME		= printf/src/ft_printf.c				\
               collections/src/iterator.c					\
               collections/src/queue.c						\
               collections/src/queue_push_pop.c				\
-              collections/src/queue_peek.c
+              collections/src/queue_peek.c					\
+              string/src/string_builder.c					\
+              string/src/string_builder_operats.c
 
 SRC			= $(addprefix $(SRCDIR)/, $(SRCNAME))
 OBJ			= $(addprefix $(OBJDIR)/, $(SRCNAME:.c=.o))
@@ -182,6 +186,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	-@$(MKDIR) $(OBJDIR)/printf/src/specs
 	-@$(MKDIR) $(OBJDIR)/core/src
 	-@$(MKDIR) $(OBJDIR)/collections/src
+	-@$(MKDIR) $(OBJDIR)/string/src
 	$(GCC) $(WOPT) $(OOPT) $(IOPT) -c $< -o $@
 
 clean:

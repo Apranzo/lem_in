@@ -41,10 +41,11 @@ SRCNAME		= lem_in.c					\
               lmn_del_output_forks.c	\
               lmn_parsing.c				\
               lmn_path.c				\
+              lmn_prepare_paths.c		\
               lmn_print.c				\
+              lmn_produce_output.c		\
               lmn_read.c				\
-              lmn_rooms.c				\
-              lmt_prepare_paths.c
+              lmn_rooms.c
 
 SRC			= $(addprefix $(SRCDIR)/, $(SRCNAME))
 OBJ			= $(addprefix $(OBJDIR)/, $(SRCNAME:.c=.o))

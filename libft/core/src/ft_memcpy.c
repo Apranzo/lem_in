@@ -12,12 +12,19 @@
 
 #include <string.h>
 
-char		*ft_memcpy(void *dst, const void *src, size_t len)
+char				*ft_memcpy(void *dst, const void *src, size_t len)
 {
-	size_t	i;
+	size_t			i;
+	unsigned char	*newdst;
+	unsigned char	*newsrc;
 
-	i = -1;
-	while (++i < len)
-		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+	newdst = (unsigned char *)dst;
+	newsrc = (unsigned char *)src;
+	i = 0;
+	while (i < len)
+	{
+		newdst[i] = newsrc[i];
+		i++;
+	}
 	return (dst);
 }
