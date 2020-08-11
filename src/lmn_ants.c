@@ -23,7 +23,7 @@ void				create_ants(t_lemin *lem)
 	while (num)
 	{
 		if (!(ant = malloc(sizeof(t_ant))))
-			ft_error("Error\n", -1);
+			ft_error("Error", -1);
 		ant->room = NULL;
 		ant->finished = 0;
 		ant->started = 0;
@@ -33,5 +33,5 @@ void				create_ants(t_lemin *lem)
 	}
 	lem->ants = ants;
 	if (!(lem->qu = qu_by_lst(lem->ants)))
-		ft_error("Error\n", -1);
+		ft_error("Error", -1);
 }

@@ -58,5 +58,5 @@ void				find_path(t_lemin *lem)
 		node = node->next;
 	}
 	if (!lem->paths->length)
-		ft_error("Error\n", -1);
+		ft_error("Error", -1);
 }

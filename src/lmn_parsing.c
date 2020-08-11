@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:50 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 16:16:13 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/08/11 14:57:43 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,14 @@ void				parse_rooms(t_lemin *lem)
 			|| !lmn_check_status(lem, new, &line)
 			|| hm_lookup(cords, ft_strchr(line, ' '))
 			|| !(new = lmn_init_room(new, ft_strsplit(line, ' '))))
-			ft_error("Error\n", -1);
+			ft_error("Error", -1);
 		hm_insert(cords, ft_strchr(line, ' '), ft_strchr(line, ' '));
-		if (!hm_insert(lem->rooms, new->name, new))
-			ft_error("Error\n", -1);
+		if (hm_lookup(lem->rooms, new->name)
+			|| !hm_insert(lem->rooms, new->name, new))
+			ft_error("Error", -1);
 	}
 	if (!itr_has_more(lem->filtred))
-		ft_error("Error\n", -1);
+		ft_error("Error", -1);
 	hm_free(cords, NULL, NULL);
 }
 
@@ -77,12 +78,12 @@ void				parse_links(t_lemin *lem)
 	while ((line = itr_next(lem->filtred)) && ft_cntwords(line, '-'))
 	{
 		if (!(linked = ft_strsplit(line, '-')) || !*linked || !*(linked + 1))
-			ft_error("Error\n", -1);
+			ft_error("Error", -1);
 		if (!(left = hm_lookup(lem->rooms, linked[0])) ||
 			!(right = hm_lookup(lem->rooms, linked[1])) ||
 			lst_contains(left->out, (t_fequal) & room_equals, right) ||
 			lst_contains(right->out, (t_fequal) & room_equals, left))
-			ft_error("Error\n", -1);
+			ft_error("Error", -1);
 		ft_freematr(linked);
 		lst_append(right->out, left);
 		lst_append(left->out, right);
@@ -98,6 +99,6 @@ int					parse_ants_amount(t_lemin *lem)
 	str = itr_next(lem->filtred);
 	lem->amount = str && str[0] != '-' ? ft_atoi(str) : -1;
 	if (lem->amount <= 0 || !ft_atoi_check(lem->amount, str))
-		ft_error("Error\n", -1);
+		ft_error("Error", -1);
 	return (lem->amount);
 }
