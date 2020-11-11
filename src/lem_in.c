@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/11 14:49:10 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/11 12:55:23 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ static void			free_lemin(t_lemin *lemin)
 int					main(void)
 {
 	static t_lemin	*lemin;
+	freopen("map", "r", stdin);
+
 
 	if (!(lemin = ft_memalloc(sizeof(t_lemin))) ||
 			!(lemin->raw = lst_new()))

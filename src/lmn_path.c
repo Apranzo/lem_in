@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:56 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/07 14:18:56 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/11 13:08:38 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int					build_path(const t_lemin *lem, t_lst *br)
 		lst_append(br, room->out->first->data);
 		entry = entry->next;
 	}
+	if (entry->data == lem->end)
+		lst_append(br, entry->data);
 	return (1);
 }
 
