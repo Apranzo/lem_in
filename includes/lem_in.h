@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:56:15 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/10 19:27:53 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/12 17:17:25 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct			s_lemin
 	size_t				amount;
 	size_t				finished;
 	t_hm				*rooms;
+	t_hm 				*inpath;
 	t_room				*start;
 	t_room				*end;
 }						t_lemin;
