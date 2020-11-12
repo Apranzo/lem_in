@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:50 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/11 14:04:21 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/12 12:39:48 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,16 @@ void				parse_rooms(t_lemin *lem)
 	hm_free(cords, NULL, NULL);
 }
 
+t_edge				*lmn_new_egde(t_room *dest)
+{
+	t_edge			*ed;
+
+	if (!(ed = ft_memalloc(sizeof(t_edge))))
+		ft_error("Error", -1);
+	ed->dest = dest;
+	return (ed);
+}
+
 void				parse_links(t_lemin *lem)
 {
 	char			*line;
@@ -85,10 +95,10 @@ void				parse_links(t_lemin *lem)
 			lst_contains(right->out, (t_fequal) & room_equals, left))
 			ft_error("Error", -1);
 		ft_freematr(linked);
-		lst_append(right->out, left);
-		lst_append(left->out, right);
-		lst_append(right->in, left);
-		lst_append(left->in, right);
+		lst_append(right->out, lmn_new_egde(left));
+		lst_append(left->out,  lmn_new_egde(right));
+		lst_append(right->in, lmn_new_egde(left));
+		lst_append(left->in, lmn_new_egde(right));
 	}
 }
 

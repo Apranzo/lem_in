@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:56:15 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/10 19:27:53 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/12 13:55:46 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,15 @@ struct					s_room
 	int					required;
 	t_xy				cords;
 };
+
+typedef struct			s_edge
+{
+	t_room				*dest;
+	t_room				*src;
+	size_t				cdest;
+	size_t				csrc;
+	int					required;
+}						t_edge;
 
 struct					s_ant
 {
@@ -71,6 +80,8 @@ typedef struct			s_fuck_the_system
 	t_node				*(*get_first)(t_room *);
 }						t_fck;
 
+void					free_egde(t_edge *edge);
+int						edge_equals(t_edge *edge1, t_edge *edge2);
 void					lmn_produce_output(t_lemin *lem,
 											t_itr *itr,
 											t_str_bld *bld);

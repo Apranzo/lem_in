@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:17:13 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 15:02:42 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/12 12:48:28 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,19 @@ static void		desc_level(t_room *child, t_room *parent)
 static int		bfs_rec(t_fck fck)
 {
 	t_node		*node;
+	t_edge		*edge;
 
 	node = fck.get_first(fck.room);
 	if (!hm_insert(fck.black, fck.room->name, fck.room))
 		return (0);
 	while (node)
 	{
-		if (!hm_lookup(fck.black, ((t_room *)node->data)->name) &&
+		edge = node->data;
+		if (!hm_lookup(fck.black, edge->dest->name) &&
 			!qu_contains(fck.qu, node->data))
 		{
-			fck.f_level(node->data, fck.room);
-			if (!qu_push_head(fck.qu, node->data))
+			fck.f_level(edge->dest, fck.room);
+			if (!qu_push_head(fck.qu, edge->dest))
 				return (0);
 		}
 		node = node->next;

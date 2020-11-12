@@ -28,6 +28,7 @@ int					read_intput(int fd, t_lemin *lem)
 	{
 		if (!lst_append(lem->raw, line))
 			ft_error("read_input Error allocation\n", -1);
+		line = NULL;
 	}
 	if (line)
 		if (!lst_append(lem->raw, line))
