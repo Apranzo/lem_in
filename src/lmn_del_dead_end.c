@@ -18,27 +18,27 @@ static void			delete_dead_end(t_room *room)
 	t_node			*tmp;
 	t_pntr			data;
 
-	if (!room->required && room->in->length && !room->out->length)
-	{
-		node = room->in->first;
-		while (node)
-		{
-			data = node->data;
-			tmp = node->next;
-			lst_rm_data(((t_room*)data)->out, (t_fequal) & room_equals, room);
-			lst_rm_data(room->in, (t_fequal) & room_equals, data);
-			node = tmp;
-		}
-	}
-	node = room->out->first;
-	while (!room->required && !room->in->length && room->out->length)
-	{
-		data = node->data;
-		tmp = node->next;
-		lst_rm_data(((t_room*)data)->in, (t_fequal) & room_equals, room);
-		lst_rm_data(room->out, (t_fequal) & room_equals, data);
-		node = tmp;
-	}
+//	if (!room->required && room->in->length && !room->out->length)
+//	{
+//		node = room->in->first;
+//		while (node)
+//		{
+//			data = node->data;
+//			tmp = node->next;
+//			lst_rm_data(((t_room*)data)->out, (t_fequal) & room_equals, room);
+//			lst_rm_data(room->in, (t_fequal) & room_equals, data);
+//			node = tmp;
+//		}
+//	}
+//	node = room->out->first;
+//	while (!room->required && !room->in->length && room->out->length)
+//	{
+//		data = node->data;
+//		tmp = node->next;
+//		lst_rm_data(((t_room*)data)->in, (t_fequal) & room_equals, room);
+//		lst_rm_data(room->out, (t_fequal) & room_equals, data);
+//		node = tmp;
+//	}
 }
 
 void				lmn_del_dead_end(const t_lst *lst)

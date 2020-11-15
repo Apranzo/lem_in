@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:56:15 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/14 18:00:01 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/15 16:56:14 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,15 @@ typedef struct s_room	t_room;
 typedef struct s_ant	t_ant;
 typedef struct s_paths_wrapper	t_pths;
 
+typedef struct			s_lmn_edge
+{
+	t_room				*dts;
+}						t_edge;
+
 struct					s_room
 {
 	char				*name;
 	t_lst				*out;
-	t_lst				*in;
 	t_ant				*ant;
 	int					asc_level;
 	int					desc_level;
@@ -112,5 +116,7 @@ int						prod_line(t_lemin *lem, t_itr *itr,	t_str_bld *bld, int printed);
 int						pass_ants(t_pth *pth, t_lemin *lemin);
 void					move(t_lst *lst);
 void					countres(t_lemin *lem);
+t_edge					*edg_new(t_room *dst);
+int						edge_eq(t_edge *ed1, t_edge *ed2);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:50 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/12 15:57:53 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/15 16:56:14 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void				parse_links(t_lemin *lem)
 	char			**linked;
 	t_room			*left;
 	t_room			*right;
+	t_edge			*to_r;
+	t_edge			*to_l;
 
 	while ((line = itr_next(lem->filtred)) && ft_cntwords(line, '-'))
 	{
@@ -81,14 +83,14 @@ void				parse_links(t_lemin *lem)
 			ft_error("Error", -1);
 		if (!(left = hm_lookup(lem->rooms, linked[0])) ||
 			!(right = hm_lookup(lem->rooms, linked[1])) ||
-			lst_contains(left->out, (t_fequal) & room_equals, right) ||
-			lst_contains(right->out, (t_fequal) & room_equals, left))
+			!(to_r = edg_new(right)) ||
+			!(to_l = edg_new(left)) ||
+			lst_contains(left->out, (t_fequal) & edge_eq, to_r) ||
+			lst_contains(right->out, (t_fequal) & edge_eq, to_l))
 			ft_error("Error", -1);
 		ft_freematr(linked);
-		lst_append(right->out, left);
-		lst_append(left->out, right);
-		lst_append(right->in, left);
-		lst_append(left->in, right);
+		lst_append(right->out, to_l);
+		lst_append(left->out, to_r);
 	}
 }
 

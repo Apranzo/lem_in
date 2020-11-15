@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:28 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 16:12:10 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/15 15:44:09 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_node			*get_out_first(t_room *room)
 
 t_node			*get_in_first(t_room *room)
 {
-	return (room->in->first);
+	return (room->out->first);
 }
 
 int				room_free(t_pntr data)
@@ -33,7 +33,7 @@ int				room_free(t_pntr data)
 	t_room		*room;
 
 	room = data;
-	lst_free(room->in, NULL);
+//	lst_free(room->in, NULL);
 	lst_free(room->out, NULL);
 	free(room->name);
 	free(room);
@@ -44,8 +44,8 @@ t_room			*lmn_init_room(t_room *new, char **room)
 {
 	if (!new || !room ||
 		!room[0] || !room[1] || !room[2] ||
-		!(new->out = lst_new()) ||
-		!(new->in = lst_new()))
+		!(new->out = lst_new()))
+//		!(new->in = lst_new()))
 		return (NULL);
 	new->name = strdup(room[0]);
 	new->cords.x = ft_atoi(room[1]);

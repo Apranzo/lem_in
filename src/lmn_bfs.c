@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:17:13 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/12 16:03:03 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/15 15:43:37 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,19 @@ static void		desc_level(t_room *child, t_room *parent)
 static int		bfs_rec(t_fck fck)
 {
 	t_node		*node;
+	t_edge		*edge;
 
 	node = fck.get_first(fck.room);
 	if (!hm_insert(fck.black, fck.room->name, fck.room))
 		return (0);
 	while (node)
 	{
-		if (!hm_lookup(fck.black, ((t_room *)node->data)->name) &&
-			!qu_contains(fck.qu, node->data))
+		edge = node->data;
+		if (!hm_lookup(fck.black, edge->dts->name) &&
+			!qu_contains(fck.qu, edge->dts))
 		{
-			fck.f_level(node->data, fck.room);
-			if (!qu_push_head(fck.qu, node->data))
+			fck.f_level(edge->dts, fck.room);
+			if (!qu_push_head(fck.qu, edge->dts))
 				return (0);
 		}
 		node = node->next;
@@ -82,7 +84,7 @@ void			lmt_bfs_desc(t_lemin *lem)
 		ft_error("Allocation error\n", -1);
 	while (!qu_is_empty(qu))
 		if (!bfs_rec((t_fck)
-				{qu_pop_tail(qu), black, qu, &desc_level, &get_in_first}))
+				{qu_pop_tail(qu), black, qu, &desc_level, &get_out_first}))
 			ft_error("Allocation error\n", -1);
 	hm_free(black, NULL, NULL);
 	qu_free(qu);

@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 19:30:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/14 18:09:22 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/15 17:25:10 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,24 @@ void		move(t_lst *lst)
 	t_ant		*prev;
 
 	node = lst->last;
-	prev = ((t_room*)node->prev->data)->ant;
+	prev = ((t_edge *)node->prev->data)->dts->ant;
 	if (node->prev && prev)
 	{
-		((t_room*)node->data)->ant = prev;
-		prev->room = node->data;
+		((t_edge *)node->data)->dts->ant = prev;
+		prev->room = ((t_edge *)node->data)->dts;;
 	}
 	node = node->prev;
 	while (node && node->prev)
 	{
-		prev = ((t_room*)node->prev->data)->ant;
-		((t_room*)node->data)->ant = prev;
+		prev = ((t_edge *)node->prev->data)->dts->ant;
+		((t_edge *)node->data)->dts->ant = prev;
 		if (prev)
-			prev->room = node->data;
-		((t_room*)node->data)->ant = ((t_room*)node->prev->data)->ant;
+			prev->room = ((t_edge *)node->data)->dts;
+		((t_edge *)node->data)->dts->ant = ((t_edge *)node->prev->data)->dts->ant;
 		node = node->prev;
 	}
 	if (node)
-		((t_room*)node->data)->ant = NULL;
+		((t_edge *)node->data)->dts->ant = NULL;
 }
 
 int				prod_line(t_lemin *lem, t_itr *itr,
@@ -61,15 +61,17 @@ int				prod_line(t_lemin *lem, t_itr *itr,
 int		pass_ants(t_pth *pth, t_lemin *lemin)
 {
 	t_room		*room;
+	t_edge 		*ed;
 
 	move(pth->rooms);
 	if (!qu_is_empty(lemin->qu)
 		&& lemin->amount - ((t_ant*)qu_peek_head(lemin->qu))->number + 1
 			>= pth->cost)
 	{
-		room = pth->rooms->first->data;
+		ed = pth->rooms->first->data;
+		room = ed->dts;
 		room->ant = qu_pop_head(lemin->qu);
-		room->ant->room = pth->rooms->first->data;
+		room->ant->room = ((t_edge*)pth->rooms->first->data)->dts;
 		room->ant->started = 1;
 	}
 	return (1);
