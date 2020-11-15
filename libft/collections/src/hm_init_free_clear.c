@@ -44,7 +44,7 @@ t_hm			*hm_init(t_hm *map, t_fhash hash_func, t_fequal equal_func)
 	return (NULL);
 }
 
-void			hm_clear(t_hm *hash_map)
+t_hm			*hm_clear(t_hm *hash_map)
 {
 	t_hm_entry	*rover;
 	t_hm_entry	*next;
@@ -63,6 +63,9 @@ void			hm_clear(t_hm *hash_map)
 		i++;
 	}
 	free(hash_map->table);
+	if (hm_allocate_table(hash_map))
+		return (hash_map);
+	return (NULL);
 }
 
 void			hm_free(t_hm *hash_map, t_ffree free_key, t_ffree free_val)

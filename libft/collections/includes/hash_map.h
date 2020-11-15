@@ -50,7 +50,7 @@ void						hm_free_entry(t_hm *hash_map,
 								t_hm_entry *entry);
 int							hm_enlarge(t_hm *hm);
 t_lst						*hm_lst(t_hm *hash_map, t_fprdct prdct);
-void						hm_clear(t_hm *hash_map);
+t_hm						*hm_clear(t_hm *hash_map);
 t_hm						*hm_init(t_hm *map, t_fhash hash_func,
 									t_fequal equal_func);
 t_hm						*hm_new(t_fhash hash_func,

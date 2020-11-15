@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/12 18:53:43 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/14 20:19:26 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ static	void 		pr(t_lemin *lem)
 		room = itr_next(itr);
 		ft_printf("name %s\tasc: %d\tdes: %d\n", room->name, room->asc_level, room->desc_level);
 	}
-
-
 }
 
 static t_room 		*mindesc(t_room *room, t_lemin *lem)
@@ -85,7 +83,6 @@ static t_lst		*shortest(t_lemin *lem)
 
 	room = lem->start;
 	pth = lst_new();
-//	node = room->out->first;
 	while ((room = mindesc(room, lem)))
 	{
 		if (lst_contains(pth, (t_fequal) & room_equals, room))
@@ -102,33 +99,72 @@ static t_lst		*shortest(t_lemin *lem)
 	return (NULL);
 }
 
-void				lmn_find_path(t_lemin *lem)
+t_pths				*lmn_find_path(t_lemin *lem)
 {
 	t_node *node;
-	t_node *last;
+	t_pths *pths;
 	t_pth *path;
-	int  i = 0;
-//	lst_sort(lem->start->out, (t_fcompare) & comp_bfs_asc);
+	size_t  i = 0;
+	t_itr 			*itr;
+	t_pth 			*lst;
 
-	while (i * 3 < lem->start->out->length)
-	{
-		last = lem->start->out->last;
-		lst_rm_entry(lem->start->out, last);
-		lst_append(lem->start->out, last->data);
-		i++;
-	}
+
 	node = lem->start->out->first;
-	if (!(lem->paths = lst_new()))
-		ft_error("main alloc error", -1);
-	while (node) {
-//		br = lst_new();
+
+	pths = ft_memalloc(sizeof(t_pths));
+	pths->paths = lst_new();
+	while (node)
+	{
 		path = ft_memalloc(sizeof(t_pth));
-//		lst_append(br, node->data);
-		if (!(path->rooms = shortest(lem)))
+		if (!(path->rooms = shortest(lem))) {
 			free(path);
+		}
 		else
-			lst_append(lem->paths, path);
+			lst_append(pths->paths, path);
 		node = node->next;
+	}
+//	itr = lst_itr_load(lem->paths, NULL, NULL);
+////	ft_printf("plendgh: %d\n", lem->paths->length);
+//	while (itr_has_more(itr))
+//	{
+//		lst = itr_next(itr);
+//		i += lst->rooms->length;
+//		ft_printf("len: %d\t", lst->rooms->length);
+//
+//	}
+//	ft_printf("\nrat: %d\t", i / lem->paths->length);
+//	if (!lem->paths->length)
+//		ft_error("Error", -1);
+	if (!pths->paths->length)
+		return (NULL);
+	return (pths);
+}
+
+void				lmn_brut(t_lemin *lem)
+{
+	t_pth 			*shrt;
+	t_itr			*sitr;
+	t_itr			*pitr;
+	t_room 			*name;
+	t_pths			*pths;
+	int i = 0;
+
+	pths = lmn_find_path(lem);
+	lst_append(lem->paths, pths);
+	pitr = lst_itr_load(pths->paths, NULL, NULL);
+	lst_sort(pths->paths, (t_fcompare) & cmpr_lst_ln);
+	while (itr_has_more(pitr) && i < 250)
+	{
+		shrt = itr_next(pitr);
+		sitr = lst_itr_load(shrt->rooms, NULL, NULL);
+		while (itr_has_more(sitr) && i++ < 250)
+		{
+			hm_clear(lem->inpath);
+			name = itr_next(sitr);
+			hm_insert(lem->inpath, name->name, name->name);
+			if((pths = lmn_find_path(lem)))
+				lst_append(lem->paths, pths);
+		}
 	}
 	if (!lem->paths->length)
 		ft_error("Error", -1);
@@ -164,8 +200,8 @@ static void			free_lemin(t_lemin *lemin)
 int					main(void)
 {
 	static t_lemin	*lemin;
-	t_lst			*lst;
-	freopen("map", "r", stdin);
+
+//	freopen("map", "r", stdin);
 
 
 	if (!(lemin = ft_memalloc(sizeof(t_lemin))) ||
@@ -175,21 +211,25 @@ int					main(void)
 	parse_ants_amount(lemin);
 	lemin->rooms = hm_new(&ft_str_hash, (t_fequal) & ft_strequ);
 	lemin->inpath = hm_new(&ft_str_hash, (t_fequal) & ft_strequ);
+	lemin->paths = lst_new();
 	parse_rooms(lemin);
 	parse_links(lemin);
 	if (!lemin->start || !lemin->end || !lemin->start->out)
 		ft_error("Error", -1);
-	create_ants(lemin);
-	lmn_bfs_asc(lemin);
-	lst = hm_lst(lemin->rooms, NULL);
-	lst_sort(lst, (t_fcompare) & comp_bfs_asc);
+//	create_ants(lemin);
+//	lmn_bfs_asc(lemin);
+//	lst = hm_lst(lemin->rooms, NULL);
+//	lst_sort(lst, (t_fcompare) & comp_bfs_asc);
 //	lmn_check_unuses(lst);
 //	lmn_alight(lst);
 //	lmn_del_dead_end(lst);
 	lmt_bfs_desc(lemin);
 //	pr(lemin);
-	lmn_find_path(lemin);
-	print_input(lemin);
-	print_res(lemin);
+	lmn_brut(lemin);
+	lmn_prepare_paths(lemin);
+//	lmn_find_path(lemin);
+//	print_input(lemin);
+	countres(lemin);
+//	print_res(lemin);
 	free_lemin(lemin);
 }

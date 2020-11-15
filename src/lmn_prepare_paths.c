@@ -6,13 +6,13 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:22:49 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/10 16:05:50 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/14 17:40:16 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lem_in.h"
 
-static int			cmpr_lst_ln(t_pth *lft, t_pth *rght)
+int			cmpr_lst_ln(t_pth *lft, t_pth *rght)
 {
 	return (lft->rooms->length - rght->rooms->length);
 }
@@ -38,7 +38,18 @@ static void			sum_prev_ln(t_node *node)
 
 void				lmn_prepare_paths(const t_lemin *lem)
 {
-	lst_sort(lem->paths, (t_fcompare) & cmpr_lst_ln);
-	lst_foreach(lem->paths, (t_fmap) & sum_prev_ln);
-	lst_sort(lem->paths, (t_fcompare) & cmpr_lst_ln_desc);
+	t_lst			*paths;
+	t_pths 			*pth;
+	t_node			*node;
+
+	paths = lem->paths;
+	node = paths->first;
+	while (node)
+	{
+		pth = node->data;
+		lst_sort(pth->paths, (t_fcompare) & cmpr_lst_ln);
+		lst_foreach(pth->paths, (t_fmap) & sum_prev_ln);
+		lst_sort(pth->paths, (t_fcompare) & cmpr_lst_ln_desc);
+		node = node->next;
+	}
 }

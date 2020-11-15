@@ -6,13 +6,13 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 19:30:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/10 19:56:19 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/14 18:09:22 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lem_in.h"
 
-static void		move(t_lst *lst)
+void		move(t_lst *lst)
 {
 	t_node		*node;
 	t_ant		*prev;
@@ -38,7 +38,7 @@ static void		move(t_lst *lst)
 		((t_room*)node->data)->ant = NULL;
 }
 
-static int		prod_line(t_lemin *lem, t_itr *itr,
+int				prod_line(t_lemin *lem, t_itr *itr,
 							t_str_bld *bld, int printed)
 {
 	t_ant		*ant;
@@ -58,7 +58,7 @@ static int		prod_line(t_lemin *lem, t_itr *itr,
 	return (printed);
 }
 
-static int		pass_ants(t_pth *pth, t_lemin *lemin)
+int		pass_ants(t_pth *pth, t_lemin *lemin)
 {
 	t_room		*room;
 
