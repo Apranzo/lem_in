@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:56:15 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/14 18:00:01 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/15 18:53:31 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ void					lmt_bfs_desc(t_lemin *lem);
 int						room_equals(t_room *room1, t_room *room2);
 int						room_free(t_pntr room);
 int						cmpr_lst_ln(t_pth *lft, t_pth *rght);
+int						cmpr_lst_ln_desc(t_pth *lft, t_pth *rght);
 int						prod_line(t_lemin *lem, t_itr *itr,	t_str_bld *bld, int printed);
 int						pass_ants(t_pth *pth, t_lemin *lemin);
 void					move(t_lst *lst);

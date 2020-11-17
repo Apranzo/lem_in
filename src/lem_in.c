@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/14 20:19:26 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/17 20:15:38 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,8 @@ t_pths				*lmn_find_path(t_lemin *lem)
 	t_node *node;
 	t_pths *pths;
 	t_pth *path;
-	size_t  i = 0;
-	t_itr 			*itr;
-	t_pth 			*lst;
-
 
 	node = lem->start->out->first;
-
 	pths = ft_memalloc(sizeof(t_pths));
 	pths->paths = lst_new();
 	while (node)
@@ -123,18 +118,6 @@ t_pths				*lmn_find_path(t_lemin *lem)
 			lst_append(pths->paths, path);
 		node = node->next;
 	}
-//	itr = lst_itr_load(lem->paths, NULL, NULL);
-////	ft_printf("plendgh: %d\n", lem->paths->length);
-//	while (itr_has_more(itr))
-//	{
-//		lst = itr_next(itr);
-//		i += lst->rooms->length;
-//		ft_printf("len: %d\t", lst->rooms->length);
-//
-//	}
-//	ft_printf("\nrat: %d\t", i / lem->paths->length);
-//	if (!lem->paths->length)
-//		ft_error("Error", -1);
 	if (!pths->paths->length)
 		return (NULL);
 	return (pths);
@@ -152,12 +135,12 @@ void				lmn_brut(t_lemin *lem)
 	pths = lmn_find_path(lem);
 	lst_append(lem->paths, pths);
 	pitr = lst_itr_load(pths->paths, NULL, NULL);
-	lst_sort(pths->paths, (t_fcompare) & cmpr_lst_ln);
-	while (itr_has_more(pitr) && i < 250)
+//	lst_sort(pths->paths, (t_fcompare) & cmpr_lst_ln);
+	while (itr_has_more(pitr) && i < 100)
 	{
 		shrt = itr_next(pitr);
 		sitr = lst_itr_load(shrt->rooms, NULL, NULL);
-		while (itr_has_more(sitr) && i++ < 250)
+		while (itr_has_more(sitr) && i++ < 100)
 		{
 			hm_clear(lem->inpath);
 			name = itr_next(sitr);
@@ -170,21 +153,21 @@ void				lmn_brut(t_lemin *lem)
 		ft_error("Error", -1);
 }
 
-void				delete_unnecerarry(t_lemin *lem)
-{
-	t_lst			*lst;
-
-	lst = hm_lst(lem->rooms, NULL);
-	lst_sort(lst, (t_fcompare) & comp_bfs_asc);
-	lmn_check_unuses(lst);
-	lmn_alight(lst);
-	lmn_del_dead_end(lst);
-	lmn_del_input_forks(lst);
-	lmt_bfs_desc(lem);
-	lst_sort(lst, (t_fcompare) & comp_bfs_desc);
-	lmn_del_output_forks(lst);
-	lst_free(lst, NULL);
-}
+//void				delete_unnecerarry(t_lemin *lem)
+//{
+//	t_lst			*lst;
+//
+//	lst = hm_lst(lem->rooms, NULL);
+//	lst_sort(lst, (t_fcompare) & comp_bfs_asc);
+//	lmn_check_unuses(lst);
+////	lmn_alight(lst);
+////	lmn_del_dead_end(lst);
+////	lmn_del_input_forks(lst);
+////	lmt_bfs_desc(lem);
+////	lst_sort(lst, (t_fcompare) & comp_bfs_desc);
+////	lmn_del_output_forks(lst);
+//	lst_free(lst, NULL);
+//}
 
 static void			free_lemin(t_lemin *lemin)
 {
@@ -201,7 +184,7 @@ int					main(void)
 {
 	static t_lemin	*lemin;
 
-//	freopen("map", "r", stdin);
+	freopen("map", "r", stdin);
 
 
 	if (!(lemin = ft_memalloc(sizeof(t_lemin))) ||
@@ -218,6 +201,8 @@ int					main(void)
 		ft_error("Error", -1);
 //	create_ants(lemin);
 //	lmn_bfs_asc(lemin);
+//	pr(lemin);
+//	delete_unnecerarry(lemin);
 //	lst = hm_lst(lemin->rooms, NULL);
 //	lst_sort(lst, (t_fcompare) & comp_bfs_asc);
 //	lmn_check_unuses(lst);

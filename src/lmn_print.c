@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:19:05 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/14 20:18:56 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/17 20:13:37 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,36 @@ void			print_best(t_lemin *lem)
 
 }
 
+void			lmn_reset(t_lemin *lem)
+{
+	t_itr			*itr;
+	t_lst			*lst;
+	t_room			*room;
+	t_ant			*ant;
+
+
+	lem->finished = 0;
+	lst = hm_lst(lem->rooms, NULL);
+	itr = lst_itr_load(lst, NULL, NULL);
+	while (itr_has_more(itr))
+	{
+		room = itr_next(itr);
+		room->ant = NULL;
+	}
+	itr = lst_itr_load(lem->ants, itr, NULL);
+	while (itr_has_more(itr))
+	{
+		ant = itr_next(itr);
+		ant->finished = 0;
+		ant->room = NULL;
+		ant->started = 0;
+	}
+	qu_clear(lem->qu);
+	if (!(lem->qu = qu_by_lst(lem->ants)))
+		ft_error("Error", -1);
+	itr_free(itr);
+}
+
 void			countres(t_lemin *lem)
 {
 	t_lst			*paths;
@@ -72,16 +102,15 @@ void			countres(t_lemin *lem)
 	t_node			*node;
 	int				printed;
 	t_itr			*itr;
-	char			*output;
 
 	paths = lem->paths;
 	pnode = paths->first;
+	create_ants(lem);
 	while (pnode)
 	{
 		pth = pnode->data;
 		printed = 0;
-		create_ants(lem);
-		lem->finished = 0;
+		lmn_reset(lem);
 		itr = lst_itr_load(lem->ants, NULL, NULL);
 		t_str_bld	*bld;
 		if (!(bld = sb_create("\n")) || (!bld->len))
@@ -100,7 +129,6 @@ void			countres(t_lemin *lem)
 		if (!(pth->output = sb_concat(bld)))
 			ft_error("Error", -1);
 		pth->len = ft_cntwords(pth->output, '\n');
-//		ft_printf("%d\n", ft_cntwords(pth->output, '\n'));
 		pnode = pnode->next;
 	}
 	print_best(lem);

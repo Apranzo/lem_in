@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:22:49 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/14 17:40:16 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/15 18:45:19 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int			cmpr_lst_ln(t_pth *lft, t_pth *rght)
 	return (lft->rooms->length - rght->rooms->length);
 }
 
-static int			cmpr_lst_ln_desc(t_pth *lft, t_pth *rght)
+int			cmpr_lst_ln_desc(t_pth *lft, t_pth *rght)
 {
 	return (cmpr_lst_ln(lft, rght) * -1);
 }

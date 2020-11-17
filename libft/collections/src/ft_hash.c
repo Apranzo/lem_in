@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 15:06:51 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/08/08 16:46:16 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/15 18:45:19 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,9 @@ size_t				int_hash(t_pntr pointer)
 size_t				pointer_hash(t_pntr pointer)
 {
 	return ((size_t)pointer);
+}
+
+int		pointer_eq(t_pntr const pntr1, t_pntr const pntr2)
+{
+	return (pntr1 == pntr2);
 }
