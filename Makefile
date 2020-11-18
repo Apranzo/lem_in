@@ -6,7 +6,7 @@
 #    By: dmarsell <dmarsell@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 01:04:56 by cshinoha          #+#    #+#              #
-#    Updated: 2020/11/18 16:22:19 by cshinoha         ###   ########.fr        #
+#    Updated: 2020/11/18 17:03:08 by cshinoha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,8 @@ SRCNAME		= lem_in.c					\
               lmn_produce_output.c		\
               lmn_read.c				\
               lmn_rooms.c				\
-              et_tu_brute.c
+              et_tu_brute.c				\
+              lmn_shortest.c
 
 SRC			= $(addprefix $(SRCDIR)/, $(SRCNAME))
 OBJ			= $(addprefix $(OBJDIR)/, $(SRCNAME:.c=.o))
