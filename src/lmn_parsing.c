@@ -21,7 +21,6 @@ static t_room		*lmn_check_status(t_lemin *lem, t_room *room, char **line)
 		else
 		{
 			*line = itr_next(lem->filtred);
-			room->required = 1;
 			lem->end = room;
 			return (lmn_check_status(lem, room, line));
 		}
@@ -33,7 +32,6 @@ static t_room		*lmn_check_status(t_lemin *lem, t_room *room, char **line)
 		else
 		{
 			*line = itr_next(lem->filtred);
-			room->required = 1;
 			lem->start = room;
 			return (lmn_check_status(lem, room, line));
 		}
@@ -60,7 +58,7 @@ void				parse_rooms(t_lemin *lem)
 			ft_error("Error", -1);
 		hm_insert(cords, ft_strchr(line, ' '), ft_strchr(line, ' '));
 		if (hm_lookup(lem->rooms, new->name)
-			||!hm_insert(lem->rooms, new->name, new))
+			|| !hm_insert(lem->rooms, new->name, new))
 			ft_error("Error", -1);
 	}
 	if (!itr_has_more(lem->filtred))

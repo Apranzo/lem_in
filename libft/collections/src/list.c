@@ -17,18 +17,21 @@ void			lst_clear(t_lst *lst, t_ffree free_data)
 	t_node		*entry;
 	t_node		*next;
 
-	entry = lst->first;
-	while (entry)
+	if (lst)
 	{
-		next = entry->next;
-		if (free_data)
-			free_data(entry->data);
-		free(entry);
-		entry = next;
+		entry = lst->first;
+		while (entry)
+		{
+			next = entry->next;
+			if (free_data)
+				free_data(entry->data);
+			free(entry);
+			entry = next;
+		}
+		lst->first = NULL;
+		lst->last = NULL;
+		lst->length = 0;
 	}
-	lst->first = NULL;
-	lst->last = NULL;
-	lst->length = 0;
 }
 
 void			lst_free(t_lst *lst, t_ffree free_data)

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-##    By: cshinoha <cshinoha@student.42.fr>         +#+  +:+       +#+         #
+#    By: dmarsell <dmarsell@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 01:04:56 by cshinoha          #+#    #+#              #
-#    Updated: 2020/11/15 18:45:19 by cshinoha         ###   ########.fr        #
+#    Updated: 2020/11/18 16:22:19 by cshinoha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ LIBNAME		= libft.a
 
 GCC			= /usr/bin/clang
 WOPT		= -Wall -Wextra -Werror
-OOPT		= -g
+OOPT		= -O2
 IOPT		= -I $(INCDIR)
 
 AR			= /usr/bin/ar -rc
@@ -32,20 +32,16 @@ INCDIR		= includes
 DPNDIR		= depends
 
 SRCNAME		= lem_in.c					\
-              lmn_alight.c				\
               lmn_ants.c				\
               lmn_bfs.c					\
-              lmn_check_unuses.c		\
-              lmn_del_dead_end.c		\
-              lmn_del_input_forks.c		\
-              lmn_del_output_forks.c	\
               lmn_parsing.c				\
               lmn_path.c				\
               lmn_prepare_paths.c		\
               lmn_print.c				\
               lmn_produce_output.c		\
               lmn_read.c				\
-              lmn_rooms.c
+              lmn_rooms.c				\
+              et_tu_brute.c
 
 SRC			= $(addprefix $(SRCDIR)/, $(SRCNAME))
 OBJ			= $(addprefix $(OBJDIR)/, $(SRCNAME:.c=.o))
@@ -56,7 +52,8 @@ LFTOBJ		= $(LIBDIR)/objects/*.o
 
 CLEAR       = "\033[K"
 EOC			= "\033[0;0m"
-GREEN		= "\033[0;32m"
+GREEN		= "\033[32m"
+TURQUOISE   = "\033[36m"
 CR			= "\r"$(CLEAR)
 
 all: $(LFT) $(NAME)
@@ -64,23 +61,29 @@ all: $(LFT) $(NAME)
 -include $(DPN)
 
 $(NAME): $(LFT) $(OBJ)
-	$(GCC) $(WOPT) $(OOPT) $(IOPT) $(OBJ) -o $(NAME) -L $(LIBDIR) -lft
-	@printf $(CR)$(GREEN)"✓ $(NAME) is created\n"$(EOC)
+	@$(GCC) $(WOPT) $(OOPT) $(IOPT) $(OBJ) -o $(NAME) -L $(LIBDIR) -lft
+	@echo "\n"
+	@echo "\033[32m [OK] \033[0m\033[32mExecution file:\033[36m" $(NAME)
+	@echo $(EOC)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@$(MKDIR) $(OBJDIR)
-	$(GCC) $(WOPT) $(OOPT) -MMD -MP -c $< -o $@
+	@$(GCC) $(WOPT) $(OOPT) -MMD -MP -c $< -o $@
+	@echo "\033[32m [OK] \033[0m\033[32mCompiling:\033[36m " $@
 
 $(LFT):
-	$(MAKE) $(LIBDIR)
+	@$(MAKE) $(LIBDIR)
 
 clean:
-	$(RM) $(OBJ) $(OBJDIR)
-	$(MAKE) $(LIBDIR) clean
+	@$(RM) $(OBJ) $(OBJDIR)
+	@$(MAKE) $(LIBDIR) clean
+	@echo "\033[31m [OK] \033[0m\033[31mDeleting catalog and binaries:\033[33m " $(OBJDIR)
 
 fclean: clean
-	$(RM) $(NAME)
-	$(MAKE) $(LIBDIR) fclean
+	@$(RM) $(NAME)
+	@$(MAKE) $(LIBDIR) fclean
+	@echo "\033[31m [OK] \033[0m\033[31mDeleting execution file:\033[33m " $(NAME)
+	@echo $(EOC)
 
 re: fclean all
 

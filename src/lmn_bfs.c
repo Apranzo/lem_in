@@ -6,19 +6,11 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:17:13 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/15 18:45:19 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/18 15:16:53 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lem_in.h"
-
-static void		asc_level(t_room *child, t_room *parent)
-{
-	child->asc_level = child->asc_level > 0 &&
-						child->asc_level < parent->asc_level + 1 ?
-						child->asc_level :
-						parent->asc_level + 1;
-}
 
 static void		desc_level(t_room *child, t_room *parent)
 {
@@ -47,26 +39,6 @@ static int		bfs_rec(t_fck fck)
 		node = node->next;
 	}
 	return (1);
-}
-
-void			lmn_bfs_asc(t_lemin *lem)
-{
-	t_hm		*black;
-	t_qu		*qu;
-
-	lem->start->asc_level = 0;
-	if (!(qu = qu_new())
-		|| !(black = hm_new(&ft_str_hash, (t_fequal) & ft_strequ))
-		|| !(qu_push_head(qu, lem->start))
-		|| !(hm_insert(black, lem->end->name, lem->end->name)))
-		ft_error("Allocation error\n", -1);
-	while (!qu_is_empty(qu))
-		if (!bfs_rec((t_fck)
-				{qu_pop_tail(qu), black, qu, &asc_level, &get_out_first}))
-			ft_error("Allocation error\n", -1);
-	hm_free(black, NULL, NULL);
-	qu_free(qu);
-	lem->end->asc_level = INT_MAX;
 }
 
 void			lmt_bfs_desc(t_lemin *lem)

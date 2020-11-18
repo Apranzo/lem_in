@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:19:17 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/15 18:45:19 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/18 15:44:01 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int					read_intput(int fd, t_lemin *lem)
 	if (line)
 		if (!lst_append(lem->raw, line))
 			ft_error("read_input Error allocation\n", -1);
-	if (res < 0	|| !lem->raw->length)
+	if (res < 0 || !lem->raw->length)
 		ft_error("Error", -2);
-	if ( !(lem->filtred = lst_itr_load(lem->raw, NULL,
+	if (!(lem->filtred = lst_itr_load(lem->raw, NULL,
 										(t_fprdct)input_filter_predict)))
 		ft_error("filtered alloc error", -1);
 	return (!res);

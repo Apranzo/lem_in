@@ -53,7 +53,6 @@ t_room			*lmn_init_room(t_room *new, char **room)
 	if (!ft_atoi_check(new->cords.x, room[1])
 		|| !ft_atoi_check(new->cords.y, room[2]))
 		return (NULL);
-	new->asc_level = -1;
 	new->desc_level = -1;
 	ft_freematr(room);
 	return (new);

@@ -12,12 +12,12 @@
 
 #include "../includes/lem_in.h"
 
-int			cmpr_lst_ln(t_pth *lft, t_pth *rght)
+int					cmpr_lst_ln(t_pth *lft, t_pth *rght)
 {
 	return (lft->rooms->length - rght->rooms->length);
 }
 
-int			cmpr_lst_ln_desc(t_pth *lft, t_pth *rght)
+int					cmpr_lst_ln_desc(t_pth *lft, t_pth *rght)
 {
 	return (cmpr_lst_ln(lft, rght) * -1);
 }
@@ -39,7 +39,7 @@ static void			sum_prev_ln(t_node *node)
 void				lmn_prepare_paths(const t_lemin *lem)
 {
 	t_lst			*paths;
-	t_pths 			*pth;
+	t_pths			*pth;
 	t_node			*node;
 
 	paths = lem->paths;

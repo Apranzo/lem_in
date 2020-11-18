@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 16:30:27 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/15 18:45:19 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/18 14:58:19 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,15 @@ static void			str_free(t_str *str)
 
 void				sb_reset(t_str_bld *sb)
 {
-	lst_free(sb->fragments, (t_ffree) & str_free);
+	lst_clear(sb->fragments, (t_ffree) & str_free);
+	sb->concated = NULL;
 	sb->len = 0;
 }
 
 void				sb_free(t_str_bld *sb)
 {
-	sb_reset(sb);
+	lst_free(sb->fragments, (t_ffree) & str_free);
+	sb->concated = NULL;
+	sb->len = 0;
 	free(sb);
 }

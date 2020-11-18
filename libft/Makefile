@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+         #
+#    By: dmarsell <dmarsell@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/28 23:59:53 by cmeowth           #+#    #+#              #
-#    Updated: 2020/08/10 20:22:25 by cshinoha         ###   ########.fr        #
+#    Updated: 2020/11/09 14:49:22 by dmarsell         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -175,25 +175,29 @@ CR			= "\r"$(CLEAR)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(AR) $(NAME) $(OBJ)
-	$(RANLIB) $(NAME)
-	-@printf $(CR)$(GREEN)"✓ $(NAME) is created\n"$(EOC)
+	@$(AR) $(NAME) $(OBJ)
+	@$(RANLIB) $(NAME)
+	@echo "\n"
+	@echo "\033[32m [OK] \033[0m\033[32mCompiling library: \033[36m " $(NAME)
+	@echo "\n"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	echo $(SRC)
-	-@$(MKDIR) $(OBJDIR)/printf/src/types
-	-@$(MKDIR) $(OBJDIR)/printf/src/tools
-	-@$(MKDIR) $(OBJDIR)/printf/src/specs
-	-@$(MKDIR) $(OBJDIR)/core/src
-	-@$(MKDIR) $(OBJDIR)/collections/src
-	-@$(MKDIR) $(OBJDIR)/string/src
-	$(GCC) $(WOPT) $(OOPT) $(IOPT) -c $< -o $@
+	@$(MKDIR) $(OBJDIR)/printf/src/types
+	@$(MKDIR) $(OBJDIR)/printf/src/tools
+	@$(MKDIR) $(OBJDIR)/printf/src/specs
+	@$(MKDIR) $(OBJDIR)/core/src
+	@$(MKDIR) $(OBJDIR)/collections/src
+	@$(MKDIR) $(OBJDIR)/string/src
+	@$(GCC) $(WOPT) $(OOPT) $(IOPT) -g -c $< -o $@
+	@echo "\033[32m [OK] \033[0m\033[32mCompiling:\033[36m " $@
 
 clean:
-	$(RM) $(OBJDIR)
+	@$(RM) $(OBJDIR)
+	@echo "\033[31m [OK] \033[0m\033[31mDeleting catalog and binaries:\033[33m " $(OBJDIR)
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
+	@echo "\033[31m [OK] \033[0m\033[31mDeleting execution file:\033[33m " $(NAME)
 
 re: fclean all
 
