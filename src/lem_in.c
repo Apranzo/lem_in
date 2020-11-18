@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/18 19:30:52 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/18 19:44:06 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static void			free_lemin(t_lemin *lemin)
 	lst_free(lemin->paths, (t_ffree) & free_pathes_wrapper);
 	lst_free(lemin->ants, free);
 	qu_free(lemin->qu);
+	lst_free(lemin->rooms_lst, NULL);
 	hm_free(lemin->rooms, NULL, (t_ffree) & room_free);
 	hm_free(lemin->inpath, NULL, NULL);
 	free(lemin);
@@ -38,7 +39,7 @@ int					main(void)
 	parse_ants_amount(lemin);
 	parse_rooms(lemin);
 	parse_links(lemin);
-	if (!lemin->start || !lemin->end || !lemin->start->out)
+	if (!(lemin->rooms_lst = hm_lst(lemin->rooms, NULL)) || !lemin->start || !lemin->end || !lemin->start->out)
 		ft_error("Error", -1);
 	create_ants(lemin);
 	lmt_bfs_desc(lemin);

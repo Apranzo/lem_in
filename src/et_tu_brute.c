@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 17:00:53 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/18 17:42:32 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/18 19:07:33 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,16 @@ static void			ants_reset(t_lemin *lem)
 void				lmn_reset(t_lemin *lem)
 {
 	t_itr			*itr;
-	t_lst			*lst;
 	t_room			*room;
 
 	lem->finished = 0;
-	lst = hm_lst(lem->rooms, NULL);
-	itr = lst_itr_load(lst, NULL, NULL);
+	itr = lst_itr_load(lem->rooms_lst, NULL, NULL);
 	while (itr_has_more(itr))
 	{
 		room = itr_next(itr);
 		room->ant = NULL;
 	}
 	ants_reset(lem);
-	lst_free(lst, NULL);
 	itr_free(itr);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:56:15 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/18 17:12:39 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/18 19:51:55 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define START "##start"
 # define END "##end"
 # define JAIL "#"
-# define NOTHING_ELSE 100
+# define NOTHING_ELSE 150
 
 typedef struct s_room	t_room;
 typedef struct s_ant	t_ant;
@@ -52,6 +52,7 @@ typedef struct			s_lemin
 	size_t				amount;
 	size_t				finished;
 	t_hm				*rooms;
+	t_lst 				*rooms_lst;
 	t_hm				*inpath;
 	t_room				*start;
 	t_room				*end;
