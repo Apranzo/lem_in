@@ -100,7 +100,7 @@ int							ft_gnl(const int fd, char **line)
 	char					*tmp;
 
 	ll = NULL;
-	if (fd < 0 || line == NULL || !(ll = init_static_list(&l, fd)))
+	if (fd < 0 || !line || !(ll = init_static_list(&l, fd)))
 		return (-1);
 	while (!ft_strchr(((t_stmt *)ll->data)->res, '\n') &&
 						(ret = read(fd, buff, BUFF_SIZE)) > 0)
@@ -111,7 +111,7 @@ int							ft_gnl(const int fd, char **line)
 				ft_strjoin(((t_stmt *)ll->data)->res, buff);
 		free(tmp);
 	}
-	if ((ret = get_line(line, ((t_stmt *)ll->data), ret)) <= 0)
+	if ((ret = get_line(line, ((t_stmt *)ll->data), ret)) <= 0 || !line)
 		freenode(ll, &l);
 	return (ret);
 }
