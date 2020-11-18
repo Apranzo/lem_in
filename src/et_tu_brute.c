@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 17:00:53 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/18 17:03:53 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/18 17:41:17 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,22 @@ static t_pths		*lmn_find_path(t_lemin *lem)
 }
 
 static void			lmn_inner_brut(t_lemin *lem,
-									t_itr *pitr, t_pths *pths, t_itr *sitr)
+									t_itr *pitr, t_pths *pths, t_itr **sitr)
 {
 	t_pth			*shrt;
 	t_room			*room;
 
 	shrt = itr_next(pitr);
-	sitr = lst_itr_load(shrt->rooms, sitr, NULL);
-	while (itr_has_more(sitr) && lem->count++ < NOTHING_ELSE)
+	*sitr = lst_itr_load(shrt->rooms, *sitr, NULL);
+	while (itr_has_more(*sitr) && lem->count++ < NOTHING_ELSE)
 	{
 		hm_clear(lem->inpath);
-		room = itr_next(sitr);
+		room = itr_next(*sitr);
 		hm_insert(lem->inpath, room->name, room->name);
 		if ((pths = lmn_find_path(lem)))
 			lst_append(lem->paths, pths);
 	}
-	itr_reset(sitr);
+	itr_reset(*sitr);
 }
 
 static void			ants_reset(t_lemin *lem)
@@ -106,9 +106,7 @@ void				lmn_brut(t_lemin *lem)
 	pitr = lst_itr_load(pths->paths, NULL, NULL);
 	sitr = NULL;
 	while (itr_has_more(pitr) && lem->count < NOTHING_ELSE)
-	{
-		lmn_inner_brut(lem, pitr, pths, sitr);
-	}
+		lmn_inner_brut(lem, pitr, pths, &sitr);
 	itr_free(pitr);
 	itr_free(sitr);
 	if (!lem->paths->length)
