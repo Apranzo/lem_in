@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 17:00:53 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/18 17:41:17 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/18 17:42:32 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,8 @@ void				lmn_brut(t_lemin *lem)
 	t_itr			*pitr;
 	t_pths			*pths;
 
-	pths = lmn_find_path(lem);
+	if (!(pths = lmn_find_path(lem)))
+		ft_error("Error", -1);
 	lst_append(lem->paths, pths);
 	pitr = lst_itr_load(pths->paths, NULL, NULL);
 	sitr = NULL;

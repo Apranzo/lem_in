@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 19:30:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/18 15:34:07 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/18 15:43:09 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void			move(t_lst *lst)
 	t_ant		*prev;
 
 	node = lst->last;
-	prev = ((t_room*)node->prev->data)->ant;
+	prev = node->prev ? ((t_room*)node->prev->data)->ant : NULL;
 	if (node->prev && prev)
 	{
 		((t_room*)node->data)->ant = prev;
