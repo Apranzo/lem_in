@@ -95,7 +95,6 @@ void				prod(t_lemin *lem, t_pths *pth, t_str_bld *bld, t_itr **itr)
 	}
 	if (!(pth->output = sb_concat(bld)))
 		ft_error("Error", -1);
-//	pth->bld = bld;
 	pth->len = bld->len;
 }
 
