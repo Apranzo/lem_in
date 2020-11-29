@@ -6,24 +6,53 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:19:05 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 16:48:05 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 17:59:38 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lem_in.h"
 
+static void			prp(t_lst *p, t_lemin *lem)
+{
+	t_pth			*pth;
+	t_itr			*itr;
+	t_itr			*eitr;
+	t_room			*ed;
+
+	itr = lst_itr_load(p, NULL, NULL);
+	while (itr_has_more(itr))
+	{
+		pth = itr_next(itr);
+		eitr = lst_itr_load(pth->rooms, NULL, NULL);
+		ft_vfprintf(lem->opt->out, "len: \t%d\n", pth->rooms->length);
+		while (itr_has_more(eitr))
+		{
+			ed = itr_next(eitr);
+			ft_vfprintf(lem->opt->out, "-> %s ", ed->name);
+		}
+		ft_vfprintf(lem->opt->out, "\n");
+		itr_reset(eitr);
+	}
+	ft_vfprintf(lem->opt->out, "\n");
+	itr_free(itr);
+	itr_free(eitr);
+}
+
 void				print_input(const t_lemin *lem)
 {
 	t_itr			*itr;
 
-	itr = lst_itr_load(lem->raw, NULL, NULL);
-	while (itr_has_more(itr))
-		ft_vfprintf(lem->opt->out, "%s\n", itr_next(itr));
-	ft_vfprintf(lem->opt->out,"\n");
-	itr_free(itr);
+	if (lem->opt->req == -1)
+	{
+		itr = lst_itr_load(lem->raw, NULL, NULL);
+		while (itr_has_more(itr))
+			ft_vfprintf(lem->opt->out, "%s\n", itr_next(itr));
+		ft_vfprintf(lem->opt->out, "\n");
+		itr_free(itr);
+	}
 }
 
-void				print_best(t_lemin *lem)
+static void			print_best(t_lemin *lem)
 {
 	t_lst			*paths;
 	t_pths			*pth;
@@ -39,11 +68,14 @@ void				print_best(t_lemin *lem)
 		best = !best || (pth->steps && pth->steps < best->steps) ? pth : best;
 		pnode = pnode->next;
 	}
-	write(lem->opt->out, best->output, best->len);
+	if (lem->opt->pth)
+		prp(best->paths, lem);
 	if (lem->opt->req > -1)
 		ft_vfprintf(lem->opt->out
-			  ,"\nlines required: %d\nlines produced: %d\ndiff: %d\n"
-			  ,lem->opt->req, best->steps, best->steps - lem->opt->req);
+			, "lines required: %d\nlines produced: %d\ndiff: %d\n"
+			, lem->opt->req, best->steps, best->steps - lem->opt->req);
+	else
+		write(lem->opt->out, best->output, best->len);
 }
 
 void				prod(t_lemin *lem, t_pths *pth, t_str_bld *bld, t_itr **itr)
@@ -63,7 +95,6 @@ void				prod(t_lemin *lem, t_pths *pth, t_str_bld *bld, t_itr **itr)
 	}
 	if (!(pth->output = sb_concat(bld)))
 		ft_error("Error", -1);
-//	pth->bld = bld;
 	pth->len = bld->len;
 }
 

@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 17:32:53 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 17:06:14 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 17:39:07 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static t_opt	*opt_cnst(void)
 		ft_error("Malloc error", -1);
 	opt->out = 1;
 	opt->req = -1;
+	opt->pth = 0;
 	return (opt);
 }
 
@@ -44,6 +45,8 @@ t_opt			*find_opt(int *ac, char ***av)
 			(opt->color = 1);
 		else if ((**av)[1] == 'r')
 			(opt->req = 1);
+		else if ((**av)[1] == 'p')
+			(opt->pth = 1);
 		else
 			return (opt);
 		(*av)++;

@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 16:43:37 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 17:54:37 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,25 @@ static void			free_lemin(t_lemin *lemin)
 	free(lemin);
 }
 
-int					main(int ac, char **av)
+static t_lemin		*lmn_init(int *ac, char ***av, t_lemin *lemin)
 {
-	static t_lemin	*lemin;
-	freopen("map", "r", stdin);
-
-	av++;
-	ac--;
 	if (!(lemin = ft_memalloc(sizeof(t_lemin)))
 		|| !(lemin->raw = lst_new())
 		|| !(lemin->rooms = hm_new(&ft_str_hash, (t_fequal) & ft_strequ))
 		|| !(lemin->inpath = hm_new(&ft_str_hash, (t_fequal) & ft_strequ))
-		|| !(lemin->opt = find_opt(&ac, &av))
+		|| !(lemin->opt = find_opt(ac, av))
 		|| !(lemin->paths = lst_new()))
 		ft_error("main alloc error", -1);
+	return (lemin);
+}
+
+int					main(int ac, char **av)
+{
+	static t_lemin	*lemin;
+
+	av++;
+	ac--;
+	lemin = lmn_init(&ac, &av, lemin);
 	read_intput(STDIN_FILENO, lemin);
 	parse_ants_amount(lemin);
 	parse_rooms(lemin);
