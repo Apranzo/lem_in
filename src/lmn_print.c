@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:19:05 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 16:48:05 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 17:48:01 by dmarsell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void				print_input(const t_lemin *lem)
 	itr = lst_itr_load(lem->raw, NULL, NULL);
 	while (itr_has_more(itr))
 		ft_vfprintf(lem->opt->out, "%s\n", itr_next(itr));
-	ft_vfprintf(lem->opt->out,"\n");
+	ft_vfprintf(lem->opt->out, "\n");
 	itr_free(itr);
 }
 
@@ -42,8 +42,8 @@ void				print_best(t_lemin *lem)
 	write(lem->opt->out, best->output, best->len);
 	if (lem->opt->req > -1)
 		ft_vfprintf(lem->opt->out
-			  ,"\nlines required: %d\nlines produced: %d\ndiff: %d\n"
-			  ,lem->opt->req, best->steps, best->steps - lem->opt->req);
+				, "\nlines required: %d\nlines produced: %d\ndiff: %d\n"
+				, lem->opt->req, best->steps, best->steps - lem->opt->req);
 }
 
 void				prod(t_lemin *lem, t_pths *pth, t_str_bld *bld, t_itr **itr)
@@ -63,7 +63,6 @@ void				prod(t_lemin *lem, t_pths *pth, t_str_bld *bld, t_itr **itr)
 	}
 	if (!(pth->output = sb_concat(bld)))
 		ft_error("Error", -1);
-//	pth->bld = bld;
 	pth->len = bld->len;
 }
 
