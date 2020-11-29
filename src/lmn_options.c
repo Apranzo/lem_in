@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 17:32:53 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 15:19:09 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 15:50:07 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_opt	*opt_cnst(void)
 
 	if (!(opt = ft_memalloc(sizeof(t_opt))))
 		ft_error("Malloc error", -1);
-	opt->out = -1;
+	opt->out = 1;
 	opt->logfile = -1;
 	return (opt);
 }

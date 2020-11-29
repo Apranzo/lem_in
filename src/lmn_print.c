@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:19:05 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 16:22:08 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 16:30:37 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void				countres(t_lemin *lem)
 
 	itr = NULL;
 	pnode = lem->paths->first;
-	if (!(bld = sb_create(NULL)) || (!bld->len))
+	if (!(bld = sb_create(NULL)))
 		ft_error("Error", -1);
 	while (pnode)
 	{
