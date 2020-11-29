@@ -16,25 +16,21 @@ static t_room		*lmn_check_status(t_lemin *lem, t_room *room, char **line)
 {
 	if (!strcmp(*line, END))
 	{
-		if (lem->end || !itr_has_more(lem->filtred))
-			return (NULL);
-		else
-		{
-			*line = itr_next(lem->filtred);
-			lem->end = room;
-			return (lmn_check_status(lem, room, line));
-		}
+		if (lem->end || !itr_has_more(lem->filtred)
+						|| ft_strchr(lem->filtred->cur_node->data, '-'))
+			ft_error("Error", -1);
+		*line = itr_next(lem->filtred);
+		lem->end = room;
+		return (lmn_check_status(lem, room, line));
 	}
 	else if (!ft_strcmp(*line, START))
 	{
-		if (lem->start || !itr_has_more(lem->filtred))
-			return (NULL);
-		else
-		{
-			*line = itr_next(lem->filtred);
-			lem->start = room;
-			return (lmn_check_status(lem, room, line));
-		}
+		if (lem->start || !itr_has_more(lem->filtred)
+				|| ft_strchr(lem->filtred->cur_node->data, '-'))
+			ft_error("Error", -1);
+		*line = itr_next(lem->filtred);
+		lem->start = room;
+		return (lmn_check_status(lem, room, line));
 	}
 	return (room);
 }
