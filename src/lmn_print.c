@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:19:05 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 16:30:37 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 16:46:04 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void				print_input(const t_lemin *lem)
 
 	itr = lst_itr_load(lem->raw, NULL, NULL);
 	while (itr_has_more(itr))
-		ft_printf("%s\n", itr_next(itr));
-	ft_printf("\n");
+		ft_vfprintf(lem->opt->out, "%s\n", itr_next(itr));
+	ft_vfprintf(lem->opt->out,"\n");
 	itr_free(itr);
 }
 
@@ -40,9 +40,10 @@ void				print_best(t_lemin *lem)
 		pnode = pnode->next;
 	}
 	write(lem->opt->out, best->output, best->len);
-	if (lem->opt && lem->opt->req)
-		ft_printf("\nlines required: %d\nlines produced: %d\ndiff: %d\n"
-			,lem->opt->req, best->steps, best->steps - lem->opt->req);
+	if (lem->opt->req)
+		ft_vfprintf(lem->opt->out
+			  ,"\nlines required: %d\nlines produced: %d\ndiff: %d\n"
+			  ,lem->opt->req, best->steps, best->steps - lem->opt->req);
 }
 
 void				prod(t_lemin *lem, t_pths *pth, t_str_bld *bld, t_itr **itr)

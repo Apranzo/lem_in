@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 16:13:57 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 16:36:46 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void			free_lemin(t_lemin *lemin)
 int					main(int ac, char **av)
 {
 	static t_lemin	*lemin;
-	freopen("map", "r", stdin);
+//	freopen("map", "r", stdin);
 
 	av++;
 	ac--;
