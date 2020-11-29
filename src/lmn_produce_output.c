@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 19:30:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 14:32:37 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 15:04:18 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,10 @@ int				prod_line(t_lemin *lem, t_itr *itr,
 		{
 			if (lem->opt && lem->opt->color && ant->room == lem->end)
 				ft_sbprintf(bld, ANSI_COLOR_RED);
-//			if (ant->room == lem->start)
-//				ft_sbprintf(bld, ANSI_COLOR_GREEN);
-			ft_sbprintf(bld,"L%zu-%s\x1B[0m ", ant->number, ant->room->name);
-//			if (ant->room == lem->end || ant->room == lem->start)
-//				ft_sbprintf(bld, ANSI_COLOR_RESET);
+			if (lem->opt && lem->opt->color)
+				ft_sbprintf(bld,"L%zu-%s\x1B[0m ", ant->number, ant->room->name);
+			else
+				ft_sbprintf(bld,"L%zu-%s ", ant->number, ant->room->name);
 		}
 		if (!ant->finished && ant->room == lem->end)
 			lem->finished += (ant->finished = 1);
