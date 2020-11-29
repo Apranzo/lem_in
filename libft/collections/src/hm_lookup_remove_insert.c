@@ -53,6 +53,8 @@ t_pntr				hm_lookup(t_hm *hm, t_pntr key)
 	t_hm_entry		*entry;
 	size_t			index;
 
+	if (!key)
+		return (NULL);
 	index = hm->hash_func(key) % hm->table_size;
 	entry = find_in_backet(hm->table[index], key, hm->equal_func);
 	return (entry ? (&(entry->pair))->value : NULL);
