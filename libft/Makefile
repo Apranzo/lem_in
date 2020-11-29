@@ -14,7 +14,7 @@ NAME		= libft.a
 
 GCC			= /usr/bin/clang
 WOPT		= -Wall -Wextra -Werror
-OOPT		= -g
+OOPT		= -O2
 IOPT		= -I ./core/includes		\
               -I ./collections/includes	\
               -I ./printf/includes		\

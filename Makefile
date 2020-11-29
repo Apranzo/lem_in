@@ -15,7 +15,7 @@ LIBNAME		= libft.a
 
 GCC			= /usr/bin/clang
 WOPT		= -Wall -Wextra -Werror
-OOPT		= -g
+OOPT		= -O2
 IOPT		= -I $(INCDIR)
 
 AR			= /usr/bin/ar -rc
