@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:18:50 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 13:36:06 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 17:10:26 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ void				parse_rooms(t_lemin *lem)
 			!ft_strchr(lem->filtred->cur_node->data, '-'))
 	{
 		line = itr_next(lem->filtred);
-		if (line[0] == 'L'
-			|| !(new = ft_memalloc(sizeof(t_room)))
+		if (!(new = ft_memalloc(sizeof(t_room)))
 			|| !lmn_check_status(lem, new, &line)
+			|| line[0] == 'L'
 			|| hm_lookup(cords, ft_strchr(line, ' '))
 			|| !(new = lmn_init_room(new, ft_strsplit(line, ' '))))
 			ft_error("Error", -1);

@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:19:05 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 16:46:04 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 16:48:05 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void				print_best(t_lemin *lem)
 		pnode = pnode->next;
 	}
 	write(lem->opt->out, best->output, best->len);
-	if (lem->opt->req)
+	if (lem->opt->req > -1)
 		ft_vfprintf(lem->opt->out
 			  ,"\nlines required: %d\nlines produced: %d\ndiff: %d\n"
 			  ,lem->opt->req, best->steps, best->steps - lem->opt->req);
