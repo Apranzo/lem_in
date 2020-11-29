@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:19:05 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 17:59:38 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 16:48:05 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void				prod(t_lemin *lem, t_pths *pth, t_str_bld *bld, t_itr **itr)
 	}
 	if (!(pth->output = sb_concat(bld)))
 		ft_error("Error", -1);
+//	pth->bld = bld;
 	pth->len = bld->len;
 }
 
