@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:19:17 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 17:42:41 by dmarsell         ###   ########.fr       */
+/*   Updated: 2020/11/29 19:28:10 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int					read_intput(int fd, t_lemin *lem)
 			ft_error("read_input Error allocation\n", -1);
 		line = NULL;
 	}
+	if (!line && res > 0)
+		ft_error("Error", -2);
 	if (line)
 		if (!lst_append(lem->raw, line))
 			ft_error("read_input Error allocation\n", -1);
