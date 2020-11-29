@@ -6,11 +6,10 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:16:41 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 19:28:09 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 19:28:10 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "../includes/lem_in.h"
 
 static void			free_lemin(t_lemin *lemin)
@@ -42,8 +41,6 @@ static t_lemin		*lmn_init(int *ac, char ***av, t_lemin *lemin)
 int					main(int ac, char **av)
 {
 	static t_lemin	*lemin;
-
-	freopen("map", "r", stdin);
 
 	av++;
 	ac--;
