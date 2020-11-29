@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 19:34:11 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/15 18:45:19 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 14:20:32 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,5 @@ int							sb_append(t_str_bld *sb, char *str);
 char						*sb_concat(t_str_bld *sb);
 void						sb_reset(t_str_bld *sb);
 void						sb_free(t_str_bld *sb);
-
-void			print_separ(t_str_bld *sb, int fd);
 
 #endif

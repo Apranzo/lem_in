@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 16:30:27 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/18 14:58:19 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 14:20:32 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,4 @@ void				sb_free(t_str_bld *sb)
 	sb->concated = NULL;
 	sb->len = 0;
 	free(sb);
-}
-
-void			print_separ(t_str_bld *sb, int fd)
-{
-	t_str			*str;
-	t_node			*node;
-
-	node = sb->fragments->first;
-	while (node)
-	{
-		str = node->data;
-		write(fd, str->str, str->length);
-		node = node->next;
-	}
 }

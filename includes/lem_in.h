@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 18:56:15 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 15:04:18 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 17:20:27 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@
 # define END "##end"
 # define JAIL "#"
 # define NOTHING_ELSE 150
-
 # define ANSI_COLOR_RED     "\x1b[31m"
-# define ANSI_COLOR_GREEN   "\x1b[32m"
-# define ANSI_COLOR_RESET   "\x1B[0m"
+# define LMN_REQ "#Here is the number of lines required: "
+
 typedef struct s_room	t_room;
 typedef struct s_ant	t_ant;
 typedef struct s_pths	t_pths;
@@ -30,11 +29,9 @@ typedef struct s_pths	t_pths;
 typedef struct			s_opt
 {
 	int					out;
-	int					dsc;
-	int					logfile;
-	int					verbose;
-	int 				color;
-	int 				req;
+	int					color;
+	int					req;
+	int					pth;
 }						t_opt;
 
 struct					s_room
@@ -85,7 +82,6 @@ struct					s_pths
 	size_t				steps;
 	size_t				len;
 	char				*output;
-//	t_str_bld			*bld;
 };
 
 typedef struct			s_fuck_the_system

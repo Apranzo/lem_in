@@ -92,7 +92,9 @@ string_builder.h
 ../../collections/includes/collections.h
 /Users/cshinoha/CLionProjects/old/libft/collections/includes/collections.h
 
-/Users/cshinoha/CLionProjects/old/src/lmn_print.c
+/Users/cshinoha/CLionProjects/old/src/lem_in.c
+stdio.h
+-
 ../includes/lem_in.h
 /Users/cshinoha/CLionProjects/old/includes/lem_in.h
 
