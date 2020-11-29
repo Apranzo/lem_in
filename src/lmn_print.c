@@ -6,7 +6,7 @@
 /*   By: cshinoha <cshinoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 14:19:05 by cshinoha          #+#    #+#             */
-/*   Updated: 2020/11/29 19:28:09 by cshinoha         ###   ########.fr       */
+/*   Updated: 2020/11/29 20:00:34 by cshinoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void				print_input(const t_lemin *lem)
 		itr = lst_itr_load(lem->raw, NULL, NULL);
 		while (itr_has_more(itr))
 			ft_vfprintf(lem->opt->out, "%s\n", itr_next(itr));
-		ft_vfprintf(lem->opt->out, "\n");
 		itr_free(itr);
 	}
 }
